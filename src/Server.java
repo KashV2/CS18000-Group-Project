@@ -1,8 +1,9 @@
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
 
 public class Server {
-
+    private static ArrayList<Socket> clients = new ArrayList<>();
 
     public static void main(String[] args) {
         ServerSocket serverSocket = createServerSocket();
@@ -14,7 +15,9 @@ public class Server {
                 closeServerSocket(serverSocket);
                 return;
             }
-
+            clients.add(client);
+            Thread clientHandler = new Thread(new ClientHandler(client));
+            clientHandler.start();
         }
     }
 
