@@ -8,6 +8,7 @@ class LoginSignUpTest {
     @BeforeEach
     void setUp() {
         loginSignUp = new LoginSignUp();
+        loginSignUp.clearUserCredentials();  // Clear stored data before each test
     }
 
     @Test
