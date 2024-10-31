@@ -22,4 +22,12 @@ public class User implements UserInterface {
     public Profile getProfile() {
         return profile;
     }
+
+    public boolean equals(User user) {
+        boolean result = false;
+        if(user.getLoginUsername().equals(loginUsername) || user.getPassword().equals(password)) {
+            result = true;
+        }
+        return result;
+    }
 }
