@@ -1,5 +1,4 @@
 import java.util.*;
-
 public class Profile extends User {
     private String name;
     private String description;
@@ -40,25 +39,34 @@ public class Profile extends User {
         this.description = description;
     }
 
-    // Future work: check for user existence throw exception if user does not exist
-    public void removeFriend(String username) {
-        this.friends.remove(username);
-    }
-
-    // Future work: check for user existence throw exception if user does not exist
-    public void addFriend(String username) {
-        this.friends.add(username);
-    }
-
-    // Future work: check for user existence throw exception if user does not exist
-    public void removeBlock(String username) {
-        if (this.blockedUsers.contains(username)) {
-            this.blockedUsers.remove(username);
+    public void removeFriend(String username) throws UserNotFoundException {
+        try {
+            this.friends.remove(username);
+        } catch (Exception e) {
+            throw new UserNotFoundException("User does not exist");
         }
     }
 
-    // Future work: check for user existence throw exception if user does not exist
-    public void addBlock(String username) {
-        this.blockedUsers.add(username);
+    public void addFriend(String username) throws UserNotFoundException {
+        try {
+            this.friends.add(username);
+        } catch (Exception e) {
+            throw new UserNotFoundException("User does not exist");
+        }
     }
-}
+
+    public void removeBlock(String username) throws UserNotFoundException {
+        try {
+            this.blockedUsers.remove(username);
+        } catch (Exception e) {
+            throw new UserNotFoundException("User does not exist");
+        }
+    }
+
+    public void addBlock(String username) UserNotFoundException {
+        try {
+            this.blockedUsers.add(username);
+        } catch (Exception e) {
+            throw new UserNotFoundException("User does not exist");
+        }
+    }
