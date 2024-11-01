@@ -70,3 +70,4 @@ public class Profile extends User {
     public void addBlock(String username) {
         this.blockedUsers.add(username);
     }
+}
