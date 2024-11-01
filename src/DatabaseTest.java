@@ -68,8 +68,8 @@ class DatabaseTest {
     @Test
     void testPasswordAlreadyExists() {
         database.addUser(user1);
-        assertTrue(database.passwordAlreadyExists(user1), "Password should already exist.");
-        assertFalse(database.passwordAlreadyExists(user2), "Password should not exist yet.");
+        assertTrue(database.passwordAlreadyExists(user1.getPassword()), "Password should already exist.");
+        assertFalse(database.passwordAlreadyExists(user2.getPassword()), "Password should not exist yet.");
     }
 
     @Test
