@@ -14,6 +14,8 @@ public class Chat implements Serializable {
                 loginUsername1 + loginUsername2 : loginUsername2 + loginUsername1;
     }
 
+    //Checks if two chats have the same ID
+    //This is needed for each client in the chat to access the same saved chat
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Chat)) return false;
@@ -21,22 +23,28 @@ public class Chat implements Serializable {
         return this.id.equals(chat.id);
     }
 
+    //Getting id variable
     public String getId() {
         return id;
     }
 
+    //Getting messages variable
     public ArrayList<String> getMessages() {
         return messages;
     }
 
+    //Gets a specific String message from the message list
+    //This is useful for when trying to delete a message, we have to check if the message is our own
     public String getMessage(int index) {
         return messages.get(index);
     }
 
+    //Add a new message from the client into the list of messages
     public void addMessage(String message) {
         messages.add(message);
     }
 
+    //Removing a specific message from the chat, for deleting feature
     public void removeMessage(int index) {
         messages.remove(index);
     }
