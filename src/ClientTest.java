@@ -26,18 +26,18 @@ class ClientTest {
         closeServerMethod.setAccessible(true);
     }
 
-    // @Test
-    // void testCreateServer_Success() {
-    //     try {
-    //         Socket serverSocket = (Socket) createServerMethod.invoke(null);
-    //         assertNotNull(serverSocket, "Server socket should not be null.");
-    //         if (serverSocket != null) {
-    //             serverSocket.close(); // Clean up the socket if it was successfully created
-    //         }
-    //     } catch (Exception e) {
-    //         fail("Exception occurred during createServer execution: " + e.getMessage());
-    //     }
-    // }
+    @Test
+    void testCreateServer_Success() {
+        try {
+            Socket serverSocket = (Socket) createServerMethod.invoke(null);
+            assertNotNull(serverSocket, "Server socket should not be null.");
+            if (serverSocket != null) {
+                serverSocket.close(); // Clean up the socket if it was successfully created
+            }
+        } catch (Exception e) {
+            fail("Exception occurred during createServer execution: " + e.getMessage());
+        }
+    }
 
     @Test
     void testCreateServerStreams_Success() {
