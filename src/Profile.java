@@ -1,5 +1,6 @@
+import java.io.Serializable;
 import java.util.*;
-public class Profile {
+public class Profile implements Serializable {
     private String name;
     private String description;
     private ArrayList<String> friends;
