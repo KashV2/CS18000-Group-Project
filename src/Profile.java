@@ -1,5 +1,5 @@
 import java.util.*;
-public class Profile extends User {
+public class Profile {
     private String name;
     private String description;
     private ArrayList<String> friends;
@@ -42,6 +42,7 @@ public class Profile extends User {
     // Future work: check for user existence throw exception if user does not exist
     public void removeFriend(String username) {
         this.friends.remove(username);
+
     }
 
     // Future work: check for user existence throw exception if user does not exist
@@ -56,17 +57,18 @@ public class Profile extends User {
         }
     }
 
-    public boolean isBlocked(String username) {
-        return this.blockedUsers.contains(username);
+    public boolean isBlocked(Profile profile) {
+        return this.blockedUsers.contains(profile.getName());
     }
 
-    public boolean isFriend(String username) {
-        return this.friends.contains(username);
+    public boolean isFriend(Profile profile) {
+        return this.friends.contains(profile.getName());
     }
-
 
 
     // Future work: check for user existence throw exception if user does not exist
     public void addBlock(String username) {
         this.blockedUsers.add(username);
     }
+
+}
