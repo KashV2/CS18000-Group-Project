@@ -8,8 +8,9 @@ public class Database {
 
     private ArrayList<User> users;
 
+    //reads in all users from file
     public Database() {
-
+        
         users = new ArrayList<>();
         try (FileInputStream fileIn = new FileInputStream("users.dat");
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
@@ -27,7 +28,7 @@ public class Database {
         }
 
     }
-
+    // add user to arraylist and output to the file
     public void addUser(User user) {
 
         try (FileOutputStream fileOut = new FileOutputStream("users.dat", true);
@@ -41,13 +42,15 @@ public class Database {
         }
     }
 
+    //getter
     public ArrayList<User> getUsers() {
         return users;
     }
 
-    public boolean nameAlreadyExists(User user) {
+    // checks if name already exists, after server makes a user to add, it will check if it already exists
+    public boolean nameAlreadyExists(String username) {
         for(int i = 0; i < users.size(); i++) {
-            if(users.get(i).equalsUsername(user)) {
+            if(users.get(i).equalsUsername(username)) {
                 return true;
             }
         }
@@ -55,9 +58,10 @@ public class Database {
 
     }
 
-    public boolean passwordAlreadyExists(User user) {
+    // 
+    public boolean passwordAlreadyExists(String password) {
         for(int i = 0; i < users.size(); i++) {
-            if(users.get(i).equalsPassword(user)) {
+            if(users.get(i).equalsPassword(password)) {
                 return true;
             }
         }
@@ -116,10 +120,10 @@ public class Database {
             user1.getProfile().addBlock(username2);
             return "User Blocked and Unfriended";
         }
-        
+
         else {
             user1.getProfile().addBlock(username2);
-            return "User Blocked"; 
+            return "User Blocked";
         }
     }
 
