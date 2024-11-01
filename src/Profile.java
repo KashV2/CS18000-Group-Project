@@ -1,5 +1,4 @@
 import java.util.*;
-
 public class Profile extends User {
     private String name;
     private String description;
@@ -57,8 +56,17 @@ public class Profile extends User {
         }
     }
 
+    public boolean isBlocked(String username) {
+        return this.blockedUsers.contains(username);
+    }
+
+    public boolean isFriend(String username) {
+        return this.friends.contains(username);
+    }
+
+
+
     // Future work: check for user existence throw exception if user does not exist
     public void addBlock(String username) {
         this.blockedUsers.add(username);
     }
-}
