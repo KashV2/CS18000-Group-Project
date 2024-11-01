@@ -11,7 +11,7 @@ public class Chat implements Serializable {
         //How to get a unique id to identify this chat:
         //Mash the loginUsernames together, whichever login comes first in the alphabet is first
         this.id = loginUsername1.compareTo(loginUsername2) < 0 ?
-                loginUsername1 + loginUsername2: loginUsername2 + loginUsername1;
+                loginUsername1 + loginUsername2 : loginUsername2 + loginUsername1;
     }
 
     @Override
