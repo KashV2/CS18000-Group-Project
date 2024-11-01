@@ -14,17 +14,13 @@ public class Database {
         users = new ArrayList<>();
         try (FileInputStream fileIn = new FileInputStream("users.dat");
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            while (true) { // Continue until an EOFException is caught
-                User user = (User) in.readObject();
+            User user = (User)in.readObject();
+            while (user != null) {
                 users.add(user);
+                user = (User)in.readObject();
             }
         } catch (Exception e) {
-            if (e instanceof java.io.EOFException) {
-                // End of file reached; handle it gracefully
-                System.out.println("End of file reached.");
-            } else {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
 
     }
