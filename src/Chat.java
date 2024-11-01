@@ -13,8 +13,19 @@ public class Chat implements Serializable {
         this.id = loginUsername1.compareTo(loginUsername2) < 0 ? loginUsername1 : loginUsername2;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Chat)) return false;
+        Chat chat = (Chat)obj;
+        return this.id.equals(chat.id);
+    }
+
     public String getId() {
         return id;
+    }
+
+    public ArrayList<String> getMessages() {
+        return messages;
     }
 
     public void addMessage(String message) {
