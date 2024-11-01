@@ -29,7 +29,15 @@ public class Chat implements Serializable {
         return messages;
     }
 
+    public String getMessage(int index) {
+        return messages.get(index);
+    }
+
     public void addMessage(String message) {
         messages.add(message);
+    }
+
+    public void removeMessage(int index) {
+        messages.remove(index);
     }
 }
