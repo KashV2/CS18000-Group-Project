@@ -41,5 +41,15 @@ public class Database {
         return users;
     }
 
+    public boolean alreadyExists(User user) {
+        for(int i = 0; i < users.size(); i++) {
+            if(users.get(i).equals(user)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
 
 }

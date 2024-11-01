@@ -1,5 +1,4 @@
 import java.util.*;
-import java.io.*;
 
 public class User implements UserInterface {
     private String loginUsername;
@@ -24,4 +23,11 @@ public class User implements UserInterface {
         return profile;
     }
 
+    public boolean equals(User user) {
+        boolean result = false;
+        if(user.getLoginUsername().equals(loginUsername) || user.getPassword().equals(password)) {
+            result = true;
+        }
+        return result;
+    }
 }
