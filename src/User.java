@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class User implements UserInterface {
+public class User implements Serializable {
     private String loginUsername;
     private String password;
     private Profile profile;
@@ -23,11 +24,17 @@ public class User implements UserInterface {
         return profile;
     }
 
-    public boolean equals(User user) {
-        boolean result = false;
-        if(user.getLoginUsername().equals(loginUsername) || user.getPassword().equals(password)) {
-            result = true;
+    public boolean equalsUsername(User user) {
+        if(user.getLoginUsername().equals(loginUsername)) {
+            return true;
         }
-        return result;
+        return false;
+    }
+
+    public boolean equalsPassword(User user) {
+        if(user.getPassword().equals(password)) {
+            return true;
+        }
+        return false;
     }
 }
