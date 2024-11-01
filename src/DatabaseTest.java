@@ -61,8 +61,8 @@ class DatabaseTest {
     @Test
     void testNameAlreadyExists() {
         database.addUser(user1);
-        assertTrue(database.nameAlreadyExists(user1), "Username should already exist.");
-        assertFalse(database.nameAlreadyExists(user2), "Username should not exist yet.");
+        assertTrue(database.nameAlreadyExists(user1.getLoginUsername()), "Username should already exist.");
+        assertFalse(database.nameAlreadyExists(user2.getLoginUsername()), "Username should not exist yet.");
     }
 
     @Test

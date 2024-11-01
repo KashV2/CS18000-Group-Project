@@ -70,9 +70,4 @@ public class Profile {
     public void addBlock(String username) {
         this.blockedUsers.add(username);
     }
-<<<<<<< HEAD
 }
-=======
-
-}
->>>>>>> 8962f1fb980b3f8b54d66ca0006290d0b75b45bc
