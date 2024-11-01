@@ -1,5 +1,8 @@
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 public class Database {
 
@@ -25,31 +28,68 @@ public class Database {
 
     }
 
-    public addUser(User user) {
+    public void addUser(User user) {
 
-        try (FileOutputStream fileOut = new FileOutputStream("users", true);
-             ObjectOutputStream out = new AppendableObjectOutputStream("users.dat")) {
+        try (FileOutputStream fileOut = new FileOutputStream("users.dat", true);
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             users.add(user);
-            out.write(user);
+            out.writeObject(user);
+            out.flush();
             System.out.println("User data has been appended to 'users'.");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public user[] getUsers() {
+    public ArrayList<User> getUsers() {
         return users;
     }
 
-    public boolean alreadyExists(User user) {
+    public boolean nameAlreadyExists(User user) {
         for(int i = 0; i < users.size(); i++) {
-            if(users.get(i).equals(user)) {
+            if(users.get(i).equalsUsername(user)) {
                 return true;
             }
         }
         return false;
 
     }
+
+    public boolean passwordAlreadyExists(User user) {
+        for(int i = 0; i < users.size(); i++) {
+            if(users.get(i).equalsPassword(user)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+
+
+    public User getUser(String username) {
+        for(int i = 0; i < users.size(); i++) {
+            if(users.get(i).getLoginUsername().equals(username)) {
+                return users.get(i);
+            }
+        }
+        return null;
+    }
+
+    public String friendUser(String username1, String username2) {
+
+        User user1 = getUser(username1);
+        User user2 = getUser(username2);
+
+
+
+    }
+
+    public boolean blockUser(String username1, String username2) {
+
+    }
+
+
 
 
 }
