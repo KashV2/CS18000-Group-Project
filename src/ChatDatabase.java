@@ -4,6 +4,7 @@ import java.util.ArrayList;
 public class ChatDatabase {
     private ArrayList<Chat> chats = new ArrayList<>();
 
+
     public ChatDatabase() {
         try (FileInputStream fileIn = new FileInputStream("chats.dat");
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
