@@ -19,7 +19,7 @@ public class LoginSignUpServer {
                 System.out.println("New client connected");
 
                 // Create a new thread for each client
-                new ClientHandler(clientSocket, loginSignUp).start();
+                new ClientHandlerTest(clientSocket, loginSignUp).start();
             }
         } catch (IOException e) {
             System.out.println("Server error: " + e.getMessage());
@@ -32,13 +32,13 @@ public class LoginSignUpServer {
     }
 }
 
-class ClientHandler extends Thread {
+class ClientHandlerTest extends Thread {
     private Socket clientSocket;
     private LoginSignUp loginSignUp;
     private BufferedReader in;
     private PrintWriter out;
 
-    public ClientHandler(Socket socket, LoginSignUp loginSignUp) {
+    public ClientHandlerTest(Socket socket, LoginSignUp loginSignUp) {
         this.clientSocket = socket;
         this.loginSignUp = loginSignUp;
     }
