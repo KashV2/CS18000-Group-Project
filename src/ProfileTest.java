@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProfileTest {
 
     @Test
-    void SetDescriptiontest() {
+    void setDescriptiontest() {
         Profile testProfile = new Profile("a","generic description", new ArrayList<String>(null), new ArrayList<String>(null));
         testProfile.setDescription("test");
         assertEquals("test", testProfile.getDescription());
