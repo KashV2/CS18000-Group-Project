@@ -15,6 +15,8 @@ public class Database {
                 users.add(user);
                 user = (User) in.readObject();
             }
+        } catch (FileNotFoundException e) {
+            //Ignore
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
