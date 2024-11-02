@@ -10,4 +10,5 @@ public interface DatabaseInterface {
     public String friendUser(String username1, String username2);
     public String blockUser(String username1, String username2);
 
+
 }

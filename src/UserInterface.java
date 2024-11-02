@@ -6,4 +6,5 @@ public interface UserInterface {
     public boolean equalsUsername(String username);
     public boolean equalsPassword(String password);
 
+
 }

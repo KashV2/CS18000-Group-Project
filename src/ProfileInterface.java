@@ -15,4 +15,5 @@ public interface ProfileInterface {
     public boolean isFriend(Profile profile);
     public void addBlock(String username);
 
+
 }
