@@ -1,7 +1,7 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Chat implements Serializable {
+public class Chat implements Chatable, Serializable {
     private String id;
     private ArrayList<String> messages = new ArrayList<>();
 
