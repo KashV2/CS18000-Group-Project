@@ -41,10 +41,11 @@ class ChatDatabaseTest {
 
             dbtest.addChat(chat1);
             dbtest.addChat(chat2);
-            String output = outputStream.toString();
+            String output = outputStream.toString().trim();
+            output = output.replaceAll("\r", ""); // Remove carriage return characters for cross-platform compatibility
 
 
-            assertEquals(output, "Chat has been registered!\nChat has been registered!\n");
+            assertEquals(output, "Chat has been registered!\nChat has been registered!");
 
         } finally {
             System.setOut(originalOut);
