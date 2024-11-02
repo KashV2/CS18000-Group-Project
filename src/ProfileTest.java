@@ -58,13 +58,15 @@ class ProfileTest {
     @Test
     void isFriendtest() {
         Profile testProfile = new Profile("a", "generic description", new ArrayList<String>(Arrays.asList("b","c","d")), new ArrayList<String>(null));
-        assertTrue(testProfile.isFriend("b"));
+        Profile testProfile2 = new Profile("b", "generic description", new ArrayList<String>(Arrays.asList("e","f","g")), new ArrayList<String>(null));
+        assertTrue(testProfile.isFriend(testProfile2));
     }
 
     @Test
     void isBlockedtest() {
         Profile testProfile = new Profile("a", "generic description", new ArrayList<String>(null), new ArrayList<String>(Arrays.asList("b","c","d")));
-        assertTrue(testProfile.isBlocked("b"));
+        Profile testProfile2 = new Profile("b", "generic description", new ArrayList<String>(null), new ArrayList<String>(Arrays.asList("e","f","g")));
+        assertTrue(testProfile.isBlocked(testProfile2));
     }
 
 
