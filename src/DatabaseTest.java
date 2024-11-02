@@ -99,20 +99,29 @@ class DatabaseTest {
     }
 
     @Test
-    void testBlockAndUnfriendUser() {
-        // Add users and make them friends initially
-        database.addUser(user1);
-        database.addUser(user2);
-        user1.getProfile().addFriend("user2");
-        user2.getProfile().addFriend("user1");
-    
-        // Block user2 from user1's side
-        String result = database.blockUser("user1", "user2");
-        assertEquals("User Blocked and Unfriended", result, "User2 should be unfriended and blocked by user1.");
-        assertTrue(user1.getProfile().getBlockedUsers().contains("user2"), "User2 should be blocked by user1.");
-        assertFalse(user1.getProfile().getFriends().contains("user2"), "User2 should no longer be a friend of user1.");
-        assertFalse(user2.getProfile().getFriends().contains("user1"), "User1 should no longer be a friend of user2.");
-    }
+void testBlockAndUnfriendUser() {
+    // Add users to the database
+    database.addUser(user1);
+    database.addUser(user2);
+
+    // Use the friendUser function to make user1 and user2 friends
+    String friendshipResult = database.friendUser("user1", "user2");
+    assertEquals("Friended Successfully!", friendshipResult, "User1 and User2 should be friends initially.");
+
+    // Verify that user1 and user2 are now friends
+    assertTrue(user1.getProfile().getFriends().contains("user2"), "User1 should have User2 as a friend.");
+    assertTrue(user2.getProfile().getFriends().contains("user1"), "User2 should have User1 as a friend.");
+
+    // Block user2 from user1's side and verify the outcome
+    String blockResult = database.blockUser("user1", "user2");
+    assertEquals("User Blocked and Unfriended", blockResult, "User2 should be unfriended and blocked by User1.");
+
+    // Verify that user2 is now blocked by user1
+    assertTrue(user1.getProfile().getBlockedUsers().contains("user2"), "User2 should be blocked by User1.");
+    assertFalse(user1.getProfile().getFriends().contains("user2"), "User2 should no longer be a friend of User1.");
+    assertFalse(user2.getProfile().getFriends().contains("user1"), "User1 should no longer be a friend of User2.");
+}
+
     
     
 }
