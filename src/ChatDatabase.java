@@ -18,6 +18,10 @@ public class ChatDatabase implements ChatDatabasable {
         }
     }
 
+    public ArrayList<Chat> getChats() {
+        return chats;
+    }
+
     public void saveChat(Chat chat) {
         try (FileInputStream fis = new FileInputStream("chats.dat");
             ObjectInputStream ois = new ObjectInputStream(fis);
