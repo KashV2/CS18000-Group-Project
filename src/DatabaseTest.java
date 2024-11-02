@@ -103,13 +103,16 @@ class DatabaseTest {
         // Add users and make them friends initially
         database.addUser(user1);
         database.addUser(user2);
-        user1.getProfile().getFriends().add("user2");
-        user2.getProfile().getFriends().add("user1");
-
+        user1.getProfile().addFriend("user2");
+        user2.getProfile().addFriend("user1");
+    
         // Block user2 from user1's side
         String result = database.blockUser("user1", "user2");
         assertEquals("User Blocked and Unfriended", result, "User2 should be unfriended and blocked by user1.");
         assertTrue(user1.getProfile().getBlockedUsers().contains("user2"), "User2 should be blocked by user1.");
         assertFalse(user1.getProfile().getFriends().contains("user2"), "User2 should no longer be a friend of user1.");
+        assertFalse(user2.getProfile().getFriends().contains("user1"), "User1 should no longer be a friend of user2.");
     }
+    
+    
 }
