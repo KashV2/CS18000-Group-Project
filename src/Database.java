@@ -109,7 +109,7 @@ public class Database {
             return " Already Blocked";
         }
 
-        else if(user1.getProfile().isFriend(user2.getProfile()) && user1.getProfile().isFriend(user2.getProfile())) {
+        else if(user1.getProfile().isFriend(user2.getProfile()) && user2.getProfile().isFriend(user1.getProfile())) {
             user1.getProfile().removeFriend(username2);
             user2.getProfile().removeFriend(username1);
             user1.getProfile().addBlock(username2);
