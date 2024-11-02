@@ -10,7 +10,7 @@ public class Database {
 
     //reads in all users from file
     public Database() {
-        
+
         users = new ArrayList<>();
         try (FileInputStream fileIn = new FileInputStream("users.dat");
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
@@ -58,7 +58,7 @@ public class Database {
 
     }
 
-    // 
+    //checks if password is already used
     public boolean passwordAlreadyExists(String password) {
         for(int i = 0; i < users.size(); i++) {
             if(users.get(i).equalsPassword(password)) {
@@ -70,7 +70,7 @@ public class Database {
     }
 
 
-
+    // gets and returns user object with that username
     public User getUser(String username) {
         for(int i = 0; i < users.size(); i++) {
             if(users.get(i).getLoginUsername().equals(username)) {
@@ -80,6 +80,7 @@ public class Database {
         return null;
     }
 
+    //attempts to friend user and gives a string message based off how it goes
     public String friendUser(String username1, String username2) {
 
         User user1 = getUser(username1);
@@ -106,6 +107,7 @@ public class Database {
 
     }
 
+    //attempts to friend user and gives a string message based off how it goes
     public String blockUser(String username1, String username2) {
         User user1 = getUser(username1);
         User user2 = getUser(username2);
