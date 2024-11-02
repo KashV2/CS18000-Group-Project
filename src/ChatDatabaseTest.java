@@ -1,9 +1,12 @@
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,13 +16,24 @@ class ChatDatabaseTest {
     void Databasetest1() {
         ChatDatabase dbtest = new ChatDatabase();
         Chat chat1 = new Chat("user1","user2");
-        Chat chat2 = new Chat("user1","user2");
-        chat1.addMessage("meow");
-        chat2.addMessage("meow");
-        chat1.addMessage("ahhhhh");
-        chat2.addMessage("ahhhhh");
         dbtest.addChat(chat1);
-        assertTrue(dbtest.chatRegistered(chat2));
+        chat1.addMessage("meow");
+        chat1.addMessage("ahhhhh");
+        dbtest.saveChat(chat1);
+
+        ChatDatabase dbtest2 = new ChatDatabase();
+        ArrayList<String> chatMessages = dbtest2.getChats().get(0).getMessages();
+        assertEquals("meow", chatMessages.get(0));
+        assertEquals("ahhhhh", chatMessages.get(1));
+    }
+
+    @AfterEach
+    void tearDown() {
+        // Clean up the file after each test to avoid test contamination
+        File file = new File("chats.dat");
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     @Test

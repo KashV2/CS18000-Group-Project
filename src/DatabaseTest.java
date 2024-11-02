@@ -46,6 +46,12 @@ class DatabaseTest {
         ArrayList<User> users = database.getUsers();
         assertEquals(1, users.size());
         assertEquals(user1, users.get(0));
+
+        //Ensure that our database is actually saving the data and can be retrieved at start
+        Database secondDatabase = new Database();
+        ArrayList<User> secondUsers = secondDatabase.getUsers();
+        assertEquals(1, secondUsers.size());
+        assertEquals(user1.getLoginUsername(), secondUsers.get(0).getLoginUsername());
     }
 
     @Test
