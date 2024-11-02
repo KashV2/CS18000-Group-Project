@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ChatTest {
+    @Test
     void testChatNotEquals() {
         // Test equals method for Chat class when not equal
         Chat chat1 = new Chat("bob", "joe");
@@ -24,11 +25,12 @@ class ChatTest {
         assertTrue(chat1.getMessages().contains("message"));
     }
     @Test
-    void testAddMessageFail() {
+    void testRemoveMessage() {
         // test failing addmessage function
         Chat chat1 = new Chat("man", "woman");
         chat1.addMessage("message");
-        assertEquals(1, chat1.getMessages().size());
+        chat1.removeMessage(0);
+        assertEquals(0, chat1.getMessages().size());
     }
 }
 
