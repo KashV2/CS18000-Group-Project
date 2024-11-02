@@ -24,15 +24,15 @@ public class User implements Serializable {
         return profile;
     }
 
-    public boolean equalsUsername(User user) {
-        if(user.getLoginUsername().equals(loginUsername)) {
+    public boolean equalsUsername(String username) {
+        if(username.equals(loginUsername)) {
             return true;
         }
         return false;
     }
 
-    public boolean equalsPassword(User user) {
-        if(user.getPassword().equals(password)) {
+    public boolean equalsPassword(String password) {
+        if(this.password.equals(password)) {
             return true;
         }
         return false;
