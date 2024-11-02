@@ -116,6 +116,7 @@ public class Database {
             return "User Blocked and Unfriended";
         }
 
+
         else {
             user1.getProfile().addBlock(username2);
             return "User Blocked";
