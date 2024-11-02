@@ -1,7 +1,4 @@
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 
 public class Database {
@@ -10,23 +7,17 @@ public class Database {
 
     //reads in all users from file
     public Database() {
-
         users = new ArrayList<>();
         try (FileInputStream fileIn = new FileInputStream("users.dat");
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            while (true) { // Continue until an EOFException is caught
-                User user = (User) in.readObject();
+            User user = (User) in.readObject();
+            while (user != null) { // Continue until an EOFException is caught
                 users.add(user);
+                user = (User) in.readObject();
             }
-        } catch (Exception e) {
-            if (e instanceof java.io.EOFException) {
-                // End of file reached; handle it gracefully
-                System.out.println("End of file reached.");
-            } else {
-                e.printStackTrace();
-            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
-
     }
     // add user to arraylist and output to the file
     public void addUser(User user) {
