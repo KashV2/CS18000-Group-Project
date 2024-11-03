@@ -41,17 +41,11 @@ public class User implements Serializable {
 
     //checks if object has that username
     public boolean equalsUsername(String username) {
-        if(username.equals(loginUsername)) {
-            return true;
-        }
-        return false;
+        return username.equals(loginUsername);
     }
 
     //checks if object has that password
-    public boolean equalsPassword(String password) {
-        if(this.password.equals(password)) {
-            return true;
-        }
-        return false;
+    public boolean equalsPassword(String comparePassword) {
+        return this.password.equals(comparePassword);
     }
 }

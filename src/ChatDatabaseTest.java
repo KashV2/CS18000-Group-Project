@@ -26,7 +26,7 @@ class ChatDatabaseTest {
     @Test
     void databaseTest1() {
         ChatDatabase dbTest = new ChatDatabase();
-        Chat chat1 = new Chat("user1","user2");
+        Chat chat1 = new Chat("user1", "user2");
         dbTest.addChat(chat1);
         chat1.addMessage("meow");
         chat1.addMessage("ahhhhh");

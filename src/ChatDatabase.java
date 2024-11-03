@@ -85,8 +85,8 @@ public class ChatDatabase implements ChatDatabaseInterface {
     //Step 1
     //Check to see if a chat between these two people already exist in the db
     public boolean chatRegistered(Chat chat) {
-        for(int i = 0; i < chats.size(); i++) {
-            if(chats.get(i).equals(chat)) {
+        for (int i = 0; i < chats.size(); i++) {
+            if (chats.get(i).equals(chat)) {
                 return true;
             }
         }

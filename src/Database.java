@@ -50,8 +50,8 @@ public class Database {
 
     // checks if name already exists, after server makes a user to add, it will check if it already exists
     public boolean nameAlreadyExists(String username) {
-        for(int i = 0; i < users.size(); i++) {
-            if(users.get(i).equalsUsername(username)) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).equalsUsername(username)) {
                 return true;
             }
         }
@@ -60,8 +60,8 @@ public class Database {
 
     //checks if password is already used
     public boolean passwordAlreadyExists(String password) {
-        for(int i = 0; i < users.size(); i++) {
-            if(users.get(i).equalsPassword(password)) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).equalsPassword(password)) {
                 return true;
             }
         }
@@ -71,8 +71,8 @@ public class Database {
 
     // gets and returns user object with that username
     public User getUser(String username) {
-        for(int i = 0; i < users.size(); i++) {
-            if(users.get(i).getLoginUsername().equals(username)) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getLoginUsername().equals(username)) {
                 return users.get(i);
             }
         }
@@ -88,9 +88,9 @@ public class Database {
         if (user1.getProfile().isFriend(user2.getProfile()) ||
             user2.getProfile().isFriend(user1.getProfile())) {
             return " Already Friended";
-        } else if(user1.getProfile().isBlocked(user2.getProfile())) {
+        } else if (user1.getProfile().isBlocked(user2.getProfile())) {
             return "First user blocked";
-        } else if(user2.getProfile().isBlocked(user1.getProfile())) {
+        } else if (user2.getProfile().isBlocked(user1.getProfile())) {
             return "Second user blocked";
         } else {
             user1.getProfile().addFriend(username2);
@@ -107,7 +107,7 @@ public class Database {
         if (user1.getProfile().isBlocked(user2.getProfile()) ||
             user2.getProfile().isBlocked(user1.getProfile())) {
             return " Already Blocked";
-        } else if(user1.getProfile().getFriends().contains("user2")
+        } else if (user1.getProfile().getFriends().contains("user2")
             && user2.getProfile().getFriends().contains("user1")) {
             user1.getProfile().removeFriend(username2);
             user2.getProfile().removeFriend(username1);
