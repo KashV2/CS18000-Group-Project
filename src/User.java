@@ -1,6 +1,17 @@
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * The User class. Representing a user of the social media app, which
+ * stores a username, password, and profile
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Abhinav Kotamreddy
+ * @author Kashyap Vallur
+ * @version November 3, 2024
+ */
+
 public class User implements Serializable {
     private String loginUsername;
     private String password;

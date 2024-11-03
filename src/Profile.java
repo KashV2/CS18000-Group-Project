@@ -1,5 +1,16 @@
 import java.io.Serializable;
 import java.util.*;
+
+/**
+ * The Profile class. Representing a user's profile that others can see.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Abhinav Kotamreddy
+ * @author Kashyap Vallur
+ * @version November 3, 2024
+ */
+
 public class Profile implements Serializable {
     private String name;
     private String description;

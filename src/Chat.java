@@ -1,6 +1,15 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * The Chat class. Representing the chat conversation between two people
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Jason Chan
+ * @version November 3, 2024
+ */
+
 public class Chat implements ChatInterface, Serializable {
     private String id;
     private ArrayList<String> messages = new ArrayList<>();

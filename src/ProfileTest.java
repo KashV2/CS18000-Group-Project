@@ -6,6 +6,16 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The ProfileTest program. Responsible for validating the Profile class.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Bach Gia Le
+ * @author Rong Yang
+ * @version November 3, 2024
+ */
+
 class ProfileTest {
 
     @Test

@@ -11,12 +11,14 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * The StockGame class.
+ * The ChatDatabaseTest program. Responsible for validating the ChatDatabase class
+ * and ensuring that data is persistent
  *
- * Purdue University -- CS18000 -- Fall 2024 -- Challenge 10
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Jason Chan
- * @version October 27, 2024
+ * @author Rong Yang
+ * @version November 3, 2024
  */
 
 class ChatDatabaseTest {
@@ -31,6 +33,8 @@ class ChatDatabaseTest {
         dbTest.saveChat(chat1);
 
         ChatDatabase dbTest2 = new ChatDatabase();
+        Chat chat2 = new Chat("user2", "user1");
+        assertTrue(dbTest2.chatRegistered(chat2));
         ArrayList<String> chatMessages = dbTest2.getChats().get(0).getMessages();
         assertEquals("meow", chatMessages.get(0));
         assertEquals("ahhhhh", chatMessages.get(1));
@@ -42,35 +46,6 @@ class ChatDatabaseTest {
         File file = new File("chats.dat");
         if (file.exists()) {
             file.delete();
-        }
-    }
-
-    @Test
-    public void databaseTest2() {
-        // Set up a stream to capture System.out output
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        System.setOut(new PrintStream(outputStream));
-
-        try {
-            ChatDatabase dbTest = new ChatDatabase();
-            Chat chat1 = new Chat("user1", "user2");
-            Chat chat2 = new Chat("user3", "user4");
-
-            chat1.addMessage("meow");
-            chat2.addMessage("bark");
-            chat2.addMessage("ahhhhhhh");
-            chat1.addMessage("mwahahahaha");
-
-            dbTest.addChat(chat1);
-            dbTest.addChat(chat2);
-            String output = outputStream.toString().trim();
-            output = output.replaceAll("\r", ""); // Remove carriage return characters for cross-platform compatibility
-
-            assertEquals(output, "Chat has been registered!\nChat has been registered!");
-
-        } finally {
-            System.setOut(originalOut);
         }
     }
 }

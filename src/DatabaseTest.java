@@ -7,6 +7,16 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The DatabaseTest class. Responsible for validating the Database class
+ * and ensuring User data is persistent
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Bach Gia Le
+ * @version November 3, 2024
+ */
+
 class DatabaseTest {
     private Database database;
     private User user1;

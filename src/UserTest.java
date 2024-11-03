@@ -3,6 +3,17 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * The UserTest class. Responsible for validating the User class.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Bach Gia Le
+ * @author Rong Yang
+ * @version November 3, 2024
+ */
+
 class UserTest {
 
     @Test

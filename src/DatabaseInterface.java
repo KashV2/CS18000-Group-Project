@@ -1,5 +1,14 @@
 import java.util.ArrayList;
 
+/**
+ * The Database interface. Responsible for storing all the methods used in the Database class.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Kashyap Vallur
+ * @version November 3, 2024
+ */
+
 public interface DatabaseInterface {
     public void addUser(User user);
     public ArrayList<User> getUsers();

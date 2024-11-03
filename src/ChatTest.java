@@ -2,6 +2,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The ChatTest class. Responsible for validating the Chat class.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Rong Yang
+ * @author Abhinav Kotamreddy
+ * @version November 3, 2024
+ */
+
 class ChatTest {
     @Test
     void testChatNotEquals() {

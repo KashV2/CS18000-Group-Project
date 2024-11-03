@@ -1,6 +1,15 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * The ChatDatabase class. Responsible for storing Chat objects persistently.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Jason Chan
+ * @version November 3, 2024
+ */
+
 public class ChatDatabase implements ChatDatabaseInterface {
     private ArrayList<Chat> chats = new ArrayList<>();
 

@@ -1,5 +1,14 @@
 import java.util.ArrayList;
 
+/**
+ * The Profile interface. Responsible for storing all the methods used in the Profile class.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Kashyap Vallur
+ * @version November 3, 2024
+ */
+
 public interface ProfileInterface {
     public String getName();
     public String getDescription();

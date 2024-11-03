@@ -1,6 +1,15 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * The Database class. Responsible for storing all the registered users.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Kashyap Vallur
+ * @version November 3, 2024
+ */
+
 public class Database {
     private ArrayList<User> users;
 
