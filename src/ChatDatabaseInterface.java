@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public interface ChatDatabasable {
+public interface ChatDatabaseInterface {
     public ArrayList<Chat> getChats();
     public void saveChat(Chat chat);
     public void addChat(Chat chat);

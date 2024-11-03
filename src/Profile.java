@@ -7,7 +7,8 @@ public class Profile implements Serializable {
     private ArrayList<String> blockedUsers;
 
     // profile constructor
-    public Profile(String name, String description, ArrayList<String> friends, ArrayList<String> blockedUsers) {
+    public Profile(String name, String description,
+            ArrayList<String> friends, ArrayList<String> blockedUsers) {
         this.name = name;
         this.description = description;
         this.friends = friends;
@@ -16,9 +17,7 @@ public class Profile implements Serializable {
 
     // name getter
     public String getName() {
-
         return name;
-
     }
 
     //description getter

@@ -2,7 +2,6 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Database {
-
     private ArrayList<User> users;
 
     //reads in all users from file
@@ -48,7 +47,6 @@ public class Database {
             }
         }
         return false;
-
     }
 
     //checks if password is already used
@@ -59,7 +57,6 @@ public class Database {
             }
         }
         return false;
-
     }
 
 
@@ -79,25 +76,18 @@ public class Database {
         User user1 = getUser(username1);
         User user2 = getUser(username2);
 
-        if(user1.getProfile().isFriend(user2.getProfile()) || user2.getProfile().isFriend(user1.getProfile())) {
+        if (user1.getProfile().isFriend(user2.getProfile()) ||
+            user2.getProfile().isFriend(user1.getProfile())) {
             return " Already Friended";
-        }
-
-        else if(user1.getProfile().isBlocked(user2.getProfile())) {
+        } else if(user1.getProfile().isBlocked(user2.getProfile())) {
             return "First user blocked";
-        }
-
-        else if(user2.getProfile().isBlocked(user1.getProfile())) {
+        } else if(user2.getProfile().isBlocked(user1.getProfile())) {
             return "Second user blocked";
-        }
-
-        else {
+        } else {
             user1.getProfile().addFriend(username2);
             user2.getProfile().addFriend(username1);
             return "Friended Successfully!";
         }
-
-
     }
 
     //attempts to friend user and gives a string message based off how it goes
@@ -105,25 +95,18 @@ public class Database {
         User user1 = getUser(username1);
         User user2 = getUser(username2);
 
-        if(user1.getProfile().isBlocked(user2.getProfile()) || user2.getProfile().isBlocked(user1.getProfile())) {
+        if (user1.getProfile().isBlocked(user2.getProfile()) ||
+            user2.getProfile().isBlocked(user1.getProfile())) {
             return " Already Blocked";
-        }
-
-        else if(user1.getProfile().getFriends().contains("user2") && user2.getProfile().getFriends().contains("user1")) {
+        } else if(user1.getProfile().getFriends().contains("user2")
+            && user2.getProfile().getFriends().contains("user1")) {
             user1.getProfile().removeFriend(username2);
             user2.getProfile().removeFriend(username1);
             user1.getProfile().addBlock(username2);
             return "User Blocked and Unfriended";
-        }
-
-
-        else {
+        } else {
             user1.getProfile().addBlock(username2);
             return "User Blocked";
         }
     }
-
-
-
-
 }

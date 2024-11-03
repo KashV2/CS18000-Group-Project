@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 
-public class ChatDatabase implements ChatDatabasable {
+public class ChatDatabase implements ChatDatabaseInterface {
     private ArrayList<Chat> chats = new ArrayList<>();
 
     public ChatDatabase() {

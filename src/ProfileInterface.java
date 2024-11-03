@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
 public interface ProfileInterface {
-
     public String getName();
     public String getDescription();
     public ArrayList<String> getFriends();
@@ -14,6 +13,4 @@ public interface ProfileInterface {
     public boolean isBlocked(Profile profile);
     public boolean isFriend(Profile profile);
     public void addBlock(String username);
-
-
 }

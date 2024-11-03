@@ -1,7 +1,7 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Chat implements Chatable, Serializable {
+public class Chat implements ChatInterface, Serializable {
     private String id;
     private ArrayList<String> messages = new ArrayList<>();
 
@@ -11,7 +11,7 @@ public class Chat implements Chatable, Serializable {
         //How to get a unique id to identify this chat:
         //Mash the loginUsernames together, whichever login comes first in the alphabet is first
         this.id = loginUsername1.compareTo(loginUsername2) < 0 ?
-                loginUsername1 + loginUsername2 : loginUsername2 + loginUsername1;
+            loginUsername1 + loginUsername2 : loginUsername2 + loginUsername1;
     }
 
     //Checks if two chats have the same ID

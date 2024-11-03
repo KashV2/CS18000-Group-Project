@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DatabaseTest {
-
     private Database database;
     private User user1;
     private User user2;
@@ -20,11 +19,13 @@ class DatabaseTest {
 
         ArrayList<String> friendsList1 = new ArrayList<>();
         ArrayList<String> blockedUsersList1 = new ArrayList<>();
-        Profile profile1 = new Profile("User One", "Description 1", friendsList1, blockedUsersList1);
+        Profile profile1 = new Profile("User One", "Description 1",
+            friendsList1, blockedUsersList1);
 
         ArrayList<String> friendsList2 = new ArrayList<>();
         ArrayList<String> blockedUsersList2 = new ArrayList<>();
-        Profile profile2 = new Profile("User Two", "Description 2", friendsList2, blockedUsersList2);
+        Profile profile2 = new Profile("User Two", "Description 2",
+            friendsList2, blockedUsersList2);
 
         user1 = new User("user1", "password1", profile1);
         user2 = new User("user2", "password2", profile2);
@@ -67,15 +68,19 @@ class DatabaseTest {
     @Test
     void testNameAlreadyExists() {
         database.addUser(user1);
-        assertTrue(database.nameAlreadyExists(user1.getLoginUsername()), "Username should already exist.");
-        assertFalse(database.nameAlreadyExists(user2.getLoginUsername()), "Username should not exist yet.");
+        assertTrue(database.nameAlreadyExists(user1.getLoginUsername()),
+            "Username should already exist.");
+        assertFalse(database.nameAlreadyExists(user2.getLoginUsername()),
+            "Username should not exist yet.");
     }
 
     @Test
     void testPasswordAlreadyExists() {
         database.addUser(user1);
-        assertTrue(database.passwordAlreadyExists(user1.getPassword()), "Password should already exist.");
-        assertFalse(database.passwordAlreadyExists(user2.getPassword()), "Password should not exist yet.");
+        assertTrue(database.passwordAlreadyExists(user1.getPassword()),
+            "Password should already exist.");
+        assertFalse(database.passwordAlreadyExists(user2.getPassword()),
+            "Password should not exist yet.");
     }
 
     @Test
@@ -86,9 +91,12 @@ class DatabaseTest {
         user1.getProfile().getFriends().remove("user2"); // Ensure they are not friends initially
 
         String result = database.friendUser("user1", "user2");
-        assertEquals("Friended Successfully!", result, "Users should be friended successfully.");
-        assertTrue(user1.getProfile().getFriends().contains("user2"), "User1 should have user2 as a friend.");
-        assertTrue(user2.getProfile().getFriends().contains("user1"), "User2 should have user1 as a friend.");
+        assertEquals("Friended Successfully!", result,
+            "Users should be friended successfully.");
+        assertTrue(user1.getProfile().getFriends().contains("user2"),
+            "User1 should have user2 as a friend.");
+        assertTrue(user2.getProfile().getFriends().contains("user1"),
+            "User2 should have user1 as a friend.");
     }
 
     @Test
@@ -99,9 +107,12 @@ class DatabaseTest {
         user1.getProfile().getFriends().remove("user2"); // Ensure they are not friends initially
 
         String result = database.blockUser("user1", "user2");
-        assertEquals("User Blocked", result, "User2 should be blocked by user1.");
-        assertTrue(user1.getProfile().getBlockedUsers().contains("user2"), "User2 should be blocked by user1.");
-        assertFalse(user2.getProfile().getFriends().contains("user1"), "User2 should not be a friend of user1.");
+        assertEquals("User Blocked", result,
+            "User2 should be blocked by user1.");
+        assertTrue(user1.getProfile().getBlockedUsers().contains("user2"),
+            "User2 should be blocked by user1.");
+        assertFalse(user2.getProfile().getFriends().contains("user1"),
+            "User2 should not be a friend of user1.");
     }
 
     @Test
@@ -112,22 +123,26 @@ class DatabaseTest {
 
         // Use the friendUser function to make user1 and user2 friends
         String friendshipResult = database.friendUser("user1", "user2");
-        assertEquals("Friended Successfully!", friendshipResult, "User1 and User2 should be friends initially.");
+        assertEquals("Friended Successfully!", friendshipResult,
+            "User1 and User2 should be friends initially.");
 
         // Verify that user1 and user2 are now friends
-        assertTrue(user1.getProfile().getFriends().contains("user2"), "User1 should have User2 as a friend.");
-        assertTrue(user2.getProfile().getFriends().contains("user1"), "User2 should have User1 as a friend.");
+        assertTrue(user1.getProfile().getFriends().contains("user2"),
+            "User1 should have User2 as a friend.");
+        assertTrue(user2.getProfile().getFriends().contains("user1"),
+            "User2 should have User1 as a friend.");
 
         // Block user2 from user1's side and verify the outcome
         String blockResult = database.blockUser("user1", "user2");
-        assertEquals("User Blocked and Unfriended", blockResult, "User2 should be unfriended and blocked by User1.");
+        assertEquals("User Blocked and Unfriended", blockResult,
+            "User2 should be unfriended and blocked by User1.");
 
         // Verify that user2 is now blocked by user1
-        assertTrue(user1.getProfile().getBlockedUsers().contains("user2"), "User2 should be blocked by User1.");
-        assertFalse(user1.getProfile().getFriends().contains("user2"), "User2 should no longer be a friend of User1.");
-        assertFalse(user2.getProfile().getFriends().contains("user1"), "User1 should no longer be a friend of User2.");
+        assertTrue(user1.getProfile().getBlockedUsers().contains("user2"),
+            "User2 should be blocked by User1.");
+        assertFalse(user1.getProfile().getFriends().contains("user2"),
+            "User2 should no longer be a friend of User1.");
+        assertFalse(user2.getProfile().getFriends().contains("user1"),
+            "User1 should no longer be a friend of User2.");
     }
-
-    
-    
 }
