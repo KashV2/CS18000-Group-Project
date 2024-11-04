@@ -18,6 +18,7 @@ hs_err_pid*
 .idea/
 *.iml
 *.iws
+*.xml
 
 # Mac
 .DS_Store
