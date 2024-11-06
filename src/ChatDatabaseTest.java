@@ -1,17 +1,14 @@
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.util.Scanner;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * The ChatDatabaseTest program. Responsible for validating the ChatDatabase class
+ * The tests.ChatDatabaseTest program. Responsible for validating the ChatDatabase class
  * and ensuring that data is persistent
  *
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
@@ -34,7 +31,7 @@ class ChatDatabaseTest {
 
         ChatDatabase dbTest2 = new ChatDatabase();
         Chat chat2 = new Chat("user2", "user1");
-        assertTrue(dbTest2.chatRegistered(chat2));
+        Assertions.assertTrue(dbTest2.chatRegistered(chat2));
         ArrayList<String> chatMessages = dbTest2.getChats().get(0).getMessages();
         assertEquals("meow", chatMessages.get(0));
         assertEquals("ahhhhh", chatMessages.get(1));
