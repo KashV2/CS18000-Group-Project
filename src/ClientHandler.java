@@ -22,19 +22,19 @@ public class ClientHandler implements Runnable {
             boolean signedIn = false;
             while (!signedIn) {
                 switch (signInResponse) {
-                case 1:
-                    //Sign in request to database
-                    //Check correct username and password
-                    //On fail send information to the client of how we failed
-                    //If we could sign in, send information back to the client that we successfully signed in
-                    break;
-                case 2:
-                    //Create new account request to database
-                    //Check if the username already exists but same password as another user is okay
-                    //On fail send information to the client of how we failed
-                    //If we could create an account, create it on the database, sign in on the client, and send information back to the client on the successful creation
-                    break;
-                default:
+                    case 1:
+                        //Sign in request to database
+                        //Check correct username and password
+                        //On fail send information to the client of how we failed
+                        //If we could sign in, send information back to the client that we successfully signed in
+                        break;
+                    case 2:
+                        //Create new account request to database
+                        //Check if the username already exists but same password as another user is okay
+                        //On fail send information to the client of how we failed
+                        //If we could create an account, create it on the database, sign in on the client, and send information back to the client on the successful creation
+                        break;
+                    default:
                 }
             }
 
