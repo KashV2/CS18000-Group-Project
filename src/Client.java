@@ -42,6 +42,34 @@ public class Client {
         serverWriter[0].println(loginUsername);
         serverWriter[0].println(password);
         serverWriter[0].println(signInResponse);
+
+        //AFTER LOGGING IN -- Main Menu / Loop
+        //Choose between editing self or searching & viewing other profile
+        while (true) {
+            int menuResponse = 0;
+            while (true) {
+                System.out.println("Choose between the following:\n1. Edit User Profile" +
+                    "\n2. Search & View Users" +
+                    "\n3. Exit");
+                try {
+                    menuResponse = Integer.parseInt(scanner.nextLine());
+                    if (menuResponse < 1 || menuResponse > 3) throw new RuntimeException();
+                    break;
+                } catch (RuntimeException e) {
+                    System.out.println("Invalid input!");
+                }
+            }
+
+            //Handle Menu Selection
+            if (menuResponse == 1) {
+                //Edit User Profile
+            } else if (menuResponse == 2) {
+                //Search & View Users
+            } else {
+                //Exit
+                break;
+            }
+        }
     }
 
     private static void createServerStreams(Socket server, BufferedReader[] serverReader, PrintWriter[] serverWriter) {

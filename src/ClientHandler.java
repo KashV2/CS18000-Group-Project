@@ -19,7 +19,9 @@ public class ClientHandler implements Runnable {
             String loginUsername = clientReader.readLine();
             String password = clientReader.readLine();
             int signInResponse = Integer.parseInt(clientReader.readLine());
-            switch (signInResponse) {
+            boolean signedIn = false;
+            while (!signedIn) {
+                switch (signInResponse) {
                 case 1:
                     //Sign in request to database
                     //Check correct username and password
@@ -33,7 +35,10 @@ public class ClientHandler implements Runnable {
                     //If we could create an account, create it on the database, sign in on the client, and send information back to the client on the successful creation
                     break;
                 default:
+                }
             }
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
