@@ -1,11 +1,18 @@
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.lang.Thread;
 
-public class Server {
+public class Server implements Runnable{
     private static ArrayList<Socket> clients = new ArrayList<>();
 
     public static void main(String[] args) {
+        Thread serverThread = new Thread(new Server());
+        //Only one server so call run
+        serverThread.run();
+    }
+
+    public void run() {
         ServerSocket serverSocket = createServerSocket();
         if (serverSocket == null) return;
 
@@ -26,14 +33,16 @@ public class Server {
             ServerSocket ss = new ServerSocket(8080);
             return ss;
         } catch (IOException e) {
-            System.out.println("Could not create server socket");
             return null;
         }
     }
 
     private static void closeServerSocket(ServerSocket ss) {
         try {
-            ss.close();
+            if (ss != null) ss.close();
+            for (Socket client : clients) {
+                if (client != null) client.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
