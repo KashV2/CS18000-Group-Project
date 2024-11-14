@@ -23,7 +23,7 @@ public class Server {
 
     private static ServerSocket createServerSocket() {
         try {
-            ServerSocket ss = new ServerSocket(9000);
+            ServerSocket ss = new ServerSocket(8080);
             return ss;
         } catch (IOException e) {
             System.out.println("Could not create server socket");

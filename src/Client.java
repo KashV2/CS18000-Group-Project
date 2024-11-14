@@ -55,7 +55,7 @@ public class Client {
     
     private static Socket createServer() {
         try {
-            Socket server = new Socket("10.24.176.212", 9000);
+            Socket server = new Socket("localhost", 8080);
             return server;
         } catch (Exception e) {
             System.out.println("Failed to connect to the server!");
