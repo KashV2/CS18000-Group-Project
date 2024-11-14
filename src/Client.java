@@ -12,8 +12,8 @@ public class Client {
         System.out.println("Connected to Server!");
 
         Scanner scanner = new Scanner(System.in);
-        BufferedReader[] serverReader = new BufferedReader[1];
-        PrintWriter[] serverWriter = new PrintWriter[1];
+        BufferedReader[] serverReader = new BufferedReader[1]; //Use index zero for access
+        PrintWriter[] serverWriter = new PrintWriter[1]; //Use index zero for access
         createServerStreams(server, serverReader, serverWriter);
 
         //Validate signInResponse
@@ -59,6 +59,9 @@ public class Client {
                     System.out.println("Invalid input!");
                 }
             }
+
+            //Send Menu Selection to Server
+            serverWriter[0].println(menuResponse);
 
             //Handle Menu Selection
             if (menuResponse == 1) {

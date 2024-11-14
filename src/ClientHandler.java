@@ -38,6 +38,7 @@ public class ClientHandler implements Runnable {
                 }
             }
 
+            int menuResponse = Integer.parseInt(clientReader.readLine());
 
         } catch (IOException e) {
             e.printStackTrace();
