@@ -1,7 +1,7 @@
 # CS18000-Group-Project
 
 # Instructions on how to compile and run project
-For Phase 1, we do not have a dedicated main method to show the interaction between the clients to the server to the databases. That will be delivered in Phase 2. Instead, we have our test cases that can be run for each of our 5 classes: UserTest, ProfileTest, DatabaseTest, ChatTest, and ChatDatabaseTest. Open the project on IntelliJ, install JUnit5 packages if prompted to, and press the run button at the top right corner (or F5) to run each test script. 
+For Phase 1, we do not have a dedicated main method to show the interaction between the clients to the server to the databases. That will be delivered in Phase 2. Instead, we have our test cases that can be run for each of our 5 classes: UserTest, ProfileTest, DatabaseTest, ChatTest, and tests.ChatDatabaseTest. Open the project on IntelliJ, install JUnit5 packages if prompted to, and press the run button at the top right corner (or F5) to run each test script. 
 
 # Brightspace and Vocareum Submission
 Jason Chan submitted Phase 1 workspace to Vocareum
