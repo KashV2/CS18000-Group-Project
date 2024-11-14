@@ -39,7 +39,11 @@ public class ClientHandler implements Runnable {
             }
 
             int menuResponse = Integer.parseInt(clientReader.readLine());
-
+            if (menuResponse == 1) {
+                //Edit User Profile
+            } else if (menuResponse == 2) {
+                //Search & View User Profile
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
