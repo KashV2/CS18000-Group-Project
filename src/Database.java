@@ -21,6 +21,8 @@ public class Database {
             while (true) { // Continue until an EOFException is caught
                 User user = (User) in.readObject();
                 users.add(user);
+                System.out.println("Login Name: " + user.getLoginUsername() + " " +
+                    "Profile Name: " + user.getProfile().getName());
             }
         } catch (FileNotFoundException | EOFException | StreamCorruptedException e) {
             //Ignore

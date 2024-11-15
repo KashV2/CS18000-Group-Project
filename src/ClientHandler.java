@@ -22,6 +22,7 @@ public class ClientHandler implements Runnable {
             clientWriter = new PrintWriter(client.getOutputStream(), true);
             Database db = Server.getDatabase();
 
+            //Signing In Loop
             boolean signedIn = false;
             while (!signedIn) {
                 String loginUsername = clientReader.readLine();
@@ -55,13 +56,13 @@ public class ClientHandler implements Runnable {
                         //On fail send information to the client of how we failed
                         //If we could create an account, create it on the database, sign in on the client,
                         //and send information back to the client on the successful creation
-                        profile = new Profile(loginUsername, "",
-                             new ArrayList<>(),  new ArrayList<>());
-                        user = new User(loginUsername, password, profile);
                         if (db.nameAlreadyExists(loginUsername)) {
                             errorMessage = "Username already exists";
                             signedIn = false;
                         } else {
+                            profile = new Profile(loginUsername, "",
+                                new ArrayList<>(),  new ArrayList<>());
+                            user = new User(loginUsername, password, profile);
                             db.addUser(user);
                             //User added successfully
                             signedIn = true;
@@ -74,10 +75,11 @@ public class ClientHandler implements Runnable {
                 clientWriter.println(errorMessage);
             }
 
-            int menuResponse = Integer.parseInt(clientReader.readLine());
-            if (menuResponse == 1) {
-                int menuResponse2 = Integer.parseInt(clientReader.readLine());
-                switch (menuResponse2) {
+            while (true) {
+                int menuResponse = Integer.parseInt(clientReader.readLine());
+                if (menuResponse == 1) {
+                    int menuResponse2 = Integer.parseInt(clientReader.readLine());
+                    switch (menuResponse2) {
                     case 1:
 
                         String newName = clientReader.readLine();
@@ -85,16 +87,11 @@ public class ClientHandler implements Runnable {
                         clientWriter.println("Name Changed Successfully");
 
                         break;
-
-
                     case 2:
-
                         String newDescription = clientReader.readLine();
                         user.getProfile().setDescription(newDescription);
                         clientWriter.println("Description Changed Successfully");
                         break;
-
-
                     case 3:
                         int menuResponse3 = Integer.parseInt(clientReader.readLine());
 
@@ -107,9 +104,6 @@ public class ClientHandler implements Runnable {
                             String ans = db.friendUser(user.getLoginUsername(), user1.getLoginUsername());
 
                             clientWriter.println(ans);
-
-
-
                         }
                         if(menuResponse3 == 2) {
 
@@ -120,65 +114,61 @@ public class ClientHandler implements Runnable {
                             user.getProfile().removeFriend(removeAddedUser);
                             user1.getProfile().removeFriend(user.getProfile().getName());
 
-
                             clientWriter.println("Succesfully unfriended");
+                        }
+                        break;
+                    case 4:
+                        int menuResponse4 = Integer.parseInt(clientReader.readLine());
+
+                        if(menuResponse4 == 1) {
+                            String blockUser = clientReader.readLine();
+
+
+                            User user1 = db.getUserFromProfileName(blockUser);
+
+                            String ans = db.blockUser(user.getLoginUsername(), user1.getLoginUsername());
+
+                            clientWriter.println(ans);
 
 
 
                         }
+                        if(menuResponse4 == 2) {
+
+                            String removeblockedUser = clientReader.readLine();
+
+                            User user1 = db.getUserFromProfileName(removeblockedUser);
+
+                            user.getProfile().removeBlock(removeblockedUser);
+                            user1.getProfile().removeBlock(user.getProfile().getName());
+
+
+                            clientWriter.println("Succesfully unblocked");
+                        }
                         break;
-
-                case 4:
-                    int menuResponse4 = Integer.parseInt(clientReader.readLine());
-
-                    if(menuResponse4 == 1) {
-                        String blockUser = clientReader.readLine();
-
-
-                        User user1 = db.getUserFromProfileName(blockUser);
-
-                        String ans = db.blockUser(user.getLoginUsername(), user1.getLoginUsername());
-
-                        clientWriter.println(ans);
-
-
-
                     }
-                    if(menuResponse4 == 2) {
-
-                        String removeblockedUser = clientReader.readLine();
-
-                        User user1 = db.getUserFromProfileName(removeblockedUser);
-
-                        user.getProfile().removeBlock(removeblockedUser);
-                        user1.getProfile().removeBlock(user.getProfile().getName());
-
-
-                        clientWriter.println("Succesfully unblocked");
-
-
-
+                    //Edit User Profile
+                } else if (menuResponse == 2) {
+                    //Search & View User Profile
+                    ArrayList<User> usersList = db.getUsers();
+                    String searchName = clientReader.readLine();
+                    boolean userFound = false;
+                    for (int i = 0; i < usersList.size(); i++) {
+                        if(searchName.equals(usersList.get(i).getLoginUsername())) {
+                            Profile profile = usersList.get(i).getProfile();
+                            clientWriter.printf("Name: %s\n", profile.getName());
+                            clientWriter.printf("Description: %s\n", profile.getDescription());
+                            clientWriter.printf("Friends: %s\n", profile.getFriends());
+                            userFound = true;
+                            break;
+                        }
                     }
+                    if(!userFound) {
+                        clientWriter.println("");
+                    }
+                } else if (menuResponse == 3) {
+                    //Exit
                     break;
-                }
-                //Edit User Profile
-            } else if (menuResponse == 2) {
-                //Search & View User Profile
-                ArrayList<User> usersList = db.getUsers();
-                String searchName = clientReader.readLine();
-                boolean userFound = false;
-                for (int i = 0; i < usersList.size(); i++) {
-                    if(searchName.equals(usersList.get(i).getLoginUsername())) {
-                        Profile profile = usersList.get(i).getProfile();
-                        clientWriter.printf("Name: %s\n", profile.getName());
-                        clientWriter.printf("Description: %s\n", profile.getDescription());
-                        clientWriter.printf("Friends: %s\n", profile.getFriends());
-                        userFound = true;
-                        break;
-                    }
-                }
-                if(!userFound) {
-                    clientWriter.println("");
                 }
             }
         } catch (IOException e) {

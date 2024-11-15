@@ -176,11 +176,32 @@ public class Client {
                     if (message.isEmpty()) {
                         System.out.println("User not found");
                     } else {
+                        //View User
                         System.out.println(message); //Name
                         message = serverReader[0].readLine();
                         System.out.println(message); //Description
                         message = serverReader[0].readLine();
                         System.out.println(message); //Friends
+
+                        //Options to do on chosen User
+//                        System.out.println("What would you like to do to the user?" +
+//                            "\n1. Add Friend" +
+//                            "\n2. Remove Friend" +
+//                            "\n3. Block User" +
+//                            "\n4. Message");
+//                        int searchUserOption = Integer.parseInt(scanner.nextLine()); //Assume right input
+//                        switch (searchUserOption) {
+//                            case 1:
+//                                break;
+//                            case 2:
+//                                break;
+//                            case 3:
+//                                break;
+//                            case 4:
+//
+//                                break;
+//                            default: //Ignore
+//                        }
                     }
                 } catch(IOException e) {
                     e.printStackTrace();
