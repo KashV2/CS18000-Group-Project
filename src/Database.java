@@ -18,10 +18,9 @@ public class Database {
         users = new ArrayList<>();
         try (FileInputStream fileIn = new FileInputStream("users.dat");
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            User user = (User) in.readObject();
-            while (user != null) { // Continue until an EOFException is caught
+            while (true) { // Continue until an EOFException is caught
+                User user = (User) in.readObject();
                 users.add(user);
-                user = (User) in.readObject();
             }
         } catch (FileNotFoundException | EOFException | StreamCorruptedException e) {
             //Ignore
@@ -31,11 +30,13 @@ public class Database {
     }
     // add user to arraylist and output to the file
     public void addUser(User user) {
+        boolean append = new File("users.dat").exists(); // Check if the file already exists
 
-        try (FileOutputStream fileOut = new FileOutputStream("users.dat", true);
-             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
-            users.add(user);
-            out.writeObject(user);
+        try (FileOutputStream fileOut = new FileOutputStream("users.dat", append);
+             ObjectOutputStream out = append ? new AppendingObjectOutputStream(fileOut) :
+             new ObjectOutputStream(fileOut)) {
+            users.add(user); // Add to in-memory list
+            out.writeObject(user); // Serialize the user object
             out.flush();
             System.out.println("User data has been appended to 'users'.");
         } catch (Exception e) {

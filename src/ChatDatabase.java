@@ -16,10 +16,9 @@ public class ChatDatabase implements ChatDatabaseInterface {
     public ChatDatabase() {
         try (FileInputStream fileIn = new FileInputStream("chats.dat");
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            Chat chat = (Chat) in.readObject();
-            while (chat != null) {
+            while (true) {
+                Chat chat = (Chat)in.readObject();
                 chats.add(chat);
-                chat = (Chat)in.readObject();
             }
         } catch (FileNotFoundException | EOFException | StreamCorruptedException e) {
             //Ignore
@@ -38,8 +37,8 @@ public class ChatDatabase implements ChatDatabaseInterface {
         ArrayList<Chat> newChats = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream("chats.dat");
             ObjectInputStream ois = new ObjectInputStream(fis)) {
-            Chat readChat = (Chat)ois.readObject();
-            while (readChat != null) {
+            while (true) {
+                Chat readChat = (Chat)ois.readObject();
                 if (!chat.equals(readChat)) {
                     //Rewrite chats that is not supposed to be replaced
                     newChats.add(readChat);
@@ -47,7 +46,6 @@ public class ChatDatabase implements ChatDatabaseInterface {
                     //Replace correct chat
                     newChats.add(chat);
                 }
-                readChat = (Chat)ois.readObject();
             }
         } catch (EOFException | StreamCorruptedException e) {
             //Ignore
@@ -71,8 +69,11 @@ public class ChatDatabase implements ChatDatabaseInterface {
     //Step 2
     //In the server, if the chat is not registered, we will add it to the db
     public void addChat(Chat chat) {
-        try (FileOutputStream fileOut = new FileOutputStream("chats.dat", true);
-             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
+        boolean append = new File("chats.dat").exists();
+
+        try (FileOutputStream fileOut = new FileOutputStream("chats.dat", append);
+             ObjectOutputStream out = append ? new AppendingObjectOutputStream(fileOut) :
+             new ObjectOutputStream(fileOut)) {
             chats.add(chat);
             out.writeObject(chat);
             out.flush();
