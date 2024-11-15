@@ -27,13 +27,13 @@ public class ChatDatabase implements ChatDatabaseInterface {
         }
     }
 
-    public ArrayList<Chat> getChats() {
+    public synchronized ArrayList<Chat> getChats() {
         return chats;
     }
 
     //Step 3
     //When sending messages, after a client sends something, we should update the chat in the db
-    public void saveChat(Chat chat) {
+    public synchronized void saveChat(Chat chat) {
         ArrayList<Chat> newChats = new ArrayList<>();
         try (FileInputStream fis = new FileInputStream("chats.dat");
             ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -68,7 +68,7 @@ public class ChatDatabase implements ChatDatabaseInterface {
 
     //Step 2
     //In the server, if the chat is not registered, we will add it to the db
-    public void addChat(Chat chat) {
+    public synchronized void addChat(Chat chat) {
         boolean append = new File("chats.dat").exists();
 
         try (FileOutputStream fileOut = new FileOutputStream("chats.dat", append);
@@ -85,7 +85,7 @@ public class ChatDatabase implements ChatDatabaseInterface {
 
     //Step 1
     //Check to see if a chat between these two people already exist in the db
-    public boolean chatRegistered(Chat chat) {
+    public synchronized boolean chatRegistered(Chat chat) {
         for (int i = 0; i < chats.size(); i++) {
             if (chats.get(i).equals(chat)) {
                 return true;

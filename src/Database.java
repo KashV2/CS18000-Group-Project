@@ -29,7 +29,7 @@ public class Database {
         }
     }
     // add user to arraylist and output to the file
-    public void addUser(User user) {
+    public synchronized void addUser(User user) {
         boolean append = new File("users.dat").exists(); // Check if the file already exists
 
         try (FileOutputStream fileOut = new FileOutputStream("users.dat", append);
@@ -45,12 +45,12 @@ public class Database {
     }
 
     //getter
-    public ArrayList<User> getUsers() {
+    public synchronized ArrayList<User> getUsers() {
         return users;
     }
 
     // checks if name already exists, after server makes a user to add, it will check if it already exists
-    public boolean nameAlreadyExists(String username) {
+    public synchronized boolean nameAlreadyExists(String username) {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).equalsUsername(username)) {
                 return true;
@@ -60,7 +60,7 @@ public class Database {
     }
 
     //checks if password is already used
-    public boolean passwordAlreadyExists(String password) {
+    public synchronized boolean passwordAlreadyExists(String password) {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).equalsPassword(password)) {
                 return true;
@@ -71,7 +71,7 @@ public class Database {
 
 
     // gets and returns user object with that username
-    public User getUser(String username) {
+    public synchronized User getUser(String username) {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getLoginUsername().equals(username)) {
                 return users.get(i);
@@ -81,7 +81,7 @@ public class Database {
     }
 
     //attempts to friend user and gives a string message based off how it goes
-    public String friendUser(String username1, String username2) {
+    public synchronized String friendUser(String username1, String username2) {
 
         User user1 = getUser(username1);
         User user2 = getUser(username2);
@@ -101,7 +101,7 @@ public class Database {
     }
 
     //attempts to friend user and gives a string message based off how it goes
-    public String blockUser(String username1, String username2) {
+    public synchronized String blockUser(String username1, String username2) {
         User user1 = getUser(username1);
         User user2 = getUser(username2);
 
@@ -120,13 +120,12 @@ public class Database {
         }
     }
 
-    public User getUserFromProfileName(String profileUsername) {
+    public synchronized User getUserFromProfileName(String profileUsername) {
         for (int i = 0; i < users.size(); i++) {
             if (profileUsername.equals(users.get(i).getProfile().getName())) {
                 return users.get(i);
             }
         }
         return null;
-
     }
 }
