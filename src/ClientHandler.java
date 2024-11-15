@@ -167,7 +167,7 @@ public class ClientHandler implements Runnable {
                 ArrayList<User> usersList = db.getUsers();
                 String searchName = clientReader.readLine();
                 boolean userFound = false;
-                for(int i =0; i<usersList.size(); i++) {
+                for (int i = 0; i < usersList.size(); i++) {
                     if(searchName.equals(usersList.get(i).getLoginUsername())) {
                         Profile profile = usersList.get(i).getProfile();
                         clientWriter.printf("Name: %s\n", profile.getName());
