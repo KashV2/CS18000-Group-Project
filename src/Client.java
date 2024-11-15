@@ -3,9 +3,6 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Client {
-    private static String loginUsername = null;
-    private static String password = null;
-
     public static void main(String[] args) {
         Socket server = createServer();
         if (server == null) return;
@@ -16,36 +13,54 @@ public class Client {
         PrintWriter[] serverWriter = new PrintWriter[1]; //Use index zero for access
         createServerStreams(server, serverReader, serverWriter);
 
-        //Validate signInResponse
-        int signInResponse = 0;
-        while (true) {
-            System.out.println("Do you want to sign in or create a new account?\n1 Sign in\n2 Create new account");
-            try {
-                signInResponse = Integer.parseInt(scanner.nextLine());
-                if (signInResponse != 1 && signInResponse != 2) {
-                    throw new RuntimeException();
+        boolean signedIn = false;
+        while(!signedIn) {
+            //Validate signInResponse
+            int signInResponse = 0;
+            while (true) {
+                System.out.println("Do you want to sign in or create a new account?\n1 Sign in\n2 Create new account");
+                try {
+                    signInResponse = Integer.parseInt(scanner.nextLine());
+                    if (signInResponse != 1 && signInResponse != 2) {
+                        throw new RuntimeException();
+                    }
+                    break;
+                } catch (RuntimeException e) {
+                    System.out.println("Invalid input!");
                 }
-                break;
-            } catch (RuntimeException e) {
-                System.out.println("Invalid input!");
+            }
+
+            //Login input
+            System.out.println("Please enter your username: ");
+            String loginUsername = scanner.nextLine();
+
+            System.out.println("Please enter your password: ");
+            String password = scanner.nextLine();
+
+            //Send login or create new account request to server (must be in this order)
+            serverWriter[0].println(loginUsername);
+            serverWriter[0].println(password);
+            serverWriter[0].println(signInResponse);
+
+            String errorMessage = null;
+            try {
+                signedIn = Boolean.parseBoolean(serverReader[0].readLine());
+                errorMessage = serverReader[0].readLine();
+
+                if (!signedIn) {
+                    if (errorMessage != null) {
+                        System.out.println(errorMessage);
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
-        //Login input
-        System.out.println("Please enter your username: ");
-        loginUsername = scanner.nextLine();
-
-        System.out.println("Please enter your password: ");
-        password = scanner.nextLine();
-
-        //Send login or create new account request to server (must be in this order)
-        serverWriter[0].println(loginUsername);
-        serverWriter[0].println(password);
-        serverWriter[0].println(signInResponse);
-
         //AFTER LOGGING IN -- Main Menu / Loop
         //Choose between editing self or searching & viewing other profile
-        while (true) {
+        boolean running = true;
+        while (running) {
             int menuResponse = 0;
             while (true) {
                 System.out.println("Choose between the following:\n1. Edit User Profile" +
@@ -66,11 +81,113 @@ public class Client {
             //Handle Menu Selection
             if (menuResponse == 1) {
                 //Edit User Profile
+
+                System.out.println("Would you like to change the name(1), description(2), friends(3), or blocked users(4)?");
+                int ans = scanner.nextInt();
+                serverWriter[0].println(ans);
+
+                switch (ans) {
+                    case 1:
+
+                        System.out.println("Please enter your new name: ");
+                        String newName = scanner.nextLine();
+                        serverWriter[0].println(newName);
+                        try {
+                            System.out.println(serverReader[0].readLine());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    case 2:
+                        System.out.println("Please enter your new description: ");
+                        String newDescription = scanner.nextLine();
+                        serverWriter[0].println(newDescription);
+                        try {
+                            System.out.println(serverReader[0].readLine());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        break;
+                    case 3:
+                        System.out.println("Would you like to add or remove a friend? (1 or 2)");
+                        String ans2 = scanner.nextLine();
+
+                        serverWriter[0].println(ans2);
+
+                        if(ans2.equals("1")) {
+                            System.out.println("Who Would you like to add?");
+                            String ans3 = scanner.nextLine();
+                            serverWriter[0].println(ans2);
+                            try {
+                                System.out.println(serverReader[0].readLine());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                        }
+                        else if (ans2.equals("2")) {
+                            System.out.println("Who Would you like to remove?");
+                            String ans3 = scanner.nextLine();
+                            serverWriter[0].println(ans2);
+                            try {
+                                System.out.println(serverReader[0].readLine());
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        break;
+
+                case 4:
+                    System.out.println("Would you like to add or remove a Blocked user? (1 or 2)");
+                    String ans3 = scanner.nextLine();
+
+                    serverWriter[0].println(ans3);
+
+                    if(ans3.equals("1")) {
+                        System.out.println("Who Would you like to block?");
+                        String ans4 = scanner.nextLine();
+                        serverWriter[0].println(ans4);
+                        try {
+                            System.out.println(serverReader[0].readLine());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                    else if (ans3.equals("2")) {
+                        System.out.println("Who Would you like to remove?");
+                        String ans4 = scanner.nextLine();
+                        serverWriter[0].println(ans4);
+                        try {
+                            System.out.println(serverReader[0].readLine());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    break;
+                }
             } else if (menuResponse == 2) {
                 //Search & View Users
-            } else {
+                System.out.println("Enter Username:");
+                String searchName = scanner.nextLine();
+                serverWriter[0].println(searchName);
+                try {
+                    String message = serverReader[0].readLine();
+                    if (message.isEmpty()) {
+                        System.out.println("User not found");
+                    } else {
+                        System.out.println(message); //Name
+                        message = serverReader[0].readLine();
+                        System.out.println(message); //Description
+                        message = serverReader[0].readLine();
+                        System.out.println(message); //Friends
+                    }
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            } else if(menuResponse==3){
                 //Exit
-                break;
+                running= false;
             }
         }
     }

@@ -118,4 +118,14 @@ public class Database {
             return "User Blocked";
         }
     }
+
+    public User getUserFromProfileName(String profileUsername) {
+        for (int i = 0; i < users.size(); i++) {
+            if (profileUsername.equals(users.get(i).getProfile().getName())) {
+                return users.get(i);
+            }
+        }
+        return null;
+
+    }
 }
