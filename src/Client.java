@@ -82,8 +82,8 @@ public class Client {
             if (menuResponse == 1) {
                 //Edit User Profile
 
-                System.out.println("Would you like to change the name(1), description(2), friends(3), or blocked users(4)?");
-                int ans = scanner.nextInt();
+                System.out.println("Would you like to change the name(1) or description(2)?");
+                int ans = Integer.parseInt(scanner.nextLine());
                 serverWriter[0].println(ans);
 
                 switch (ans) {
@@ -108,63 +108,7 @@ public class Client {
                             throw new RuntimeException(e);
                         }
                         break;
-                    case 3:
-                        System.out.println("Would you like to add or remove a friend? (1 or 2)");
-                        String ans2 = scanner.nextLine();
 
-                        serverWriter[0].println(ans2);
-
-                        if(ans2.equals("1")) {
-                            System.out.println("Who Would you like to add?");
-                            String ans3 = scanner.nextLine();
-                            serverWriter[0].println(ans2);
-                            try {
-                                System.out.println(serverReader[0].readLine());
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-
-                        }
-                        else if (ans2.equals("2")) {
-                            System.out.println("Who Would you like to remove?");
-                            String ans3 = scanner.nextLine();
-                            serverWriter[0].println(ans2);
-                            try {
-                                System.out.println(serverReader[0].readLine());
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                        break;
-
-                case 4:
-                    System.out.println("Would you like to add or remove a Blocked user? (1 or 2)");
-                    String ans3 = scanner.nextLine();
-
-                    serverWriter[0].println(ans3);
-
-                    if(ans3.equals("1")) {
-                        System.out.println("Who Would you like to block?");
-                        String ans4 = scanner.nextLine();
-                        serverWriter[0].println(ans4);
-                        try {
-                            System.out.println(serverReader[0].readLine());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                    }
-                    else if (ans3.equals("2")) {
-                        System.out.println("Who Would you like to remove?");
-                        String ans4 = scanner.nextLine();
-                        serverWriter[0].println(ans4);
-                        try {
-                            System.out.println(serverReader[0].readLine());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                    break;
                 }
             } else if (menuResponse == 2) {
                 //Search & View Users
@@ -184,24 +128,64 @@ public class Client {
                         System.out.println(message); //Friends
 
                         //Options to do on chosen User
-//                        System.out.println("What would you like to do to the user?" +
-//                            "\n1. Add Friend" +
-//                            "\n2. Remove Friend" +
-//                            "\n3. Block User" +
-//                            "\n4. Message");
-//                        int searchUserOption = Integer.parseInt(scanner.nextLine()); //Assume right input
-//                        switch (searchUserOption) {
-//                            case 1:
-//                                break;
-//                            case 2:
-//                                break;
-//                            case 3:
-//                                break;
-//                            case 4:
-//
-//                                break;
-//                            default: //Ignore
-//                        }
+                        System.out.println("What would you like to do to the user?" +
+                            "\n1. Add or remove Friend" +
+                            "\n2. Block or Unblock User" +
+                            "\n3. Message");
+                        int searchUserOption = Integer.parseInt(scanner.nextLine()); //Assume right input
+                        serverWriter[0].println(searchUserOption);
+
+                        switch (searchUserOption) {
+                            case 1:
+                                System.out.println("Would you like to add or remove a friend? (1 or 2)");
+                                String ans2 = scanner.nextLine();
+
+
+                                serverWriter[0].println(ans2);
+
+                                if(ans2.equals("1")) {
+                                    try {
+                                        System.out.println(serverReader[0].readLine());
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+
+                                }
+                                else if (ans2.equals("2")) {
+                                    try {
+                                        System.out.println(serverReader[0].readLine());
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                                break;
+                            case 2:
+                                System.out.println("Would you like to add or remove a Blocked user? (1 or 2)");
+                                String ans3 = scanner.nextLine();
+                                serverWriter[0].println(ans3);
+                                if(ans3.equals("1")) {
+                                    try {
+                                        System.out.println(serverReader[0].readLine());
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+
+                                }
+                                else if (ans3.equals("2")) {
+
+
+
+                                    try {
+                                        System.out.println(serverReader[0].readLine());
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                                break;
+                            case 3:
+                                //messaging to be implemented
+                                break;
+                        }
                     }
                 } catch(IOException e) {
                     e.printStackTrace();

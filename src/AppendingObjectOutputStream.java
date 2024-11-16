@@ -3,7 +3,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 // Custom ObjectOutputStream that skips the header for appending
-public class AppendingObjectOutputStream extends ObjectOutputStream {
+public class AppendingObjectOutputStream extends ObjectOutputStream implements AppendingObjectOutputStreamInterface {
     public AppendingObjectOutputStream(OutputStream out) throws IOException {
         super(out);
     }

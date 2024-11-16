@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @version November 3, 2024
  */
 
-public class Database {
+public class Database implements DatabaseInterface {
     private ArrayList<User> users;
 
     //reads in all users from file
@@ -22,7 +22,8 @@ public class Database {
                 User user = (User) in.readObject();
                 users.add(user);
                 System.out.println("Login Name: " + user.getLoginUsername() + " " +
-                    "Profile Name: " + user.getProfile().getName());
+                    "Profile Name: " + user.getProfile().getName() + " " +
+                    "Description: " + user.getProfile().getDescription());
             }
         } catch (FileNotFoundException | EOFException | StreamCorruptedException e) {
             //Ignore
@@ -37,6 +38,7 @@ public class Database {
         try (FileOutputStream fileOut = new FileOutputStream("users.dat", append);
              ObjectOutputStream out = append ? new AppendingObjectOutputStream(fileOut) :
              new ObjectOutputStream(fileOut)) {
+            System.out.println(user.getProfile().getName() + " " + user.getProfile().getDescription());
             users.add(user); // Add to in-memory list
             out.writeObject(user); // Serialize the user object
             out.flush();
@@ -129,5 +131,36 @@ public class Database {
             }
         }
         return null;
+    }
+
+    public void saveUser(User user) {
+        ArrayList<User> newUsers = new ArrayList<>();
+        try (FileInputStream fis = new FileInputStream("users.dat");
+            ObjectInputStream ois = new ObjectInputStream(fis)) {
+            while (true) {
+                User readUser = (User) ois.readObject();
+                if (!user.equalsUsername(readUser.getLoginUsername())) {
+                    newUsers.add(readUser);
+                } else {
+                    newUsers.add(user);
+                }
+            }
+        } catch (EOFException | StreamCorruptedException e) {
+            //Ignore
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Unable to Save User");
+            e.printStackTrace();
+        }
+
+        //Actually rewriting all users back into the database
+        try (FileOutputStream fos = new FileOutputStream("users.dat");
+            ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            for (User userInstance : newUsers) {
+                oos.writeObject(userInstance);
+                oos.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
