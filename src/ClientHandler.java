@@ -78,6 +78,7 @@ public class ClientHandler implements Runnable {
             while (true) {
                 int menuResponse = Integer.parseInt(clientReader.readLine());
                 if (menuResponse == 1) {
+                    //Edit User Profile
                     int menuResponse2 = Integer.parseInt(clientReader.readLine());
                     switch (menuResponse2) {
                     case 1:
@@ -94,8 +95,6 @@ public class ClientHandler implements Runnable {
                         db.saveUser(user);
                         clientWriter.println("Description Changed Successfully");
                         break;
-
-                    //Edit User Profile
                     }
                 }
                 else if (menuResponse == 2) {
@@ -110,7 +109,6 @@ public class ClientHandler implements Runnable {
                                 clientWriter.printf("Description: %s\n", profile.getDescription());
                                 clientWriter.printf("Friends: %s\n", profile.getFriends());
                                 userFound = true;
-
 
 
                                     int menuResponse2 = Integer.parseInt(clientReader.readLine());
@@ -171,24 +169,15 @@ public class ClientHandler implements Runnable {
                                         }
                                         break;
                                     case 3:
-                                        //message chatting implementation
-
+                                        //Message User
                                         break;
+                                    default: //Back
                                     }
-
-
-
-
-
-
-
-
-
+                                    break;
                             }
                             if (!userFound) {
                                 clientWriter.println("");
                             }
-
                         }
                 } else if (menuResponse == 3) {
                     //Exit

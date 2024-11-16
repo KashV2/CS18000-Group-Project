@@ -457,6 +457,6 @@ public class RunLocalTest {
     }
 
     public static void main(String[] args) {
-        org.junit.platform.console.ConsoleLauncher.main(new String[]{"--select-class", "RunLocalTest"});
+        //org.junit.platform.console.ConsoleLauncher.main(new String[]{"--select-class", "RunLocalTest"});
     }
 }

@@ -108,7 +108,6 @@ public class Client {
                             throw new RuntimeException(e);
                         }
                         break;
-
                 }
             } else if (menuResponse == 2) {
                 //Search & View Users
@@ -131,7 +130,8 @@ public class Client {
                         System.out.println("What would you like to do to the user?" +
                             "\n1. Add or remove Friend" +
                             "\n2. Block or Unblock User" +
-                            "\n3. Message");
+                            "\n3. Message" +
+                            "\n4. Back");
                         int searchUserOption = Integer.parseInt(scanner.nextLine()); //Assume right input
                         serverWriter[0].println(searchUserOption);
 
@@ -143,7 +143,7 @@ public class Client {
 
                                 serverWriter[0].println(ans2);
 
-                                if(ans2.equals("1")) {
+                                if (ans2.equals("1")) {
                                     try {
                                         System.out.println(serverReader[0].readLine());
                                     } catch (IOException e) {
@@ -163,7 +163,7 @@ public class Client {
                                 System.out.println("Would you like to add or remove a Blocked user? (1 or 2)");
                                 String ans3 = scanner.nextLine();
                                 serverWriter[0].println(ans3);
-                                if(ans3.equals("1")) {
+                                if (ans3.equals("1")) {
                                     try {
                                         System.out.println(serverReader[0].readLine());
                                     } catch (IOException e) {
@@ -172,9 +172,6 @@ public class Client {
 
                                 }
                                 else if (ans3.equals("2")) {
-
-
-
                                     try {
                                         System.out.println(serverReader[0].readLine());
                                     } catch (IOException e) {
@@ -183,8 +180,9 @@ public class Client {
                                 }
                                 break;
                             case 3:
-                                //messaging to be implemented
+                                //Message User
                                 break;
+                            default: //Back
                         }
                     }
                 } catch(IOException e) {
