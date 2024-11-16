@@ -36,7 +36,7 @@ public class RunLocalTest {
             dbTest.addChat(chat1);
             chat1.addMessage("meow");
             chat1.addMessage("ahhhhh");
-            dbTest.saveChat(chat1);
+            dbTest.saveChats();
 
             ChatDatabase dbTest2 = new ChatDatabase();
             Chat chat2 = new Chat("user2", "user1");

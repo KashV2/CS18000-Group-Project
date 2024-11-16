@@ -20,10 +20,10 @@ public class Database implements Interface.DatabaseInterface {
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
             while (true) { // Continue until an EOFException is caught
                 User user = (User) in.readObject();
-                users.add(user);
                 System.out.println("Login Name: " + user.getLoginUsername() + " " +
                     "Profile Name: " + user.getProfile().getName() + " " +
                     "Description: " + user.getProfile().getDescription());
+                users.add(user);
             }
         } catch (FileNotFoundException | EOFException | StreamCorruptedException e) {
             //Ignore
@@ -33,19 +33,11 @@ public class Database implements Interface.DatabaseInterface {
     }
     // add user to arraylist and output to the file
     public synchronized void addUser(User user) {
-        boolean append = new File("users.dat").exists(); // Check if the file already exists
+        users.add(user);
+        System.out.println(user.getProfile().getName() + " " + user.getProfile().getDescription());
+        System.out.println("User data has been appended to 'users'.");
 
-        try (FileOutputStream fileOut = new FileOutputStream("users.dat", append);
-             ObjectOutputStream out = append ? new AppendingObjectOutputStream(fileOut) :
-             new ObjectOutputStream(fileOut)) {
-            System.out.println(user.getProfile().getName() + " " + user.getProfile().getDescription());
-            users.add(user); // Add to in-memory list
-            out.writeObject(user); // Serialize the user object
-            out.flush();
-            System.out.println("User data has been appended to 'users'.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        saveUsers();
     }
 
     //getter
@@ -133,29 +125,11 @@ public class Database implements Interface.DatabaseInterface {
         return null;
     }
 
-    public void saveUser(User user) {
-        ArrayList<User> newUsers = new ArrayList<>();
-        try (FileInputStream fis = new FileInputStream("users.dat");
-            ObjectInputStream ois = new ObjectInputStream(fis)) {
-            while (true) {
-                User readUser = (User) ois.readObject();
-                if (!user.equalsUsername(readUser.getLoginUsername())) {
-                    newUsers.add(readUser);
-                } else {
-                    newUsers.add(user);
-                }
-            }
-        } catch (EOFException | StreamCorruptedException e) {
-            //Ignore
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Unable to Save User");
-            e.printStackTrace();
-        }
-
+    public synchronized void saveUsers() {
         //Actually rewriting all users back into the database
         try (FileOutputStream fos = new FileOutputStream("users.dat");
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            for (User userInstance : newUsers) {
+            for (User userInstance : users) {
                 oos.writeObject(userInstance);
                 oos.flush();
             }

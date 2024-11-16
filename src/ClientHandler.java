@@ -63,7 +63,6 @@ public class ClientHandler implements Runnable {
                         profile = new Profile(loginUsername, "",
                             new ArrayList<>(), new ArrayList<>());
                         user = new User(loginUsername, password, profile);
-                        System.out.println(profile.getName());
                         db.addUser(user);
                         //User added successfully
                         signedIn = true;
@@ -82,21 +81,20 @@ public class ClientHandler implements Runnable {
                     //Edit User Profile
                     int menuResponse2 = Integer.parseInt(clientReader.readLine());
                     switch (menuResponse2) {
-                    case 1:
+                        case 1:
 
-                        String newName = clientReader.readLine();
-                        user.getProfile().setName(newName);
-                        db.saveUser(user);
-                        clientWriter.println("Name Changed Successfully");
+                            String newName = clientReader.readLine();
+                            user.getProfile().setName(newName);
+                            clientWriter.println("Name Changed Successfully");
 
-                        break;
-                    case 2:
-                        String newDescription = clientReader.readLine();
-                        user.getProfile().setDescription(newDescription);
-                        db.saveUser(user);
-                        clientWriter.println("Description Changed Successfully");
-                        break;
+                            break;
+                        case 2:
+                            String newDescription = clientReader.readLine();
+                            user.getProfile().setDescription(newDescription);
+                            clientWriter.println("Description Changed Successfully");
+                            break;
                     }
+                    db.saveUsers();
                 }
                 else if (menuResponse == 2) {
                         //Search & View User Profile

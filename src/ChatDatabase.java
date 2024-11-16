@@ -33,31 +33,11 @@ public class ChatDatabase implements Interface.ChatDatabaseInterface {
 
     //Step 3
     //When sending messages, after a client sends something, we should update the chat in the db
-    public synchronized void saveChat(Chat chat) {
-        ArrayList<Chat> newChats = new ArrayList<>();
-        try (FileInputStream fis = new FileInputStream("chats.dat");
-            ObjectInputStream ois = new ObjectInputStream(fis)) {
-            while (true) {
-                Chat readChat = (Chat)ois.readObject();
-                if (!chat.equals(readChat)) {
-                    //Rewrite chats that is not supposed to be replaced
-                    newChats.add(readChat);
-                } else {
-                    //Replace correct chat
-                    newChats.add(chat);
-                }
-            }
-        } catch (EOFException | StreamCorruptedException e) {
-            //Ignore
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Unable to save chat");
-            e.printStackTrace();
-        }
-
+    public synchronized void saveChats() {
         //Actually rewriting all chats into the database
         try (FileOutputStream fos = new FileOutputStream("chats.dat");
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            for (Chat newChat : newChats) {
+            for (Chat newChat : chats) {
                 oos.writeObject(newChat);
                 oos.flush();
             }
@@ -69,18 +49,10 @@ public class ChatDatabase implements Interface.ChatDatabaseInterface {
     //Step 2
     //In the server, if the chat is not registered, we will add it to the db
     public synchronized void addChat(Chat chat) {
-        boolean append = new File("chats.dat").exists();
+        chats.add(chat);
+        System.out.println("Chat has been registered!");
 
-        try (FileOutputStream fileOut = new FileOutputStream("chats.dat", append);
-             ObjectOutputStream out = append ? new AppendingObjectOutputStream(fileOut) :
-             new ObjectOutputStream(fileOut)) {
-            chats.add(chat);
-            out.writeObject(chat);
-            out.flush();
-            System.out.println("Chat has been registered!");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        saveChats();
     }
 
     //Step 1

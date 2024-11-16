@@ -84,7 +84,7 @@ public interface ChatDatabaseInterface {
  * @version November 3, 2024
  */
     public ArrayList<Chat> getChats();
-    public void saveChat(Chat chat);
+    public void saveChats();
     public void addChat(Chat chat);
     public boolean chatRegistered(Chat chat);
 }
