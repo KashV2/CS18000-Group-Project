@@ -32,6 +32,13 @@ copy users.dat usersBackup.dat
 
 echo.
 echo -----
+echo Running Checkstyle Checks:
+echo -----
+java -jar checkstyle-10.18.2-all.jar -c checkstyle.xml */*.java
+java -jar checkstyle-10.18.2-all.jar -c checkstyle.xml *.java
+
+echo.
+echo -----
 echo Checking for Compilation Errors:
 echo -----
 javac -cp "junit-platform-console-standalone-1.9.3.jar;hamcrest-core-1.3.jar;sqlite-jdbc-3.47.0.0.jar;." *.java
@@ -43,13 +50,6 @@ echo -----
 echo Running Local Tests:
 echo -----
 java -cp "junit-platform-console-standalone-1.9.3.jar;hamcrest-core-1.3.jar;sqlite-jdbc-3.47.0.0.jar;." RunLocalTest
-
-echo.
-echo -----
-echo Running Checkstyle Checks:
-echo -----
-java -jar checkstyle-10.18.2-all.jar -c checkstyle.xml */*.java
-java -jar checkstyle-10.18.2-all.jar -c checkstyle.xml *.java
 
 echo.
 echo -----

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @version November 3, 2024
  */
 
-public class ChatDatabase implements Interface.ChatDatabaseInterface {
+public class ChatDatabase implements ChatDatabaseInterface {
     private ArrayList<Chat> chats = new ArrayList<>();
 
     public ChatDatabase() {

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @version November 3, 2024
  */
 
-public class Database implements Interface.DatabaseInterface {
+public class Database implements DatabaseInterface {
     private ArrayList<User> users;
 
     //reads in all users from file

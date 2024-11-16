@@ -12,7 +12,7 @@ import java.util.*;
  * @version November 3, 2024
  */
 
-public class User implements Serializable {
+public class User implements Serializable, UserInterface {
     private String loginUsername;
     private String password;
     private Profile profile;

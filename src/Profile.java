@@ -11,7 +11,7 @@ import java.util.*;
  * @version November 3, 2024
  */
 
-public class Profile implements Serializable, Interface.ProfileInterface {
+public class Profile implements Serializable, ProfileInterface {
     private String name;
     private String description;
     private ArrayList<String> friends;
