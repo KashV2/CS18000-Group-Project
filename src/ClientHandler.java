@@ -63,6 +63,7 @@ public class ClientHandler implements Runnable {
                         profile = new Profile(loginUsername, "",
                             new ArrayList<>(), new ArrayList<>());
                         user = new User(loginUsername, password, profile);
+                        System.out.println(profile.getName());
                         db.addUser(user);
                         //User added successfully
                         signedIn = true;
@@ -175,10 +176,10 @@ public class ClientHandler implements Runnable {
                                     }
                                     break;
                             }
-                            if (!userFound) {
-                                clientWriter.println("");
-                            }
                         }
+                    if (!userFound) {
+                        clientWriter.println("");
+                    }
                 } else if (menuResponse == 3) {
                     //Exit
                     break;
