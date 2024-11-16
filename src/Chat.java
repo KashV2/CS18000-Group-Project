@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @version November 3, 2024
  */
 
-public class Chat implements ChatInterface, Serializable {
+public class Chat implements Interface.ChatInterface, Serializable {
     private String id;
     private ArrayList<String> messages = new ArrayList<>();
 
