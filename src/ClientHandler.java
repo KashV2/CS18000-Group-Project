@@ -81,6 +81,12 @@ public class ClientHandler implements Runnable {
                 int menuResponse = Integer.parseInt(clientReader.readLine());
                 if (menuResponse == 1) {
                     //Edit User Profile
+                    //Send info about self
+                    clientWriter.printf("Name: %s\n", profile.getName());
+                    clientWriter.printf("Description: %s\n", profile.getDescription());
+                    clientWriter.printf("Friends: %s\n", profile.getFriends());
+                    clientWriter.printf("Blocked: %s\n", profile.getBlockedUsers());
+
                     int menuResponse2 = Integer.parseInt(clientReader.readLine());
                     switch (menuResponse2) {
                         case 1:

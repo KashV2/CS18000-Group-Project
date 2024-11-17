@@ -83,9 +83,17 @@ public class Profile implements Serializable, ProfileInterface {
         return this.blockedUsers.contains(profile.getName());
     }
 
+    public boolean isBlocked(User user) {
+        return this.blockedUsers.contains(user.getLoginUsername());
+    }
+
     //checks if user is friend
     public boolean isFriend(Profile profile) {
         return this.friends.contains(profile.getName());
+    }
+
+    public boolean isFriend(User user) {
+        return this.friends.contains(user.getLoginUsername());
     }
 
 

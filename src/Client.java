@@ -82,6 +82,15 @@ public class Client {
             //Handle Menu Selection
             if (menuResponse == 1) {
                 //Edit User Profile
+                //Retrieve info about yourself
+                try {
+                    System.out.println(serverReader[0].readLine()); //Name
+                    System.out.println(serverReader[0].readLine()); //Description
+                    System.out.println(serverReader[0].readLine()); //Friends
+                    System.out.println(serverReader[0].readLine()); //Blocked
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 System.out.println("Would you like to change the name(1) or description(2)?");
                 int ans = Integer.parseInt(scanner.nextLine());

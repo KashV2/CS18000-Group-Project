@@ -82,12 +82,12 @@ public class Database implements DatabaseInterface {
         User user1 = getUser(username1);
         User user2 = getUser(username2);
 
-        if (user1.getProfile().isFriend(user2.getProfile()) ||
-            user2.getProfile().isFriend(user1.getProfile())) {
+        if (user1.getProfile().isFriend(user2) ||
+            user2.getProfile().isFriend(user1)) {
             return "Already Friended";
-        } else if (user1.getProfile().isBlocked(user2.getProfile())) {
+        } else if (user1.getProfile().isBlocked(user2)) {
             return "First user blocked";
-        } else if (user2.getProfile().isBlocked(user1.getProfile())) {
+        } else if (user2.getProfile().isBlocked(user1)) {
             return "Second user blocked";
         } else {
             user1.getProfile().addFriend(username2);
@@ -101,11 +101,11 @@ public class Database implements DatabaseInterface {
         User user1 = getUser(username1);
         User user2 = getUser(username2);
 
-        if (user1.getProfile().isBlocked(user2.getProfile()) ||
-            user2.getProfile().isBlocked(user1.getProfile())) {
+        if (user1.getProfile().isBlocked(user2) ||
+            user2.getProfile().isBlocked(user1)) {
             return "Already Blocked";
-        } else if (user1.getProfile().getFriends().contains("user2")
-            && user2.getProfile().getFriends().contains("user1")) {
+        } else if (user1.getProfile().isFriend(user2)
+            && user2.getProfile().isFriend(user1)) {
             user1.getProfile().removeFriend(username2);
             user2.getProfile().removeFriend(username1);
             user1.getProfile().addBlock(username2);
