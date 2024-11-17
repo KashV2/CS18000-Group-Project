@@ -13,6 +13,7 @@ public class Client {
         PrintWriter[] serverWriter = new PrintWriter[1]; //Use index zero for access
         createServerStreams(server, serverReader, serverWriter);
 
+        String loginUsername = null;
         boolean signedIn = false;
         while(!signedIn) {
             //Validate signInResponse
@@ -32,7 +33,7 @@ public class Client {
 
             //Login input
             System.out.println("Please enter your username: ");
-            String loginUsername = scanner.nextLine();
+            loginUsername = scanner.nextLine();
 
             System.out.println("Please enter your password: ");
             String password = scanner.nextLine();
@@ -190,7 +191,7 @@ public class Client {
 
                                 //Loading Messages
                                 String currentHistoryMessage = serverReader[0].readLine();
-                                while (currentHistoryMessage != null) {
+                                while (!currentHistoryMessage.equals("<~!||NULL||!~>")) {
                                     System.out.println(currentHistoryMessage);
                                     currentHistoryMessage = serverReader[0].readLine();
                                 }
@@ -202,6 +203,11 @@ public class Client {
                                     String send = scanner.nextLine();
                                     serverWriter[0].println(send);
                                     if (send.equals("/bye")) break;
+                                }
+                                try {
+                                    messageHandler.join();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
                                 }
                                 break;
                             default: //Back

@@ -78,6 +78,7 @@ public class ClientHandler implements Runnable {
             }
 
             while (true) {
+                System.out.println("I'm back");
                 int menuResponse = Integer.parseInt(clientReader.readLine());
                 if (menuResponse == 1) {
                     //Edit User Profile
@@ -176,6 +177,8 @@ public class ClientHandler implements Runnable {
                                                 receivingUser.getProfile().isBlocked(user.getProfile())) {
                                                 clientWriter.println(false);
                                                 break;
+                                            } else {
+                                                clientWriter.println(true);
                                             }
 
                                             //Creating or retrieving chat object
@@ -190,19 +193,39 @@ public class ClientHandler implements Runnable {
                                             ArrayList<String> messageHistory = chat.getMessages();
                                             for (String message : messageHistory) {
                                                 clientWriter.println(message);
+                                                System.out.println("This is from loading: " + message);
                                             }
-                                            clientWriter.println((String)null);
+                                            clientWriter.println("<~!||NULL||!~>");
 
                                             //Message Loop
                                             inDM = true;
                                             while (true) {
                                                 String sentMessage = clientReader.readLine();
-                                                if (sentMessage.equals("/bye")) {
-                                                    inDM = false;
-                                                    break;
+                                                if (sentMessage.charAt(0) == '/') {
+                                                    //Secret Exit Message
+                                                    if (sentMessage.equals("/bye")) {
+                                                        inDM = false;
+                                                        clientWriter.println("/bye"); //Send this message to ourselves
+                                                        break;
+                                                    }
+                                                    //Secret Deletion Code
+                                                    sentMessage = sentMessage.substring(1);
+                                                    //Assume input is correct because this is just temporary
+                                                    int index = Integer.parseInt(sentMessage);
+                                                    if (index < 0 || index >= messageHistory.size()) continue;
+                                                    int loginNameLength = user.getLoginUsername().length();
+                                                    if (messageHistory.get(index).length() >= loginNameLength) {
+                                                        //Check if we own the message we are trying to delete
+                                                        if (messageHistory.get(index).substring(0, loginNameLength).equals(user.getLoginUsername())) {
+                                                            chat.removeMessage(index);
+                                                            chatDb.saveChats();
+                                                        }
+                                                    }
+                                                    continue;
                                                 }
 
                                                 //Process of saving message and sending to receiver
+                                                sentMessage = user.getLoginUsername() + ": " + sentMessage;
                                                 chat.addMessage(sentMessage);
                                                 chatDb.saveChats();
                                                 //Send to Receiving Client if they are online (and in DM's too)
