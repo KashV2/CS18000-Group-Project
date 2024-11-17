@@ -123,9 +123,10 @@ public class ClientHandler implements Runnable {
                                                 String addUser = searchName;
 
 
-                                                User user1 = db.getUserFromProfileName(addUser);
+                                                User user1 = db.getUser(addUser);
 
                                                 String ans = db.friendUser(user.getLoginUsername(), user1.getLoginUsername());
+                                                db.saveUsers();
 
                                                 clientWriter.println(ans);
                                             }
@@ -133,10 +134,11 @@ public class ClientHandler implements Runnable {
 
                                                 String removeAddedUser = searchName;
 
-                                                User user1 = db.getUserFromProfileName(removeAddedUser);
+                                                User user1 = db.getUser(removeAddedUser);
 
                                                 user.getProfile().removeFriend(removeAddedUser);
                                                 user1.getProfile().removeFriend(user.getProfile().getName());
+                                                db.saveUsers();
 
                                                 clientWriter.println("Succesfully unfriended");
                                             }
@@ -148,9 +150,10 @@ public class ClientHandler implements Runnable {
                                                 String blockUser = searchName;
 
 
-                                                User user1 = db.getUserFromProfileName(blockUser);
+                                                User user1 = db.getUser(blockUser);
 
                                                 String ans = db.blockUser(user.getLoginUsername(), user1.getLoginUsername());
+                                                db.saveUsers();
 
                                                 clientWriter.println(ans);
 
@@ -160,10 +163,11 @@ public class ClientHandler implements Runnable {
 
                                                 String removeblockedUser = searchName;
 
-                                                User user1 = db.getUserFromProfileName(removeblockedUser);
+                                                User user1 = db.getUser(removeblockedUser);
 
                                                 user.getProfile().removeBlock(removeblockedUser);
                                                 user1.getProfile().removeBlock(user.getProfile().getName());
+                                                db.saveUsers();
 
 
                                                 clientWriter.println("Succesfully unblocked");
