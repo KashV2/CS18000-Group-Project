@@ -84,7 +84,7 @@ public class Database implements DatabaseInterface {
 
         if (user1.getProfile().isFriend(user2.getProfile()) ||
             user2.getProfile().isFriend(user1.getProfile())) {
-            return " Already Friended";
+            return "Already Friended";
         } else if (user1.getProfile().isBlocked(user2.getProfile())) {
             return "First user blocked";
         } else if (user2.getProfile().isBlocked(user1.getProfile())) {
@@ -103,7 +103,7 @@ public class Database implements DatabaseInterface {
 
         if (user1.getProfile().isBlocked(user2.getProfile()) ||
             user2.getProfile().isBlocked(user1.getProfile())) {
-            return " Already Blocked";
+            return "Already Blocked";
         } else if (user1.getProfile().getFriends().contains("user2")
             && user2.getProfile().getFriends().contains("user1")) {
             user1.getProfile().removeFriend(username2);

@@ -78,7 +78,6 @@ public class ClientHandler implements Runnable {
             }
 
             while (true) {
-                System.out.println("I'm back");
                 int menuResponse = Integer.parseInt(clientReader.readLine());
                 if (menuResponse == 1) {
                     //Edit User Profile
