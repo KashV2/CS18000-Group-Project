@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.lang.Thread;
 
-public class Server implements Runnable{
+public class Server implements Runnable, ServerInterface{
     private static ArrayList<Socket> clients = new ArrayList<>();
     private static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private final static Database db = new Database();

@@ -18,6 +18,8 @@ public interface ProfileInterface {
     public void addFriend(String username);
     public void removeBlock(String username);
     public boolean isBlocked(Profile profile);
+    public boolean isBlocked(User user);
     public boolean isFriend(Profile profile);
+    public boolean isFriend(User user);
     public void addBlock(String username);
 }

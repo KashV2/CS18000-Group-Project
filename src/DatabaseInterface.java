@@ -15,4 +15,6 @@ public interface DatabaseInterface {
     public User getUser(String username);
     public String friendUser(String username1, String username2);
     public String blockUser(String username1, String username2);
+    public User getUserFromProfileName(String profileUsername);
+    public void saveUsers();
 }
