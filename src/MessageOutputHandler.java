@@ -2,7 +2,17 @@ import java.util.Scanner;
 import java.net.*;
 import java.io.*;
 
-public class MessageOutputHandler implements Runnable {
+/**
+ * The MessageOutputHandler program. A thread that listens to incoming messages from the other person during
+ * direct messaging so that you can also send messages to them at the same time.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Jason Chan
+ * @version November 17, 2024
+ */
+
+public class MessageOutputHandler implements Runnable, MessageOutputHandlerInterface {
     private BufferedReader reader;
 
     public MessageOutputHandler(BufferedReader reader) {

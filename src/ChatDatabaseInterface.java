@@ -9,8 +9,9 @@ import java.util.ArrayList;
  * @version November 3, 2024
  */
 public interface ChatDatabaseInterface {
+    public Chat getChat(Chat chat);
     public ArrayList<Chat> getChats();
-    void saveChats() throws IOException;
+    public void saveChats();
     public void addChat(Chat chat);
     public boolean chatRegistered(Chat chat);
 }

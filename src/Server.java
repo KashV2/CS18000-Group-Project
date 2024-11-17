@@ -3,7 +3,17 @@ import java.io.*;
 import java.util.ArrayList;
 import java.lang.Thread;
 
-public class Server implements Runnable, ServerInterface{
+/**
+ * The Server program. Run this on one computer once before starting up any client application.
+ * This program allows clients to properly connect to the server in a thread-safe way.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Jason Chan
+ * @version November 17, 2024
+ */
+
+public class Server implements Runnable, ServerInterface {
     private static ArrayList<Socket> clients = new ArrayList<>();
     private static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private final static Database db = new Database();
@@ -16,16 +26,37 @@ public class Server implements Runnable, ServerInterface{
     }
 
     public void run() {
-        ServerSocket serverSocket = createServerSocket();
-        if (serverSocket == null) return;
+        //Create Server Socket
+        ServerSocket serverSocket = null;
+        try {
+            serverSocket = new ServerSocket(8080);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
 
         while (true) {
-            Socket client = createClient(serverSocket);
-            clients.add(client);
-            if (client == null) {
-                closeServerSocket(serverSocket);
+            //Create client
+            Socket client = null;
+            try {
+                client = serverSocket.accept();
+            } catch (IOException e) {
+                System.out.println("Could not create client");
                 return;
             }
+
+            if (client == null) {
+                try {
+                    serverSocket.close();
+                    for (Socket onlineClient : clients) {
+                        if (onlineClient != null) onlineClient.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return;
+            }
+            clients.add(client);
             ClientHandler clientHandler = new ClientHandler(client);
             clientHandlers.add(clientHandler);
             Thread clientHandlerThread = new Thread(clientHandler);
@@ -43,35 +74,5 @@ public class Server implements Runnable, ServerInterface{
 
     public static ChatDatabase getChatDatabase() {
         return chatDb;
-    }
-
-    private static ServerSocket createServerSocket() {
-        try {
-            ServerSocket ss = new ServerSocket(8080);
-            return ss;
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    private static void closeServerSocket(ServerSocket ss) {
-        try {
-            if (ss != null) ss.close();
-            for (Socket client : clients) {
-                if (client != null) client.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static Socket createClient(ServerSocket serverSocket) {
-        try {
-            Socket client = serverSocket.accept();
-            return client;
-        } catch (IOException e) {
-            System.out.println("Could not create client");
-            return null;
-        }
     }
 }

@@ -2,20 +2,48 @@ import java.net.*;
 import java.io.*;
 import java.util.Scanner;
 
-public class Client implements ClientInterface {
-    public static void main(String[] args) {
-        Socket server = createServer();
-        if (server == null) return;
-        System.out.println("Connected to Server!");
+/**
+ * The Client program. Run this to connect to a server and interact with the application.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Jason Chan
+ * @author Abhinav Kotamreddy
+ * @author Kashyap Vallur
+ * @version November 17, 2024
+ */
 
+public class Client implements Runnable, ClientInterface {
+    public static void main(String[] args) {
+        Thread clientThread = new Thread(new Client());
+        clientThread.run(); //Only one
+    }
+
+    public void run() {
+        //Connect to server
+        Socket server = null;
+        try {
+            server = new Socket("localhost", 8080);
+        } catch (Exception e) {
+            System.out.println("Failed to connect to the server!");
+            return;
+        }
+
+        System.out.println("Connected to Server!");
         Scanner scanner = new Scanner(System.in);
         BufferedReader[] serverReader = new BufferedReader[1]; //Use index zero for access
         PrintWriter[] serverWriter = new PrintWriter[1]; //Use index zero for access
-        createServerStreams(server, serverReader, serverWriter);
+        //Create Server Streams
+        try {
+            serverReader[0] = new BufferedReader(new InputStreamReader(server.getInputStream()));
+            serverWriter[0] = new PrintWriter(server.getOutputStream(), true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         String loginUsername = null;
         boolean signedIn = false;
-        while(!signedIn) {
+        while (!signedIn) {
             //Validate signInResponse
             int signInResponse = 0;
             while (true) {
@@ -97,27 +125,26 @@ public class Client implements ClientInterface {
                 serverWriter[0].println(ans);
 
                 switch (ans) {
-                    case 1:
-
-                        System.out.println("Please enter your new name: ");
-                        String newName = scanner.nextLine();
-                        serverWriter[0].println(newName);
-                        try {
-                            System.out.println(serverReader[0].readLine());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        break;
-                    case 2:
-                        System.out.println("Please enter your new description: ");
-                        String newDescription = scanner.nextLine();
-                        serverWriter[0].println(newDescription);
-                        try {
-                            System.out.println(serverReader[0].readLine());
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        break;
+                case 1:
+                    System.out.println("Please enter your new name: ");
+                    String newName = scanner.nextLine();
+                    serverWriter[0].println(newName);
+                    try {
+                        System.out.println(serverReader[0].readLine());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                case 2:
+                    System.out.println("Please enter your new description: ");
+                    String newDescription = scanner.nextLine();
+                    serverWriter[0].println(newDescription);
+                    try {
+                        System.out.println(serverReader[0].readLine());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
                 }
             } else if (menuResponse == 2) {
                 //Search & View Users
@@ -146,114 +173,92 @@ public class Client implements ClientInterface {
                         serverWriter[0].println(searchUserOption);
 
                         switch (searchUserOption) {
-                            case 1:
-                                System.out.println("Would you like to add or remove a friend? (1 or 2)");
-                                String ans2 = scanner.nextLine();
+                        case 1:
+                            System.out.println("Would you like to add or remove a friend? (1 or 2)");
+                            String ans2 = scanner.nextLine();
 
 
-                                serverWriter[0].println(ans2);
+                            serverWriter[0].println(ans2);
 
-                                if (ans2.equals("1")) {
-                                    try {
-                                        System.out.println(serverReader[0].readLine());
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-
-                                }
-                                else if (ans2.equals("2")) {
-                                    try {
-                                        System.out.println(serverReader[0].readLine());
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                }
-                                break;
-                            case 2:
-                                System.out.println("Would you like to add or remove a Blocked user? (1 or 2)");
-                                String ans3 = scanner.nextLine();
-                                serverWriter[0].println(ans3);
-                                if (ans3.equals("1")) {
-                                    try {
-                                        System.out.println(serverReader[0].readLine());
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-
-                                }
-                                else if (ans3.equals("2")) {
-                                    try {
-                                        System.out.println(serverReader[0].readLine());
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                }
-                                break;
-                            case 3:
-                                //Message User
-                                boolean canMessage = Boolean.parseBoolean(serverReader[0].readLine());
-                                //Checking blocked
-                                if (!canMessage) {
-                                    System.out.println("Either you or your receiver is blocked");
-                                    break;
-                                }
-
-                                //Loading Messages
-                                String currentHistoryMessage = serverReader[0].readLine();
-                                while (!currentHistoryMessage.equals("<~!||NULL||!~>")) {
-                                    System.out.println(currentHistoryMessage);
-                                    currentHistoryMessage = serverReader[0].readLine();
-                                }
-
-                                //Message Loop
-                                Thread messageHandler = new Thread(new MessageOutputHandler(serverReader[0]));
-                                messageHandler.start();
-                                while (true) {
-                                    String send = scanner.nextLine();
-                                    serverWriter[0].println(send);
-                                    if (send.equals("/bye")) break;
-                                }
+                            if (ans2.equals("1")) {
                                 try {
-                                    messageHandler.join();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                                    System.out.println(serverReader[0].readLine());
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
                                 }
+
+                            } else if (ans2.equals("2")) {
+                                try {
+                                    System.out.println(serverReader[0].readLine());
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                            break;
+                        case 2:
+                            System.out.println("Would you like to add or remove a Blocked user? (1 or 2)");
+                            String ans3 = scanner.nextLine();
+                            serverWriter[0].println(ans3);
+                            if (ans3.equals("1")) {
+                                try {
+                                    System.out.println(serverReader[0].readLine());
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+
+                            } else if (ans3.equals("2")) {
+                                try {
+                                    System.out.println(serverReader[0].readLine());
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                            break;
+                        case 3:
+                            //Message User
+                            boolean canMessage = Boolean.parseBoolean(serverReader[0].readLine());
+                            //Checking blocked
+                            if (!canMessage) {
+                                System.out.println("Either you or your receiver is blocked");
                                 break;
-                            default: //Back
+                            }
+
+                            //Loading Messages
+                            String currentHistoryMessage = serverReader[0].readLine();
+                            while (!currentHistoryMessage.equals("<~!||NULL||!~>")) {
+                                System.out.println(currentHistoryMessage);
+                                currentHistoryMessage = serverReader[0].readLine();
+                            }
+
+                            //Message Loop
+                            Thread messageHandler = new Thread(new MessageOutputHandler(serverReader[0]));
+                            messageHandler.start();
+                            while (true) {
+                                String send = scanner.nextLine();
+                                serverWriter[0].println(send);
+                                if (send.equals("/bye")) break;
+                            }
+                            try {
+                                messageHandler.join();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            break;
+                        default: //Back
                         }
                     }
-                } catch(IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else if(menuResponse==3){
+            } else if (menuResponse == 3) {
                 //Exit
-                running= false;
+                running = false;
             }
         }
-    }
 
-    private static void createServerStreams(Socket server, BufferedReader[] serverReader, PrintWriter[] serverWriter) {
+        //Close Server
         try {
-            serverReader[0] = new BufferedReader(new InputStreamReader(server.getInputStream()));
-            serverWriter[0] = new PrintWriter(server.getOutputStream(), true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private static Socket createServer() {
-        try {
-            Socket server = new Socket("localhost", 8080);
-            return server;
-        } catch (Exception e) {
-            System.out.println("Failed to connect to the server!");
-            return null;
-        }
-    }
-    
-    private static void closeServer(Socket server) {
-        try {
-            server.close();
+            if (server != null) server.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
