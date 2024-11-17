@@ -18,6 +18,7 @@ public class Server implements Runnable, ServerInterface {
     private static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private final static Database db = new Database();
     private final static ChatDatabase chatDb = new ChatDatabase();
+    private static ServerSocket serverSocket;
 
     public static void main(String[] args) {
         Thread serverThread = new Thread(new Server());
@@ -27,12 +28,11 @@ public class Server implements Runnable, ServerInterface {
 
     public void run() {
         //Create Server Socket
-        ServerSocket serverSocket = null;
+        serverSocket = null;
         try {
             serverSocket = new ServerSocket(8080);
         } catch (IOException e) {
             e.printStackTrace();
-            return;
         }
 
         while (true) {
@@ -41,27 +41,28 @@ public class Server implements Runnable, ServerInterface {
             try {
                 client = serverSocket.accept();
             } catch (IOException e) {
-                System.out.println("Could not create client");
-                return;
-            }
-
-            if (client == null) {
+                //Close All Sockets
                 try {
-                    serverSocket.close();
+                    if (serverSocket != null) serverSocket.close();
                     for (Socket onlineClient : clients) {
                         if (onlineClient != null) onlineClient.close();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } finally {
+                    return;
                 }
-                return;
             }
+
             clients.add(client);
             ClientHandler clientHandler = new ClientHandler(client);
             clientHandlers.add(clientHandler);
             Thread clientHandlerThread = new Thread(clientHandler);
             clientHandlerThread.start();
         }
+    }
+
+    public static void removeClient(ClientHandler sender, Socket client) {
+        clientHandlers.remove(sender);
+        clients.remove(client);
     }
 
     public static ArrayList<ClientHandler> getClientHandlers() {

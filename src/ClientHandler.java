@@ -91,7 +91,6 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
             }
 
             while (true) {
-                System.out.println("Back to home");
                 int menuResponse = Integer.parseInt(clientReader.readLine());
                 if (menuResponse == 1) {
                     //Edit User Profile
@@ -271,8 +270,14 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
                     break;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            //Client probably closed their program abruptly
+            try {
+                if (client != null) client.close();
+                Server.removeClient(this, client);
+            } finally {
+                return;
+            }
         }
     }
 }
