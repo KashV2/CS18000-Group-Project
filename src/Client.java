@@ -2,7 +2,7 @@ import java.net.*;
 import java.io.*;
 import java.util.Scanner;
 
-public class Client {
+public class Client implements ClientInterface {
     public static void main(String[] args) {
         Socket server = createServer();
         if (server == null) return;
