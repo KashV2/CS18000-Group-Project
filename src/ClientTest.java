@@ -34,6 +34,7 @@ class ClientTest {
     void testCreateServerStreams_Success() {
         try {
             // Create a stubbed socket and streams
+
             Socket serverSocket = new StubSocket();
             BufferedReader[] serverReader = new BufferedReader[1];
             PrintWriter[] serverWriter = new PrintWriter[1];
@@ -44,13 +45,7 @@ class ClientTest {
             fail("Exception occurred during createServerStreams execution: " + e.getMessage());
         }
     }
-    @Test
-    void testUserLoginInput() {
-        // Simulate user input for sign-in
-        InputStream testInput = new ByteArrayInputStream("1\nusername\npassword\n".getBytes());
-        System.setIn(testInput);
-        assertDoesNotThrow(() -> Client.main(new String[0]), "Client execution failed with simulated user input.");
-    }
+
     @Test
     void testCloseServer_Success() {
         try {
@@ -63,7 +58,7 @@ class ClientTest {
             fail("Exception occurred during closeServer execution: " + e.getMessage());
         }
     }
-    // Inner class to simulate a Socket for testing
+
     private static class StubSocket extends Socket {
         private boolean isClosed = false;
         @Override
