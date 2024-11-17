@@ -181,6 +181,28 @@ public class Client {
                                 break;
                             case 3:
                                 //Message User
+                                boolean canMessage = Boolean.parseBoolean(serverReader[0].readLine());
+                                //Checking blocked
+                                if (!canMessage) {
+                                    System.out.println("Either you or your receiver is blocked");
+                                    break;
+                                }
+
+                                //Loading Messages
+                                String currentHistoryMessage = serverReader[0].readLine();
+                                while (currentHistoryMessage != null) {
+                                    System.out.println(currentHistoryMessage);
+                                    currentHistoryMessage = serverReader[0].readLine();
+                                }
+
+                                //Message Loop
+                                Thread messageHandler = new Thread(new MessageOutputHandler(serverReader[0]));
+                                messageHandler.start();
+                                while (true) {
+                                    String send = scanner.nextLine();
+                                    serverWriter[0].println(send);
+                                    if (send.equals("/bye")) break;
+                                }
                                 break;
                             default: //Back
                         }

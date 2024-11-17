@@ -5,6 +5,7 @@ import java.lang.Thread;
 
 public class Server implements Runnable{
     private static ArrayList<Socket> clients = new ArrayList<>();
+    private static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private final static Database db = new Database();
     private final static ChatDatabase chatDb = new ChatDatabase();
 
@@ -20,14 +21,20 @@ public class Server implements Runnable{
 
         while (true) {
             Socket client = createClient(serverSocket);
+            clients.add(client);
             if (client == null) {
                 closeServerSocket(serverSocket);
                 return;
             }
-            clients.add(client);
-            Thread clientHandler = new Thread(new ClientHandler(client));
-            clientHandler.start();
+            ClientHandler clientHandler = new ClientHandler(client);
+            clientHandlers.add(clientHandler);
+            Thread clientHandlerThread = new Thread(clientHandler);
+            clientHandlerThread.start();
         }
+    }
+
+    public static ArrayList<ClientHandler> getClientHandlers() {
+        return clientHandlers;
     }
 
     public static Database getDatabase() {

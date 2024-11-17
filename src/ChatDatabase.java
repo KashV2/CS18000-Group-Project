@@ -27,6 +27,16 @@ public class ChatDatabase implements ChatDatabaseInterface {
         }
     }
 
+    //Returns a current chat if chat already exists
+    public synchronized Chat getChat(Chat chat) {
+        for (Chat c : chats) {
+            if (c.equals(chat)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
     public synchronized ArrayList<Chat> getChats() {
         return chats;
     }

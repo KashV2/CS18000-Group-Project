@@ -10,6 +10,7 @@ public class ClientHandler implements Runnable {
     private PrintWriter clientWriter;
     private User user;
     private Profile profile;
+    private boolean inDM;
 
     public ClientHandler(Socket client) {
         this.client = client;
@@ -21,6 +22,7 @@ public class ClientHandler implements Runnable {
             clientReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             clientWriter = new PrintWriter(client.getOutputStream(), true);
             Database db = Server.getDatabase();
+            ChatDatabase chatDb = Server.getChatDatabase();
 
             //Signing In Loop
             boolean signedIn = false;
@@ -112,65 +114,109 @@ public class ClientHandler implements Runnable {
 
                                     int menuResponse2 = Integer.parseInt(clientReader.readLine());
                                     switch (menuResponse2) {
-
-                                    case 1:
-                                        int menuResponse3 = Integer.parseInt(clientReader.readLine());
-
-
-                                        if (menuResponse3 == 1) {
-                                            String addUser = searchName;
+                                        case 1:
+                                            int menuResponse3 = Integer.parseInt(clientReader.readLine());
 
 
-                                            User user1 = db.getUserFromProfileName(addUser);
-
-                                            String ans = db.friendUser(user.getLoginUsername(), user1.getLoginUsername());
-
-                                            clientWriter.println(ans);
-                                        }
-                                        else if (menuResponse3 == 2) {
-
-                                            String removeAddedUser = searchName;
-
-                                            User user1 = db.getUserFromProfileName(removeAddedUser);
-
-                                            user.getProfile().removeFriend(removeAddedUser);
-                                            user1.getProfile().removeFriend(user.getProfile().getName());
-
-                                            clientWriter.println("Succesfully unfriended");
-                                        }
-                                        break;
-                                    case 2:
-                                        int menuResponse4 = Integer.parseInt(clientReader.readLine());
-
-                                        if (menuResponse4 == 1) {
-                                            String blockUser = searchName;
+                                            if (menuResponse3 == 1) {
+                                                String addUser = searchName;
 
 
-                                            User user1 = db.getUserFromProfileName(blockUser);
+                                                User user1 = db.getUserFromProfileName(addUser);
 
-                                            String ans = db.blockUser(user.getLoginUsername(), user1.getLoginUsername());
+                                                String ans = db.friendUser(user.getLoginUsername(), user1.getLoginUsername());
 
-                                            clientWriter.println(ans);
+                                                clientWriter.println(ans);
+                                            }
+                                            else if (menuResponse3 == 2) {
+
+                                                String removeAddedUser = searchName;
+
+                                                User user1 = db.getUserFromProfileName(removeAddedUser);
+
+                                                user.getProfile().removeFriend(removeAddedUser);
+                                                user1.getProfile().removeFriend(user.getProfile().getName());
+
+                                                clientWriter.println("Succesfully unfriended");
+                                            }
+                                            break;
+                                        case 2:
+                                            int menuResponse4 = Integer.parseInt(clientReader.readLine());
+
+                                            if (menuResponse4 == 1) {
+                                                String blockUser = searchName;
 
 
-                                        }
-                                        else if (menuResponse4 == 2) {
+                                                User user1 = db.getUserFromProfileName(blockUser);
 
-                                            String removeblockedUser = searchName;
+                                                String ans = db.blockUser(user.getLoginUsername(), user1.getLoginUsername());
 
-                                            User user1 = db.getUserFromProfileName(removeblockedUser);
-
-                                            user.getProfile().removeBlock(removeblockedUser);
-                                            user1.getProfile().removeBlock(user.getProfile().getName());
+                                                clientWriter.println(ans);
 
 
-                                            clientWriter.println("Succesfully unblocked");
-                                        }
-                                        break;
-                                    case 3:
-                                        //Message User
-                                        break;
-                                    default: //Back
+                                            }
+                                            else if (menuResponse4 == 2) {
+
+                                                String removeblockedUser = searchName;
+
+                                                User user1 = db.getUserFromProfileName(removeblockedUser);
+
+                                                user.getProfile().removeBlock(removeblockedUser);
+                                                user1.getProfile().removeBlock(user.getProfile().getName());
+
+
+                                                clientWriter.println("Succesfully unblocked");
+                                            }
+                                            break;
+                                        case 3:
+                                            //Message User
+                                            User receivingUser = db.getUser(searchName);
+                                            //Deny DM if you or receiver is blocking each other
+                                            if (user.getProfile().isBlocked(receivingUser.getProfile()) ||
+                                                receivingUser.getProfile().isBlocked(user.getProfile())) {
+                                                clientWriter.println(false);
+                                                break;
+                                            }
+
+                                            //Creating or retrieving chat object
+                                            Chat chat = new Chat(user.getLoginUsername(), receivingUser.getLoginUsername());
+                                            if (chatDb.chatRegistered(chat)) {
+                                                chat = chatDb.getChat(chat);
+                                            } else {
+                                                chatDb.addChat(chat);
+                                            }
+
+                                            //Loading Messages
+                                            ArrayList<String> messageHistory = chat.getMessages();
+                                            for (String message : messageHistory) {
+                                                clientWriter.println(message);
+                                            }
+                                            clientWriter.println((String)null);
+
+                                            //Message Loop
+                                            inDM = true;
+                                            while (true) {
+                                                String sentMessage = clientReader.readLine();
+                                                if (sentMessage.equals("/bye")) {
+                                                    inDM = false;
+                                                    break;
+                                                }
+
+                                                //Process of saving message and sending to receiver
+                                                chat.addMessage(sentMessage);
+                                                chatDb.saveChats();
+                                                //Send to Receiving Client if they are online (and in DM's too)
+                                                ArrayList<ClientHandler> clientHandlers = Server.getClientHandlers();
+                                                for (ClientHandler onlineClient : clientHandlers) {
+                                                    if (!onlineClient.inDM) continue;
+                                                    if (onlineClient.user.equalsUsername(receivingUser.getLoginUsername())) {
+                                                        onlineClient.clientWriter.println(sentMessage);
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                        default: //Back
                                     }
                                     break;
                             }
