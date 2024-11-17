@@ -132,4 +132,25 @@ class DatabaseTest {
         assertFalse(user2.getProfile().getFriends().contains("user1"),
             "User1 should no longer be a friend of User2.");
     }
+
+    @Test
+    void testGetUserFromProfileName() {
+        database.addUser(user1);
+        database.addUser(user2);
+        assertEquals(user1, database.getUserFromProfileName("User One"));
+        assertEquals(user2, database.getUserFromProfileName("User Two"));
+        assertNull(database.getUserFromProfileName("Nonexistent Profile"));
+    }
+
+    @Test
+    void testSaveUsers() {
+        database.addUser(user1);
+        database.addUser(user2);
+        database.saveUsers();
+        Database secondDatabase = new Database();
+        ArrayList<User> users = secondDatabase.getUsers();
+        assertEquals(2, users.size());
+        assertEquals("user1", users.get(0).getLoginUsername());
+        assertEquals("user2", users.get(1).getLoginUsername());
+    }
 }
