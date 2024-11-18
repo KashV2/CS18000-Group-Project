@@ -267,6 +267,8 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
                     }
                 } else if (menuResponse == 3) {
                     //Exit
+                    if (client != null) client.close();
+                    Server.removeClient(this, client);
                     break;
                 }
             }
