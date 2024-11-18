@@ -5,7 +5,7 @@ import java.io.File;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 /**
- * The tests.ChatDatabaseTest program. Responsible for validating the ChatDatabase class
+ * The ChatDatabaseTest program. Responsible for validating the ChatDatabase class
  * and ensuring that data is persistent
  *
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
