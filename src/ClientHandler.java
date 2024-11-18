@@ -123,10 +123,10 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
                     boolean userFound = false;
                     for (int i = 0; i < usersList.size(); i++) {
                         if (searchName.equals(usersList.get(i).getLoginUsername())) {
-                            Profile profile = usersList.get(i).getProfile();
-                            clientWriter.printf("Name: %s\n", profile.getName());
-                            clientWriter.printf("Description: %s\n", profile.getDescription());
-                            clientWriter.printf("Friends: %s\n", profile.getFriends());
+                            Profile searchedProfile = usersList.get(i).getProfile();
+                            clientWriter.printf("Name: %s\n", searchedProfile.getName());
+                            clientWriter.printf("Description: %s\n", searchedProfile.getDescription());
+                            clientWriter.printf("Friends: %s\n", searchedProfile.getFriends());
                             userFound = true;
 
                             int menuResponse2 = Integer.parseInt(clientReader.readLine());
@@ -234,7 +234,8 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
                                             int loginNameLength = user.getLoginUsername().length();
                                             if (messageHistory.get(index).length() >= loginNameLength) {
                                                 //Check if we own the message we are trying to delete
-                                                if (messageHistory.get(index).substring(0, loginNameLength).equals(user.getLoginUsername())) {
+                                                if (messageHistory.get(index).substring(0, loginNameLength)
+                                                    .equals(user.getLoginUsername())) {
                                                     chat.removeMessage(index);
                                                     chatDb.saveChats();
                                                 }

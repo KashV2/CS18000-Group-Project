@@ -16,8 +16,8 @@ import java.lang.Thread;
 public class Server implements Runnable, ServerInterface {
     private static ArrayList<Socket> clients = new ArrayList<>();
     private static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
-    private final static Database db = new Database();
-    private final static ChatDatabase chatDb = new ChatDatabase();
+    private final static Database DB = new Database();
+    private final static ChatDatabase CHAT_DB = new ChatDatabase();
     private static ServerSocket serverSocket;
 
     public static void main(String[] args) {
@@ -70,10 +70,10 @@ public class Server implements Runnable, ServerInterface {
     }
 
     public static Database getDatabase() {
-        return db;
+        return DB;
     }
 
     public static ChatDatabase getChatDatabase() {
-        return chatDb;
+        return CHAT_DB;
     }
 }
