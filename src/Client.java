@@ -1,6 +1,9 @@
+import com.sun.tools.javac.Main;
+
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
+import java.util.concurrent.*;
 
 /**
  * The Client program. Run this to connect to a server and interact with the application.
@@ -47,12 +50,18 @@ public class Client implements Runnable, ClientInterface {
             //Validate signInResponse
             int signInResponse = 0;
             while (true) {
-                System.out.println("Do you want to sign in or create a new account?\n1 Sign in\n2 Create new account");
+                CountDownLatch latch = new CountDownLatch(1);
+                SignInMenu menu1 = new SignInMenu(latch);
                 try {
-                    signInResponse = Integer.parseInt(scanner.nextLine());
-                    if (signInResponse != 1 && signInResponse != 2) {
+                    latch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (menu1.getOutput() != 1 && menu1.getOutput() != 2) {
                         throw new RuntimeException();
                     }
+                    signInResponse = menu1.getOutput();
                     break;
                 } catch (RuntimeException e) {
                     System.out.println("Invalid input!");
@@ -60,11 +69,15 @@ public class Client implements Runnable, ClientInterface {
             }
 
             //Login input
-            System.out.println("Please enter your username: ");
-            loginUsername = scanner.nextLine();
-
-            System.out.println("Please enter your password: ");
-            String password = scanner.nextLine();
+            CountDownLatch latch = new CountDownLatch(1);
+            LogInMenu menu2 = new LogInMenu(latch);
+            try {
+                latch.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            loginUsername = menu2.getUsername();
+            String password = menu2.getPassword();
 
             //Send login or create new account request to server (must be in this order)
             serverWriter[0].println(loginUsername);
@@ -92,11 +105,15 @@ public class Client implements Runnable, ClientInterface {
         while (running) {
             int menuResponse = 0;
             while (true) {
-                System.out.println("Choose between the following:\n1. Edit User Profile" +
-                    "\n2. Search & View Users" +
-                    "\n3. Exit");
+                CountDownLatch latch = new CountDownLatch(1);
+                MainMenu menu3 = new MainMenu(latch);
                 try {
-                    menuResponse = Integer.parseInt(scanner.nextLine());
+                    latch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    menuResponse = menu3.getMenuResponse();
                     if (menuResponse < 1 || menuResponse > 3) throw new RuntimeException();
                     break;
                 } catch (RuntimeException e) {
@@ -120,14 +137,26 @@ public class Client implements Runnable, ClientInterface {
                     e.printStackTrace();
                 }
 
-                System.out.println("Would you like to change the name(1) or description(2)?");
-                int ans = Integer.parseInt(scanner.nextLine());
+                CountDownLatch latch = new CountDownLatch(1);
+                ChangeNameDescriptionMenu menu4 = new ChangeNameDescriptionMenu(latch);
+                try {
+                    latch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                int ans = menu4.getMenuResponse();
                 serverWriter[0].println(ans);
 
                 switch (ans) {
                 case 1:
-                    System.out.println("Please enter your new name: ");
-                    String newName = scanner.nextLine();
+                    CountDownLatch latch2 = new CountDownLatch(1);
+                    NameDescChangeMenu menu9 = new NameDescChangeMenu(latch2, "Please your new name");
+                    try {
+                        latch2.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    String newName = menu9.getMessage();
                     serverWriter[0].println(newName);
                     try {
                         System.out.println(serverReader[0].readLine());
@@ -136,8 +165,14 @@ public class Client implements Runnable, ClientInterface {
                     }
                     break;
                 case 2:
-                    System.out.println("Please enter your new description: ");
-                    String newDescription = scanner.nextLine();
+                    CountDownLatch latch3 = new CountDownLatch(1);
+                    NameDescChangeMenu menu10 = new NameDescChangeMenu(latch3, "Please your new description");
+                    try {
+                        latch3.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    String newDescription = menu10.getMessage();
                     serverWriter[0].println(newDescription);
                     try {
                         System.out.println(serverReader[0].readLine());
@@ -148,34 +183,52 @@ public class Client implements Runnable, ClientInterface {
                 }
             } else if (menuResponse == 2) {
                 //Search & View Users
-                System.out.println("Enter Username:");
-                String searchName = scanner.nextLine();
+                CyclicBarrier barrier = new CyclicBarrier(2);
+                SearchUserMenu menu5 = new SearchUserMenu(barrier);
+                try {
+                    barrier.await();
+                } catch (InterruptedException | BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+                String searchName = menu5.getSearchedUser();
                 serverWriter[0].println(searchName);
                 try {
                     String message = serverReader[0].readLine();
                     if (message.isEmpty()) {
-                        System.out.println("User not found");
+                        menu5.displayUserNotFound();
                     } else {
                         //View User
-                        System.out.println(message); //Name
+                        String userDescription;
+                        userDescription = message + "\n";//Name
                         message = serverReader[0].readLine();
-                        System.out.println(message); //Description
+                        userDescription += message +"\n";//Description
                         message = serverReader[0].readLine();
-                        System.out.println(message); //Friends
+                        userDescription += message + "\n";//Friends
+
 
                         //Options to do on chosen User
-                        System.out.println("What would you like to do to the user?" +
-                            "\n1. Add or remove Friend" +
-                            "\n2. Block or Unblock User" +
-                            "\n3. Message" +
-                            "\n4. Back");
-                        int searchUserOption = Integer.parseInt(scanner.nextLine()); //Assume right input
+                        menu5.userActionMenu(userDescription);
+                        try{
+                            barrier.await();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (BrokenBarrierException e) {
+                            throw new RuntimeException(e);
+                        }
+                        menu5.dispose();
+                        int searchUserOption = menu5.getMenuResponse(); //Assume right input
                         serverWriter[0].println(searchUserOption);
 
                         switch (searchUserOption) {
                         case 1:
-                            System.out.println("Would you like to add or remove a friend? (1 or 2)");
-                            String ans2 = scanner.nextLine();
+                            CountDownLatch latch = new CountDownLatch(1);
+                            AddRemoveFriendMenu menu6 = new AddRemoveFriendMenu(latch);
+                            try {
+                                latch.await();
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            String ans2 = String.valueOf(menu6.getMenuResponse());
 
 
                             serverWriter[0].println(ans2);
@@ -196,8 +249,14 @@ public class Client implements Runnable, ClientInterface {
                             }
                             break;
                         case 2:
-                            System.out.println("Would you like to add or remove a Blocked user? (1 or 2)");
-                            String ans3 = scanner.nextLine();
+                            CountDownLatch latch2 = new CountDownLatch(1);
+                            AddRemoveBlockedMenu menu7 = new AddRemoveBlockedMenu(latch2);
+                            try {
+                                latch2.await();
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            String ans3 = String.valueOf(menu7.getMenuResponse());
                             serverWriter[0].println(ans3);
                             if (ans3.equals("1")) {
                                 try {
@@ -223,10 +282,13 @@ public class Client implements Runnable, ClientInterface {
                                 break;
                             }
 
+                            BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
+                            ChatMenu chatMenu = new ChatMenu(messageQueue);
+
                             //Loading Messages
                             String currentHistoryMessage = serverReader[0].readLine();
                             while (!currentHistoryMessage.equals("<~!||NULL||!~>")) {
-                                System.out.println(currentHistoryMessage);
+                                chatMenu.addMessage(currentHistoryMessage);
                                 currentHistoryMessage = serverReader[0].readLine();
                             }
 
@@ -234,9 +296,16 @@ public class Client implements Runnable, ClientInterface {
                             Thread messageHandler = new Thread(new MessageOutputHandler(serverReader[0]));
                             messageHandler.start();
                             while (true) {
-                                String send = scanner.nextLine();
-                                serverWriter[0].println(send);
-                                if (send.equals("/bye")) break;
+                                String send = messageQueue.take();                                serverWriter[0].println(send);
+                                if (send.equals("/bye")) {
+                                    chatMenu.dispose();
+                                    break;
+                                }
+                                try {
+                                    Thread.sleep(100); // Add a small delay to avoid busy waiting
+                                } catch (InterruptedException ex) {
+                                    ex.printStackTrace();
+                                }
                             }
                             try {
                                 messageHandler.join();
@@ -249,6 +318,8 @@ public class Client implements Runnable, ClientInterface {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
             } else if (menuResponse == 3) {
                 //Exit
