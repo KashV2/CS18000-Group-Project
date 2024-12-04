@@ -285,6 +285,7 @@ public class Client implements Runnable, ClientInterface {
 
                             BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
                             ChatMenu chatMenu = new ChatMenu(messageQueue);
+                            chatMenu.setClientLoginUsername(loginUsername);
 
                             //Loading Messages
                             String currentHistoryMessage = serverReader[0].readLine();
@@ -297,7 +298,8 @@ public class Client implements Runnable, ClientInterface {
                             Thread messageHandler = new Thread(new MessageOutputHandler(serverReader[0]));
                             messageHandler.start();
                             while (true) {
-                                String send = messageQueue.take();                                serverWriter[0].println(send);
+                                String send = messageQueue.take();
+                                serverWriter[0].println(send);
                                 if (send.equals("/bye")) {
                                     chatMenu.dispose();
                                     break;
