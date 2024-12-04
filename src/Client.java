@@ -1,5 +1,6 @@
 import com.sun.tools.javac.Main;
 
+import javax.swing.*;
 import java.net.*;
 import java.io.*;
 import java.util.Scanner;
@@ -92,6 +93,7 @@ public class Client implements Runnable, ClientInterface {
                 if (!signedIn) {
                     if (errorMessage != null) {
                         System.out.println(errorMessage);
+                        JOptionPane.showMessageDialog(null, errorMessage, "Input Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             } catch (IOException e) {
