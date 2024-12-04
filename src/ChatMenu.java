@@ -3,10 +3,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.BrokenBarrierException;
 
 
 public class ChatMenu extends JFrame implements ActionListener {
+    private String clientLoginUsername;
     JButton sendButton = new JButton("Send");
+    JButton backButton = new JButton("Back");
     JTextField textField = new JTextField();
     JTextArea textArea = new JTextArea();
     String message;
@@ -40,6 +43,7 @@ public class ChatMenu extends JFrame implements ActionListener {
         this.add(scrollPane, BorderLayout.CENTER);
         this.add(textField, BorderLayout.SOUTH);
         this.add(sendButton);
+        this.add(backButton);
 
         // Display the frame
         setVisible(true);
@@ -49,7 +53,7 @@ public class ChatMenu extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == sendButton) {
             message = textField.getText();
-            textArea.setText(textArea.getText() + message + "\n" );
+            textArea.setText(textArea.getText() + clientLoginUsername + ": " + message + "\n" );
             textField.setText("");
             try {
                 messageQueue.put(message); // Add message to the queue
@@ -57,11 +61,14 @@ public class ChatMenu extends JFrame implements ActionListener {
                 ex.printStackTrace();
             }
         }
+        if(e.getSource() == backButton) {
+
+        }
     }
 
     public void addMessage(String message) {
-        SwingUtilities.invokeLater(() -> textArea.append(message + "\n"));
-    }
+    SwingUtilities.invokeLater(() -> textArea.append(message + "\n"));
+}
 
     public String getChatMessage() {
         String currentMessage = message;
@@ -69,9 +76,7 @@ public class ChatMenu extends JFrame implements ActionListener {
         return currentMessage;
     }
 
-
-    public static void main(String[] args) {
-
-
+    public void setClientLoginUsername(String loginUsername) {
+        clientLoginUsername = loginUsername;
     }
 }
