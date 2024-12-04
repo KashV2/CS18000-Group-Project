@@ -92,7 +92,6 @@ public class Client implements Runnable, ClientInterface {
 
                 if (!signedIn) {
                     if (errorMessage != null) {
-                        System.out.println(errorMessage);
                         JOptionPane.showMessageDialog(null, errorMessage, "Input Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
