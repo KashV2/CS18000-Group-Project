@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -34,14 +36,24 @@ public class ChatMenu extends JFrame implements ActionListener {
         textField.setPreferredSize(new Dimension(600, 30));
         sendButton.setPreferredSize(new Dimension(100, 30));
         sendButton.addActionListener(this);
-        backButton.addActionListener(this);
+        textField.addActionListener(e -> sendButton.doClick()); // Send message on pressing Enter
         inputPanel.add(textField);
         inputPanel.add(sendButton);
-        inputPanel.add(backButton);
+
+        // Back button panel (Top-right corner)
+        JPanel topPanel = new JPanel(new BorderLayout());
+        backButton.addActionListener(this);
+        topPanel.add(backButton, BorderLayout.EAST);
 
         // Add components to the frame
+        add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
         add(inputPanel, BorderLayout.SOUTH);
+
+        // Add padding around components
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        messagePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Display the frame
         setVisible(true);
@@ -51,7 +63,7 @@ public class ChatMenu extends JFrame implements ActionListener {
         if (e.getSource() == sendButton) {
             message = textField.getText();
             if (!message.isEmpty()) {
-                addMessage(clientLoginUsername + ": " + message);
+                addMessage(clientLoginUsername + ": " + message, true);
                 textField.setText("");
                 try {
                     messageQueue.put(message); // Add message to the queue
@@ -69,9 +81,10 @@ public class ChatMenu extends JFrame implements ActionListener {
         }
     }
 
-    public void addMessage(String messageText) {
+    public void addMessage(String messageText, boolean includeTimestamp) {
         JPanel messageRow = new JPanel(new BorderLayout());
-        JLabel messageLabel = new JLabel(messageText);
+        String timestamp = new SimpleDateFormat("HH:mm").format(new Date());
+        JLabel messageLabel = new JLabel((includeTimestamp ? "[" + timestamp + "] " : "") + messageText);
         JButton deleteButton = new JButton("X");
         deleteButton.setForeground(Color.RED);
         deleteButton.setPreferredSize(new Dimension(45, 30));
@@ -91,6 +104,10 @@ public class ChatMenu extends JFrame implements ActionListener {
         messagePanel.add(messageRow);
         messagePanel.revalidate();
         messagePanel.repaint();
+
+        // Auto-scroll to the bottom
+        JScrollBar vertical = ((JScrollPane) messagePanel.getParent().getParent()).getVerticalScrollBar();
+        vertical.setValue(vertical.getMaximum());
     }
 
     public String getChatMessage() {

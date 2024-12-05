@@ -5,46 +5,73 @@ import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
 
 public class SignInMenu extends JFrame implements ActionListener {
-    JButton signIn = new JButton("Sign in");
-    JButton signUp = new JButton("Sign up");
-    JLabel welcomeMessage = new JLabel("Do you want to sign in or create a new account?");
-    int output = 0;
+    private final JButton signInButton;
+    private final JButton signUpButton;
     private final CountDownLatch latch;
+    private int output;
 
     public SignInMenu(CountDownLatch latch) {
         this.latch = latch;
 
         setTitle("Welcome");
-        setSize(800, 500);
+        setSize(500, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(10, 10));
+        setLayout(new BorderLayout(15, 15));
 
-        welcomeMessage.setFont(new Font("Arial", Font.BOLD, 20));
+        JLabel welcomeMessage = new JLabel("Welcome! Please choose an option.", JLabel.CENTER);
+        welcomeMessage.setFont(new Font("SansSerif", Font.BOLD, 24));
+        welcomeMessage.setForeground(new Color(50, 50, 50));
         add(welcomeMessage, BorderLayout.NORTH);
 
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 20, 20));
-        buttonPanel.add(signIn);
-        buttonPanel.add(signUp);
-        signUp.addActionListener(this);
-        signIn.addActionListener(this);
+        signInButton = createGradientButton("Sign In", new Color(135, 206, 250), new Color(70, 130, 180));
+        signUpButton = createGradientButton("Sign Up", new Color(255, 182, 193), new Color(255, 105, 180));
+
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 15, 15));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+        buttonPanel.add(signInButton);
+        buttonPanel.add(signUpButton);
         add(buttonPanel, BorderLayout.CENTER);
-        this.setVisible(true);
+
+        JLabel footerLabel = new JLabel("", JLabel.CENTER);
+        footerLabel.setFont(new Font("SansSerif", Font.ITALIC, 12));
+        footerLabel.setForeground(new Color(100, 100, 100));
+        add(footerLabel, BorderLayout.SOUTH);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
-    public void setUnVisible(){
-        this.signIn.setVisible(false);
+    private JButton createGradientButton(String text, Color startColor, Color endColor) {
+        JButton button = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gradient = new GradientPaint(0, 0, startColor, getWidth(), getHeight(), endColor);
+                g2d.setPaint(gradient);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+                super.paintComponent(g);
+            }
+        };
+        button.setFont(new Font("SansSerif", Font.BOLD, 16));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setOpaque(false);
+        button.setContentAreaFilled(false);
+        button.setBorder(BorderFactory.createLineBorder(new Color(50, 50, 50), 1));
+        button.addActionListener(this);
+        return button;
+    }
+
+    public void setSignInButtonVisible(boolean isVisible) {
+        signInButton.setVisible(isVisible);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == signIn) {
-            output = 1;
-            latch.countDown();
-        } else if (e.getSource() == signUp) {
-            output = 2;
-            latch.countDown();
-        }
-        this.dispose();
+        if (e.getSource() == signInButton) output = 1;
+        else if (e.getSource() == signUpButton) output = 2;
+        latch.countDown();
+        dispose();
     }
 
     public int getOutput() {

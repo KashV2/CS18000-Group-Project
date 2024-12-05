@@ -160,7 +160,7 @@ public class Client implements Runnable, ClientInterface {
                 switch (ans) {
                 case 1:
                     CountDownLatch latch2 = new CountDownLatch(1);
-                    NameDescChangeMenu menu9 = new NameDescChangeMenu(latch2, "Please your new name");
+                    NameDescChangeMenu menu9 = new NameDescChangeMenu(latch2, "Please enter your new name");
                     try {
                         latch2.await();
                     } catch (InterruptedException e) {
@@ -178,7 +178,7 @@ public class Client implements Runnable, ClientInterface {
                     break;
                 case 2:
                     CountDownLatch latch3 = new CountDownLatch(1);
-                    NameDescChangeMenu menu10 = new NameDescChangeMenu(latch3, "Please your new description");
+                    NameDescChangeMenu menu10 = new NameDescChangeMenu(latch3, "Please enter your new description");
                     try {
                         latch3.await();
                     } catch (InterruptedException e) {
@@ -327,7 +327,7 @@ public class Client implements Runnable, ClientInterface {
                             //Loading Messages
                             String currentHistoryMessage = serverReader[0].readLine();
                             while (!currentHistoryMessage.equals("<~!||NULL||!~>")) {
-                                chatMenu.addMessage(currentHistoryMessage);
+                                chatMenu.addMessage(currentHistoryMessage, true); // false if no timestamp
                                 currentHistoryMessage = serverReader[0].readLine();
                             }
 
