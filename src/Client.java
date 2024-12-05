@@ -345,9 +345,16 @@ public class Client implements Runnable, ClientInterface {
                                     String send = messageQueue.take();
                                     serverWriter[0].println(send);
                                     if (send.equals("/bye")) {
-                                        System.out.println("bye");
                                         chatMenu.dispose();
                                         break;
+                                    } else if (send.contains("/")) {
+                                        //Send delete request
+                                        //Receive success (number) or fail (empty)
+                                        //If success actually delete that row
+                                        String successIndicator = serverReader[0].readLine();
+                                        if (!successIndicator.isEmpty()) {
+                                            chatMenu.removeRow(Integer.parseInt(successIndicator));
+                                        }
                                     }
                                     try {
                                         Thread.sleep(100); // Add a small delay to avoid busy waiting

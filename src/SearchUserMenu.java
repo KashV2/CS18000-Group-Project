@@ -118,6 +118,7 @@ public class SearchUserMenu extends JFrame implements ActionListener {
             } else {
                 try {
                     barrier.await();
+                    this.searchButton.setVisible(false);
                 } catch (InterruptedException | BrokenBarrierException ex) {
                     ex.printStackTrace();
                 }

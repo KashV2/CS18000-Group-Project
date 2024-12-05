@@ -242,8 +242,14 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
                                                     .equals(user.getLoginUsername())) {
                                                     chat.removeMessage(index);
                                                     chatDb.saveChats();
+                                                    //Tell client that we can remove message row
+                                                    clientWriter.println(sentMessage);
+                                                    clientWriter.println(sentMessage);
+                                                    continue;
                                                 }
                                             }
+                                            clientWriter.println("");
+                                            clientWriter.println("");
                                             continue;
                                         }
 

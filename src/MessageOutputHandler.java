@@ -25,7 +25,7 @@ public class MessageOutputHandler implements Runnable, MessageOutputHandlerInter
             try {
                 String incomingMessage = reader.readLine();
                 if (incomingMessage.equals("/bye")) break;
-                System.out.println("\n" + incomingMessage);
+                System.out.print(incomingMessage);
                 //Messaging will be a little funky when both are typing and sending at the same time
                 //Because if one sends it'll kind of be printed next to what the other is trying to type
                 //But this will be cleared up in the GUI phase where we have our dedicated spaces to type

@@ -3,11 +3,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ChatMenu extends JFrame implements ActionListener {
+    private ArrayList<JPanel> messageRows = new ArrayList<>();
     private String clientLoginUsername;
     JButton sendButton = new JButton("Send");
     JButton backButton = new JButton("Back");
@@ -94,14 +96,17 @@ public class ChatMenu extends JFrame implements ActionListener {
 
         // Action to delete the message row
         deleteButton.addActionListener(e -> {
-            messagePanel.remove(messageRow);
-            messagePanel.revalidate();
-            messagePanel.repaint();
+            try {
+                messageQueue.put("/" + messageRows.indexOf(messageRow));
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
         });
 
         messageRow.add(messageLabel, BorderLayout.CENTER);
         messageRow.add(deleteButton, BorderLayout.EAST);
         messagePanel.add(messageRow);
+        messageRows.add(messageRow);
         messagePanel.revalidate();
         messagePanel.repaint();
 
@@ -114,6 +119,13 @@ public class ChatMenu extends JFrame implements ActionListener {
         String currentMessage = message;
         message = null;
         return currentMessage;
+    }
+
+    public void removeRow(int index) {
+        messagePanel.remove(messageRows.get(index));
+        messageRows.remove(index);
+        messagePanel.revalidate();
+        messagePanel.repaint();
     }
 
     public void setClientLoginUsername(String loginUsername) {
