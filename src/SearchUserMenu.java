@@ -18,6 +18,7 @@ public class SearchUserMenu extends JFrame implements ActionListener {
     private int menuResponse;
     private String searchedUser;
     private final CyclicBarrier barrier;
+    private boolean backPressed = false;
 
     public SearchUserMenu(CyclicBarrier barrier) {
         this.barrier = barrier;
@@ -43,7 +44,7 @@ public class SearchUserMenu extends JFrame implements ActionListener {
 
         searchButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         searchButton.setBackground(new Color(70, 130, 180));
-        searchButton.setForeground(Color.WHITE);
+        searchButton.setForeground(Color.BLACK);
         searchButton.setFocusPainted(false);
         searchButton.addActionListener(this);
 
@@ -86,7 +87,7 @@ public class SearchUserMenu extends JFrame implements ActionListener {
         JPanel bottomPanel = new JPanel();
         backButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         backButton.setBackground(new Color(220, 20, 60));
-        backButton.setForeground(Color.WHITE);
+        backButton.setForeground(Color.BLACK);
         backButton.setFocusPainted(false);
         backButton.addActionListener(this);
         bottomPanel.add(backButton);
@@ -132,6 +133,7 @@ public class SearchUserMenu extends JFrame implements ActionListener {
             triggerBarrier();
         } else if (e.getSource() == backButton) {
             menuResponse = 4;
+            backPressed = true;
             triggerBarrier();
         }
     }
@@ -157,6 +159,10 @@ public class SearchUserMenu extends JFrame implements ActionListener {
             revalidate();
             repaint();
         }).start();
+    }
+
+    public boolean isBackPressed() {
+        return backPressed;
     }
 
     public void userActionMenu(String userInfo) {

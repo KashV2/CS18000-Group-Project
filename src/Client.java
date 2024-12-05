@@ -108,7 +108,6 @@ public class Client implements Runnable, ClientInterface {
         CyclicBarrier barrier = null;
         SearchUserMenu menu5 = null;
         while (running) {
-            System.out.println("I should be here");
             int menuResponse = 0;
             if (continueInSearch == false) {
                 while (true) {
@@ -213,13 +212,13 @@ public class Client implements Runnable, ClientInterface {
                 serverWriter[0].println(searchName);
                 try {
                     String message = serverReader[0].readLine();
-                    if (message.isEmpty()) {
+                    if (message.isEmpty() && !menu5.isBackPressed()) {
                         JOptionPane.showMessageDialog(
                             null,"Username does not exist","Input Error", JOptionPane.ERROR_MESSAGE);
                         menu5.displayUserNotFound();
                         continueInSearch = true;
                         openSearch = false;
-                    } else {
+                    } else if (!menu5.isBackPressed()) {
                         //View User
                         String userDescription;
                         userDescription = message + "\n";//Name
@@ -355,7 +354,10 @@ public class Client implements Runnable, ClientInterface {
                             }
                             break;
                         default: //Back
+                            System.out.println("We are trying to go back");
                         }
+                    } else {
+                        menu5.dispose();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

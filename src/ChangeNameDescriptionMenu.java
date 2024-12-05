@@ -31,11 +31,11 @@ public class ChangeNameDescriptionMenu extends JFrame implements ActionListener 
         descButton.setFont(new Font("SansSerif", Font.PLAIN, 14));
 
         nameButton.setBackground(new Color(70, 130, 180));
-        nameButton.setForeground(Color.WHITE);
+        nameButton.setForeground(Color.BLACK);
         nameButton.setFocusPainted(false);
 
         descButton.setBackground(new Color(70, 130, 180));
-        descButton.setForeground(Color.WHITE);
+        descButton.setForeground(Color.BLACK);
         descButton.setFocusPainted(false);
 
         nameButton.addActionListener(this);

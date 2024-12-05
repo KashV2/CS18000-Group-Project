@@ -38,7 +38,7 @@ public class MainMenu extends JFrame implements ActionListener {
     private JButton createStyledButton(JButton button) {
         button.setFont(new Font("SansSerif", Font.PLAIN, 16));
         button.setBackground(new Color(135, 206, 250));
-        button.setForeground(Color.WHITE);
+        button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(50, 50, 50), 1),
