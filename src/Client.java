@@ -137,17 +137,22 @@ public class Client implements Runnable, ClientInterface {
             if (menuResponse == 1) {
                 //Edit User Profile
                 //Retrieve info about yourself
+                String nameLabel = "";
+                String descriptionLabel = "";
+                String friendsLabel = "";
+                String blockedLabel = "";
                 try {
-                    System.out.println(serverReader[0].readLine()); //Name
-                    System.out.println(serverReader[0].readLine()); //Description
-                    System.out.println(serverReader[0].readLine()); //Friends
-                    System.out.println(serverReader[0].readLine()); //Blocked
+                    nameLabel = serverReader[0].readLine(); //Name
+                    descriptionLabel = serverReader[0].readLine(); //Description
+                    friendsLabel = serverReader[0].readLine(); //Friends
+                    blockedLabel = serverReader[0].readLine(); //Blocked
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 CountDownLatch latch = new CountDownLatch(1);
                 ChangeNameDescriptionMenu menu4 = new ChangeNameDescriptionMenu(latch);
+                menu4.initialize(nameLabel, descriptionLabel, friendsLabel, blockedLabel);
                 try {
                     latch.await();
                 } catch (InterruptedException e) {
