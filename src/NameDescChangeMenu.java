@@ -33,7 +33,7 @@ public class NameDescChangeMenu extends JFrame implements ActionListener {
 
         sendButton.setFont(new Font("SansSerif", Font.BOLD, 16));
         sendButton.setBackground(new Color(70, 130, 180));
-        sendButton.setForeground(Color.WHITE);
+        sendButton.setForeground(Color.BLACK);
         sendButton.setFocusPainted(false);
         sendButton.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(50, 50, 50), 2),

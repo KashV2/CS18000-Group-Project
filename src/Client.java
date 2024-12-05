@@ -108,7 +108,6 @@ public class Client implements Runnable, ClientInterface {
         CyclicBarrier barrier = null;
         SearchUserMenu menu5 = null;
         while (running) {
-            System.out.println("I should be here");
             int menuResponse = 0;
             if (continueInSearch == false) {
                 while (true) {
@@ -138,17 +137,22 @@ public class Client implements Runnable, ClientInterface {
             if (menuResponse == 1) {
                 //Edit User Profile
                 //Retrieve info about yourself
+                String nameLabel = "";
+                String descriptionLabel = "";
+                String friendsLabel = "";
+                String blockedLabel = "";
                 try {
-                    System.out.println(serverReader[0].readLine()); //Name
-                    System.out.println(serverReader[0].readLine()); //Description
-                    System.out.println(serverReader[0].readLine()); //Friends
-                    System.out.println(serverReader[0].readLine()); //Blocked
+                    nameLabel = serverReader[0].readLine(); //Name
+                    descriptionLabel = serverReader[0].readLine(); //Description
+                    friendsLabel = serverReader[0].readLine(); //Friends
+                    blockedLabel = serverReader[0].readLine(); //Blocked
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
                 CountDownLatch latch = new CountDownLatch(1);
                 ChangeNameDescriptionMenu menu4 = new ChangeNameDescriptionMenu(latch);
+                menu4.initialize(nameLabel, descriptionLabel, friendsLabel, blockedLabel);
                 try {
                     latch.await();
                 } catch (InterruptedException e) {
@@ -209,159 +213,172 @@ public class Client implements Runnable, ClientInterface {
                 } catch (InterruptedException | BrokenBarrierException e) {
                     e.printStackTrace();
                 }
-                String searchName = menu5.getSearchedUser();
-                serverWriter[0].println(searchName);
-                try {
-                    String message = serverReader[0].readLine();
-                    if (message.isEmpty()) {
-                        JOptionPane.showMessageDialog(
-                            null,"Username does not exist","Input Error", JOptionPane.ERROR_MESSAGE);
-                        menu5.displayUserNotFound();
-                        continueInSearch = true;
-                        openSearch = false;
-                    } else {
-                        //View User
-                        String userDescription;
-                        userDescription = message + "\n";//Name
-                        message = serverReader[0].readLine();
-                        userDescription += message +"\n";//Description
-                        message = serverReader[0].readLine();
-                        userDescription += message + "\n";//Friends
+                boolean re_search = false;
+                do {
+                    re_search = false;
+                    String searchName = menu5.getSearchedUser();
+                    serverWriter[0].println(searchName);
+                    try {
+                        String message = serverReader[0].readLine();
+                        if (message.isEmpty() && !menu5.isBackPressed()) {
+                            JOptionPane.showMessageDialog(
+                                null,"Username does not exist","Input Error", JOptionPane.ERROR_MESSAGE);
+                            menu5.displayUserNotFound();
+                            continueInSearch = true;
+                            openSearch = false;
+                        } else if (!menu5.isBackPressed()) {
+                            //View User
+                            String userDescription;
+                            userDescription = message + "\n";//Name
+                            message = serverReader[0].readLine();
+                            userDescription += message +"\n";//Description
+                            message = serverReader[0].readLine();
+                            userDescription += message + "\n";//Friends
 
 
-                        //Options to do on chosen User
-                        menu5.userActionMenu(userDescription);
-                        try{
-                            barrier.await();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (BrokenBarrierException e) {
-                            throw new RuntimeException(e);
-                        }
-                        menu5.dispose();
-                        int searchUserOption = menu5.getMenuResponse(); //Assume right input
-                        serverWriter[0].println(searchUserOption);
-
-                        switch (searchUserOption) {
-                        case 1:
-                            CountDownLatch latch = new CountDownLatch(1);
-                            AddRemoveFriendMenu menu6 = new AddRemoveFriendMenu(latch);
-                            try {
-                                latch.await();
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
-                            String ans2 = String.valueOf(menu6.getMenuResponse());
-
-
-                            serverWriter[0].println(ans2);
-
-                            if (ans2.equals("1")) {
-                                try {
-                                    String temp = serverReader[0].readLine();
-
-                                    JOptionPane.showMessageDialog(null,temp,"Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
-                                    continueInSearch = true;
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-
-                            } else if (ans2.equals("2")) {
-                                try {
-
-                                    String temp = serverReader[0].readLine();
-
-                                    JOptionPane.showMessageDialog(null,temp,"Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
-                                    continueInSearch = true;
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                            break;
-                        case 2:
-                            CountDownLatch latch2 = new CountDownLatch(1);
-                            AddRemoveBlockedMenu menu7 = new AddRemoveBlockedMenu(latch2);
-                            try {
-                                latch2.await();
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
-                            String ans3 = String.valueOf(menu7.getMenuResponse());
-                            serverWriter[0].println(ans3);
-                            if (ans3.equals("1")) {
-                                try {
-                                    String temp = serverReader[0].readLine();
-
-                                    JOptionPane.showMessageDialog(null,temp,"Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
-                                    continueInSearch = true;
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-
-                            } else if (ans3.equals("2")) {
-                                try {
-                                    String temp = serverReader[0].readLine();
-
-                                    JOptionPane.showMessageDialog(null,temp,"Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
-                                    continueInSearch = true;
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                            break;
-                        case 3:
-                            //Message User
-                            boolean canMessage = Boolean.parseBoolean(serverReader[0].readLine());
-                            //Checking blocked
-                            if (!canMessage) {
-                                JOptionPane.showMessageDialog(
-                                    null,"Either you or your receiver is blocked","Messaging", JOptionPane.ERROR_MESSAGE);
-                                continueInSearch = true;
-                                break;
-                            }
-
-                            BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
-                            ChatMenu chatMenu = new ChatMenu(messageQueue);
-                            chatMenu.setClientLoginUsername(loginUsername);
-
-                            //Loading Messages
-                            String currentHistoryMessage = serverReader[0].readLine();
-                            while (!currentHistoryMessage.equals("<~!||NULL||!~>")) {
-                                chatMenu.addMessage(currentHistoryMessage, true); // false if no timestamp
-                                currentHistoryMessage = serverReader[0].readLine();
-                            }
-
-                            //Message Loop
-                            Thread messageHandler = new Thread(new MessageOutputHandler(serverReader[0]));
-                            messageHandler.start();
-                            while (true) {
-                                String send = messageQueue.take();
-                                serverWriter[0].println(send);
-                                if (send.equals("/bye")) {
-                                    System.out.println("bye");
-                                    chatMenu.dispose();
-                                    break;
-                                }
-                                try {
-                                    Thread.sleep(100); // Add a small delay to avoid busy waiting
-                                } catch (InterruptedException ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
-                            try {
-                                messageHandler.join();
+                            //Options to do on chosen User
+                            menu5.userActionMenu(userDescription);
+                            try{
+                                barrier.await();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
+                            } catch (BrokenBarrierException e) {
+                                throw new RuntimeException(e);
                             }
-                            break;
-                        default: //Back
+                            menu5.dispose();
+                            int searchUserOption = menu5.getMenuResponse(); //Assume right input
+                            serverWriter[0].println(searchUserOption);
+
+                            switch (searchUserOption) {
+                            case 1:
+                                CountDownLatch latch = new CountDownLatch(1);
+                                AddRemoveFriendMenu menu6 = new AddRemoveFriendMenu(latch);
+                                try {
+                                    latch.await();
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                String ans2 = String.valueOf(menu6.getMenuResponse());
+
+
+                                serverWriter[0].println(ans2);
+
+                                if (ans2.equals("1")) {
+                                    try {
+                                        String temp = serverReader[0].readLine();
+
+                                        JOptionPane.showMessageDialog(null,temp,"Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
+                                        continueInSearch = true;
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+
+                                } else if (ans2.equals("2")) {
+                                    try {
+
+                                        String temp = serverReader[0].readLine();
+
+                                        JOptionPane.showMessageDialog(null,temp,"Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
+                                        continueInSearch = true;
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                                break;
+                            case 2:
+                                CountDownLatch latch2 = new CountDownLatch(1);
+                                AddRemoveBlockedMenu menu7 = new AddRemoveBlockedMenu(latch2);
+                                try {
+                                    latch2.await();
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                String ans3 = String.valueOf(menu7.getMenuResponse());
+                                serverWriter[0].println(ans3);
+                                if (ans3.equals("1")) {
+                                    try {
+                                        String temp = serverReader[0].readLine();
+
+                                        JOptionPane.showMessageDialog(null,temp,"Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
+                                        continueInSearch = true;
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+
+                                } else if (ans3.equals("2")) {
+                                    try {
+                                        String temp = serverReader[0].readLine();
+
+                                        JOptionPane.showMessageDialog(null,temp,"Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
+                                        continueInSearch = true;
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }
+                                break;
+                            case 3:
+                                //Message User
+                                boolean canMessage = Boolean.parseBoolean(serverReader[0].readLine());
+                                //Checking blocked
+                                if (!canMessage) {
+                                    JOptionPane.showMessageDialog(
+                                        null,"Either you or your receiver is blocked","Messaging", JOptionPane.ERROR_MESSAGE);
+                                    continueInSearch = true;
+                                    break;
+                                }
+
+                                BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
+                                ChatMenu chatMenu = new ChatMenu(messageQueue);
+                                chatMenu.setClientLoginUsername(loginUsername);
+
+                                //Loading Messages
+                                String currentHistoryMessage = serverReader[0].readLine();
+                                while (!currentHistoryMessage.equals("<~!||NULL||!~>")) {
+                                    chatMenu.addMessage(currentHistoryMessage, true); // false if no timestamp
+                                    currentHistoryMessage = serverReader[0].readLine();
+                                }
+
+                                //Message Loop
+                                Thread messageHandler = new Thread(new MessageOutputHandler(serverReader[0]));
+                                messageHandler.start();
+                                while (true) {
+                                    String send = messageQueue.take();
+                                    serverWriter[0].println(send);
+                                    if (send.equals("/bye")) {
+                                        System.out.println("bye");
+                                        chatMenu.dispose();
+                                        break;
+                                    }
+                                    try {
+                                        Thread.sleep(100); // Add a small delay to avoid busy waiting
+                                    } catch (InterruptedException ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                                try {
+                                    messageHandler.join();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            default: //Back
+                                if (menu5.isBackPressed()) {
+                                    serverWriter[0].println("");
+                                    menu5.dispose();
+                                    break;
+                                }
+                                re_search = true;
+                                serverWriter[0].println("Re-search");
+                            }
+                        } else {
+                            menu5.dispose();
                         }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+                } while (re_search);
             } else if (menuResponse == 3) {
                 //Exit
                 running = false;

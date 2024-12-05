@@ -44,7 +44,7 @@ public class LogInMenu extends JFrame implements ActionListener {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         confirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
         confirm.setBackground(new Color(135, 206, 250));
-        confirm.setForeground(Color.WHITE);
+        confirm.setForeground(Color.BLACK);
         confirm.setFocusPainted(false);
         confirm.addActionListener(this);
         buttonPanel.add(confirm);

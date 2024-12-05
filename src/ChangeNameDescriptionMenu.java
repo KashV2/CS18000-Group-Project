@@ -8,6 +8,10 @@ public class ChangeNameDescriptionMenu extends JFrame implements ActionListener 
     private final JButton nameButton = new JButton("Change Name");
     private final JButton descButton = new JButton("Change Description");
     private final JLabel instruction = new JLabel("Choose an option");
+    private JLabel profileNameLabel = new JLabel("Name: ");
+    private JLabel profileDescriptionLabel = new JLabel("Description: ");
+    private JLabel friendsLabel = new JLabel("Friends: ");
+    private JLabel blockedLabel = new JLabel("Blocked: ");
     private int menuResponse;
     private final CountDownLatch latch;
 
@@ -17,12 +21,20 @@ public class ChangeNameDescriptionMenu extends JFrame implements ActionListener 
         setTitle("Change Options");
         setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(15, 15));
+        setLayout(new BorderLayout(15, 1));
 
         // Instruction label at the top
+        JPanel panel = new JPanel(new GridLayout(2, 1));
         instruction.setFont(new Font("SansSerif", Font.BOLD, 16));
         instruction.setHorizontalAlignment(SwingConstants.CENTER);
-        add(instruction, BorderLayout.NORTH);
+        JPanel nextPanel = new JPanel();
+        panel.add(instruction);
+        nextPanel.add(profileNameLabel);
+        nextPanel.add(profileDescriptionLabel);
+        nextPanel.add(friendsLabel);
+        nextPanel.add(blockedLabel);
+        add(panel, BorderLayout.NORTH);
+        panel.add(nextPanel, BorderLayout.CENTER);
 
         // Buttons in the center
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 10));
@@ -31,11 +43,11 @@ public class ChangeNameDescriptionMenu extends JFrame implements ActionListener 
         descButton.setFont(new Font("SansSerif", Font.PLAIN, 14));
 
         nameButton.setBackground(new Color(70, 130, 180));
-        nameButton.setForeground(Color.WHITE);
+        nameButton.setForeground(Color.BLACK);
         nameButton.setFocusPainted(false);
 
         descButton.setBackground(new Color(70, 130, 180));
-        descButton.setForeground(Color.WHITE);
+        descButton.setForeground(Color.BLACK);
         descButton.setFocusPainted(false);
 
         nameButton.addActionListener(this);
@@ -73,5 +85,12 @@ public class ChangeNameDescriptionMenu extends JFrame implements ActionListener 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void initialize(String name, String description, String friends, String blocked) {
+        profileNameLabel.setText(name);
+        profileDescriptionLabel.setText(description);
+        friendsLabel.setText(friends);
+        blockedLabel.setText(blocked);
     }
 }
