@@ -15,6 +15,7 @@ public class SearchUserMenu extends JFrame implements ActionListener {
     JButton back = new JButton("Back");
     JLabel userNotFound = new JLabel("User not found");
     JLabel searchedUserInfo = new JLabel("-");
+    JPanel buttonPanel = new JPanel();
     int menuResponse;
     String searchedUser;
     private final CyclicBarrier barrier;
@@ -34,7 +35,9 @@ public class SearchUserMenu extends JFrame implements ActionListener {
         back.addActionListener(this);
 
         this.add(search);
+        this.add(back);
         this.add(username);
+        this.add(buttonPanel);
         this.setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -99,10 +102,9 @@ public class SearchUserMenu extends JFrame implements ActionListener {
     public void userActionMenu(String userInfo) {
         searchedUserInfo.setText(userInfo);
         this.add(searchedUserInfo);
-        this.add(blockOrUnblock);
-        this.add(addOrRemove);
-        this.add(message);
-        this.add(back);
+        buttonPanel.add(addOrRemove);
+        buttonPanel.add(blockOrUnblock);
+        buttonPanel.add(message);
 
         this.revalidate();
         this.repaint();

@@ -103,23 +103,32 @@ public class Client implements Runnable, ClientInterface {
         //AFTER LOGGING IN -- Main Menu / Loop
         //Choose between editing self or searching & viewing other profile
         boolean running = true;
+        boolean continueInSearch = false;
+        boolean openSearch = true;
+        CyclicBarrier barrier = null;
+        SearchUserMenu menu5 = null;
         while (running) {
+            System.out.println("I should be here");
             int menuResponse = 0;
-            while (true) {
-                CountDownLatch latch = new CountDownLatch(1);
-                MainMenu menu3 = new MainMenu(latch);
-                try {
-                    latch.await();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            if (continueInSearch == false) {
+                while (true) {
+                    CountDownLatch latch = new CountDownLatch(1);
+                    MainMenu menu3 = new MainMenu(latch);
+                    try {
+                        latch.await();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        menuResponse = menu3.getMenuResponse();
+                        if (menuResponse < 1 || menuResponse > 3) throw new RuntimeException();
+                        break;
+                    } catch (RuntimeException e) {
+                        System.out.println("Invalid input!");
+                    }
                 }
-                try {
-                    menuResponse = menu3.getMenuResponse();
-                    if (menuResponse < 1 || menuResponse > 3) throw new RuntimeException();
-                    break;
-                } catch (RuntimeException e) {
-                    System.out.println("Invalid input!");
-                }
+            } else {
+                menuResponse = 2;
             }
 
             //Send Menu Selection to Server
@@ -164,6 +173,8 @@ public class Client implements Runnable, ClientInterface {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+                    JOptionPane.showMessageDialog(
+                        null,"Succesfully Changed Name!","Changing Profile", JOptionPane.INFORMATION_MESSAGE);
                     break;
                 case 2:
                     CountDownLatch latch3 = new CountDownLatch(1);
@@ -180,12 +191,19 @@ public class Client implements Runnable, ClientInterface {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
+                    JOptionPane.showMessageDialog(
+                        null,"Succesfully Changed Description!","Changing Profile", JOptionPane.INFORMATION_MESSAGE);
                     break;
                 }
             } else if (menuResponse == 2) {
                 //Search & View Users
-                CyclicBarrier barrier = new CyclicBarrier(2);
-                SearchUserMenu menu5 = new SearchUserMenu(barrier);
+                if (!continueInSearch || openSearch) {
+                    barrier = new CyclicBarrier(2);
+                    menu5 = new SearchUserMenu(barrier);
+                } else {
+                    continueInSearch = false;
+                    openSearch = true;
+                }
                 try {
                     barrier.await();
                 } catch (InterruptedException | BrokenBarrierException e) {
@@ -196,7 +214,11 @@ public class Client implements Runnable, ClientInterface {
                 try {
                     String message = serverReader[0].readLine();
                     if (message.isEmpty()) {
+                        JOptionPane.showMessageDialog(
+                            null,"Username does not exist","Input Error", JOptionPane.ERROR_MESSAGE);
                         menu5.displayUserNotFound();
+                        continueInSearch = true;
+                        openSearch = false;
                     } else {
                         //View User
                         String userDescription;
@@ -236,14 +258,21 @@ public class Client implements Runnable, ClientInterface {
 
                             if (ans2.equals("1")) {
                                 try {
-                                    System.out.println(serverReader[0].readLine());
+                                    String temp = serverReader[0].readLine();
+
+                                    JOptionPane.showMessageDialog(null,temp,"Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
+                                    continueInSearch = true;
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
 
                             } else if (ans2.equals("2")) {
                                 try {
-                                    System.out.println(serverReader[0].readLine());
+
+                                    String temp = serverReader[0].readLine();
+
+                                    JOptionPane.showMessageDialog(null,temp,"Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
+                                    continueInSearch = true;
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -261,14 +290,20 @@ public class Client implements Runnable, ClientInterface {
                             serverWriter[0].println(ans3);
                             if (ans3.equals("1")) {
                                 try {
-                                    System.out.println(serverReader[0].readLine());
+                                    String temp = serverReader[0].readLine();
+
+                                    JOptionPane.showMessageDialog(null,temp,"Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
+                                    continueInSearch = true;
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
 
                             } else if (ans3.equals("2")) {
                                 try {
-                                    System.out.println(serverReader[0].readLine());
+                                    String temp = serverReader[0].readLine();
+
+                                    JOptionPane.showMessageDialog(null,temp,"Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
+                                    continueInSearch = true;
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -279,7 +314,9 @@ public class Client implements Runnable, ClientInterface {
                             boolean canMessage = Boolean.parseBoolean(serverReader[0].readLine());
                             //Checking blocked
                             if (!canMessage) {
-                                System.out.println("Either you or your receiver is blocked");
+                                JOptionPane.showMessageDialog(
+                                    null,"Either you or your receiver is blocked","Messaging", JOptionPane.ERROR_MESSAGE);
+                                continueInSearch = true;
                                 break;
                             }
 
@@ -301,6 +338,7 @@ public class Client implements Runnable, ClientInterface {
                                 String send = messageQueue.take();
                                 serverWriter[0].println(send);
                                 if (send.equals("/bye")) {
+                                    System.out.println("bye");
                                     chatMenu.dispose();
                                     break;
                                 }

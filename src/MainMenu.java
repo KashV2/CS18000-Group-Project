@@ -16,14 +16,14 @@ public class MainMenu extends JFrame implements ActionListener {
         this.latch = latch;
 
         setSize(800,500);
-        this.setLayout(new FlowLayout());
+        this.setLayout(new GridLayout(1,1));
         edit.setPreferredSize(new Dimension(400,200));
         exit.setPreferredSize(new Dimension(400,200));
         search.setPreferredSize(new Dimension(400,200));
 
         this.add(edit);
-        this.add(exit);
         this.add(search);
+        this.add(exit);
         edit.addActionListener(this);
         exit.addActionListener(this);
         search.addActionListener(this);

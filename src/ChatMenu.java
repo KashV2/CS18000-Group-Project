@@ -3,72 +3,95 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.BrokenBarrierException;
-
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class ChatMenu extends JFrame implements ActionListener {
     private String clientLoginUsername;
     JButton sendButton = new JButton("Send");
     JButton backButton = new JButton("Back");
     JTextField textField = new JTextField();
-    JTextArea textArea = new JTextArea();
+    JPanel messagePanel = new JPanel(); // Panel for messages with delete buttons
     String message;
     private final BlockingQueue<String> messageQueue;
 
-
-    public <Jbutton> ChatMenu(BlockingQueue<String> messageQueue) {
+    public ChatMenu(BlockingQueue<String> messageQueue) {
         this.messageQueue = messageQueue;
+
         // Set up the frame
         setTitle("Chatting with");
         setSize(800, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        this.setLayout(new FlowLayout());
-        this.setVisible(false);
+        setLayout(new BorderLayout());
 
-
-
-        // Setup button and textfield
-        textArea.setEditable(false);
-        sendButton.setPreferredSize(new Dimension(100, 30));
-        sendButton.addActionListener((ActionListener) this);
-        textField.setPreferredSize(new Dimension(600, 30));
-        textArea.setPreferredSize(new Dimension(700, 400));
-
-        // Wrap the JTextArea in a JScrollPane
-        JScrollPane scrollPane = new JScrollPane(textArea);
+        // Set up the message panel
+        messagePanel.setLayout(new BoxLayout(messagePanel, BoxLayout.Y_AXIS));
+        JScrollPane scrollPane = new JScrollPane(messagePanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-        this.add(scrollPane, BorderLayout.CENTER);
-        this.add(textField, BorderLayout.SOUTH);
-        this.add(sendButton);
-        this.add(backButton);
+        // Setup input field and buttons
+        JPanel inputPanel = new JPanel(new FlowLayout());
+        textField.setPreferredSize(new Dimension(600, 30));
+        sendButton.setPreferredSize(new Dimension(100, 30));
+        sendButton.addActionListener(this);
+        backButton.addActionListener(this);
+        inputPanel.add(textField);
+        inputPanel.add(sendButton);
+        inputPanel.add(backButton);
+
+        // Add components to the frame
+        add(scrollPane, BorderLayout.CENTER);
+        add(inputPanel, BorderLayout.SOUTH);
 
         // Display the frame
         setVisible(true);
     }
 
-
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == sendButton) {
             message = textField.getText();
-            textArea.setText(textArea.getText() + clientLoginUsername + ": " + message + "\n" );
-            textField.setText("");
+            if (!message.isEmpty()) {
+                addMessage(clientLoginUsername + ": " + message);
+                textField.setText("");
+                try {
+                    messageQueue.put(message); // Add message to the queue
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        if (e.getSource() == backButton) {
             try {
-                messageQueue.put(message); // Add message to the queue
+                messageQueue.put("/bye"); // Add message to the queue
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
         }
-        if(e.getSource() == backButton) {
-
-        }
     }
 
-    public void addMessage(String message) {
-    SwingUtilities.invokeLater(() -> textArea.append(message + "\n"));
-}
+    public void addMessage(String messageText) {
+        JPanel messageRow = new JPanel(new BorderLayout());
+        JLabel messageLabel = new JLabel(messageText);
+        JButton deleteButton = new JButton("X");
+        deleteButton.setForeground(Color.RED);
+        deleteButton.setPreferredSize(new Dimension(45, 30));
+        deleteButton.setBorderPainted(false);
+        deleteButton.setFocusPainted(false);
+        deleteButton.setContentAreaFilled(false);
+
+        // Action to delete the message row
+        deleteButton.addActionListener(e -> {
+            messagePanel.remove(messageRow);
+            messagePanel.revalidate();
+            messagePanel.repaint();
+        });
+
+        messageRow.add(messageLabel, BorderLayout.CENTER);
+        messageRow.add(deleteButton, BorderLayout.EAST);
+        messagePanel.add(messageRow);
+        messagePanel.revalidate();
+        messagePanel.repaint();
+    }
 
     public String getChatMessage() {
         String currentMessage = message;
@@ -78,5 +101,9 @@ public class ChatMenu extends JFrame implements ActionListener {
 
     public void setClientLoginUsername(String loginUsername) {
         clientLoginUsername = loginUsername;
+    }
+
+    public static void main(String[] args) {
+        new ChatMenu(new LinkedBlockingQueue<>());
     }
 }
