@@ -3,111 +3,170 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
 public class SearchUserMenu extends JFrame implements ActionListener {
-    JButton search = new JButton("Search");
-    JTextField username = new JTextField();
-    JButton addOrRemove = new JButton("Add or Remove Friend");
-    JButton blockOrUnblock = new JButton("Block Or Unblock User");
-    JButton message = new JButton("Message");
-    JButton back = new JButton("Back");
-    JLabel userNotFound = new JLabel("User not found");
-    JLabel searchedUserInfo = new JLabel("-");
-    JPanel buttonPanel = new JPanel();
-    int menuResponse;
-    String searchedUser;
+    private final JButton searchButton = new JButton("Search");
+    private final JTextField usernameField = new JTextField();
+    private final JButton addOrRemoveButton = new JButton("Add/Remove Friend");
+    private final JButton blockOrUnblockButton = new JButton("Block/Unblock User");
+    private final JButton messageButton = new JButton("Message");
+    private final JButton backButton = new JButton("Back");
+    private final JLabel userNotFoundLabel = new JLabel("User not found", JLabel.CENTER);
+    private final JLabel userInfoLabel = new JLabel("");
+    private final JPanel actionButtonPanel = new JPanel();
+    private int menuResponse;
+    private String searchedUser;
     private final CyclicBarrier barrier;
-
 
     public SearchUserMenu(CyclicBarrier barrier) {
         this.barrier = barrier;
 
-        setSize(800,500);
-        this.setLayout(new FlowLayout());
-        username.setPreferredSize(new Dimension(700,30));
-        this.setLayout(new FlowLayout());
-        search.addActionListener(this);
-        addOrRemove.addActionListener(this);
-        blockOrUnblock.addActionListener(this);
-        message.addActionListener(this);
-        back.addActionListener(this);
-
-        this.add(search);
-        this.add(back);
-        this.add(username);
-        this.add(buttonPanel);
-        this.setVisible(true);
+        // Frame setup
+        setTitle("Search User Menu");
+        setSize(600, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout(20, 20));
+
+        // Top Panel: Search Bar
+        JPanel topPanel = new JPanel(new BorderLayout(10, 10));
+        JLabel searchLabel = new JLabel("Enter username to search:", JLabel.CENTER);
+        searchLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        topPanel.add(searchLabel, BorderLayout.NORTH);
+
+        usernameField.setPreferredSize(new Dimension(300, 30));
+        usernameField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        usernameField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(150, 150, 150), 1),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+
+        searchButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        searchButton.setBackground(new Color(70, 130, 180));
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setFocusPainted(false);
+        searchButton.addActionListener(this);
+
+        JPanel searchBarPanel = new JPanel();
+        searchBarPanel.add(usernameField);
+        searchBarPanel.add(searchButton);
+        topPanel.add(searchBarPanel, BorderLayout.CENTER);
+
+        add(topPanel, BorderLayout.NORTH);
+
+        // Center Panel: User Information and Action Buttons
+        JPanel centerPanel = new JPanel(new BorderLayout(10, 10));
+        userInfoLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        userInfoLabel.setForeground(Color.DARK_GRAY);
+        userInfoLabel.setVisible(false);
+
+        JPanel userInfoPanel = new JPanel(new BorderLayout());
+        userInfoPanel.add(userInfoLabel, BorderLayout.WEST);
+        userInfoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        centerPanel.add(userInfoPanel, BorderLayout.NORTH);
+
+        userNotFoundLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
+        userNotFoundLabel.setForeground(Color.RED);
+        userNotFoundLabel.setVisible(false);
+        centerPanel.add(userNotFoundLabel, BorderLayout.CENTER);
+
+        actionButtonPanel.setLayout(new GridLayout(1, 3, 10, 10));
+        actionButtonPanel.setVisible(false);
+        styleButton(addOrRemoveButton, new Color(85, 107, 47));
+        styleButton(blockOrUnblockButton, new Color(255, 140, 0));
+        styleButton(messageButton, new Color(135, 206, 250));
+        actionButtonPanel.add(addOrRemoveButton);
+        actionButtonPanel.add(blockOrUnblockButton);
+        actionButtonPanel.add(messageButton);
+        centerPanel.add(actionButtonPanel, BorderLayout.SOUTH);
+
+        add(centerPanel, BorderLayout.CENTER);
+
+        // Bottom Panel: Back Button
+        JPanel bottomPanel = new JPanel();
+        backButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        backButton.setBackground(new Color(220, 20, 60));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFocusPainted(false);
+        backButton.addActionListener(this);
+        bottomPanel.add(backButton);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
+    private void styleButton(JButton button, Color backgroundColor) {
+        button.setBackground(backgroundColor);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("SansSerif", Font.BOLD, 14));
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+        ));
+        button.addActionListener(this);
+    }
+
+    @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == search) {
-            searchedUser = username.getText();
-            try {
-                barrier.await();
-            } catch (InterruptedException | BrokenBarrierException ex) {
-                ex.printStackTrace();
+        if (e.getSource() == searchButton) {
+            searchedUser = usernameField.getText().trim();
+            if (searchedUser.isEmpty()) {
+                displayUserNotFound();
+            } else {
+                try {
+                    barrier.await();
+                } catch (InterruptedException | BrokenBarrierException ex) {
+                    ex.printStackTrace();
+                }
             }
-        }
-        if (e.getSource() == addOrRemove) {
+        } else if (e.getSource() == addOrRemoveButton) {
             menuResponse = 1;
-            try {
-                barrier.await();
-            } catch (InterruptedException | BrokenBarrierException ex) {
-                ex.printStackTrace();
-            }
-        }
-        if (e.getSource() == blockOrUnblock) {
+            triggerBarrier();
+        } else if (e.getSource() == blockOrUnblockButton) {
             menuResponse = 2;
-            try {
-                barrier.await();
-            } catch (InterruptedException | BrokenBarrierException ex) {
-                ex.printStackTrace();
-            }
-        }
-        if (e.getSource() == message) {
+            triggerBarrier();
+        } else if (e.getSource() == messageButton) {
             menuResponse = 3;
-            try {
-                barrier.await();
-            } catch (InterruptedException | BrokenBarrierException ex) {
-                ex.printStackTrace();
-            }
-        }
-        if (e.getSource() == back) {
+            triggerBarrier();
+        } else if (e.getSource() == backButton) {
             menuResponse = 4;
-            try {
-                barrier.await();
-            } catch (InterruptedException | BrokenBarrierException ex) {
-                ex.printStackTrace();
-            }
+            triggerBarrier();
+        }
+    }
+
+    private void triggerBarrier() {
+        try {
+            barrier.await();
+        } catch (InterruptedException | BrokenBarrierException ex) {
+            ex.printStackTrace();
         }
     }
 
     public void displayUserNotFound() {
-        userNotFound.setVisible(true);
-        userNotFound.setForeground(Color.RED);
-        this.add(userNotFound);
-        this.revalidate();
-        this.repaint();
+        userNotFoundLabel.setVisible(true);
+        userInfoLabel.setVisible(false);
+        actionButtonPanel.setVisible(false);
 
-        new Timer(1000, e -> {
-            userNotFound.setVisible(false);
-            this.revalidate();
-            this.repaint();
+        revalidate();
+        repaint();
+
+        new Timer(2000, e -> {
+            userNotFoundLabel.setVisible(false);
+            revalidate();
+            repaint();
         }).start();
     }
 
     public void userActionMenu(String userInfo) {
-        searchedUserInfo.setText(userInfo);
-        this.add(searchedUserInfo);
-        buttonPanel.add(addOrRemove);
-        buttonPanel.add(blockOrUnblock);
-        buttonPanel.add(message);
+        userNotFoundLabel.setVisible(false);
+        userInfoLabel.setText("User Info: " + userInfo);
+        userInfoLabel.setVisible(true);
+        actionButtonPanel.setVisible(true);
 
-        this.revalidate();
-        this.repaint();
+        revalidate();
+        repaint();
     }
 
     public String getSearchedUser() {
@@ -118,8 +177,8 @@ public class SearchUserMenu extends JFrame implements ActionListener {
         return menuResponse;
     }
 
-    public static void main(String[] args) throws InterruptedException {
-
-
+    public static void main(String[] args) {
+        CyclicBarrier barrier = new CyclicBarrier(1);
+        SwingUtilities.invokeLater(() -> new SearchUserMenu(barrier));
     }
 }

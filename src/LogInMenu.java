@@ -3,40 +3,65 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
+
 public class LogInMenu extends JFrame implements ActionListener {
-    JTextField usernameField = new JTextField();
-    JPasswordField passwordField = new JPasswordField();
-    String username;
-    String password;
-    JLabel instruction = new JLabel("Enter your username and password");
-    JButton confirm = new JButton("confirm");
+    private final JTextField usernameField = new JTextField();
+    private final JPasswordField passwordField = new JPasswordField();
+    private String username;
+    private String password;
+    private final JLabel instruction = new JLabel("Enter your username and password", JLabel.CENTER);
+    private final JButton confirm = new JButton("Confirm");
     private final CountDownLatch latch;
 
     public LogInMenu(CountDownLatch latch) {
         this.latch = latch;
 
         setTitle("Log In");
-        setSize(800, 500);
+        setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new FlowLayout());
-        usernameField.setPreferredSize(new Dimension(700, 30));
-        passwordField.setPreferredSize(new Dimension(700, 30));
-        confirm.addActionListener(this);
+        setLayout(new BorderLayout(15, 15));
 
-        this.add(instruction);
-        this.add(usernameField);
-        this.add(passwordField);
-        this.add(confirm);
-        this.setVisible(true);
+        // Instruction Panel
+        instruction.setFont(new Font("SansSerif", Font.BOLD, 18));
+        instruction.setForeground(new Color(50, 50, 50));
+        add(instruction, BorderLayout.NORTH);
+
+        // Input Panel
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new GridLayout(2, 1, 10, 10));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        usernameField.setPreferredSize(new Dimension(200, 30));
+        usernameField.setBorder(BorderFactory.createTitledBorder("Username"));
+        passwordField.setPreferredSize(new Dimension(200, 30));
+        passwordField.setBorder(BorderFactory.createTitledBorder("Password"));
+
+        inputPanel.add(usernameField);
+        inputPanel.add(passwordField);
+        add(inputPanel, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        confirm.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        confirm.setBackground(new Color(135, 206, 250));
+        confirm.setForeground(Color.WHITE);
+        confirm.setFocusPainted(false);
+        confirm.addActionListener(this);
+        buttonPanel.add(confirm);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == confirm) {
             username = usernameField.getText();
-            password = passwordField.getText();
+            password = new String(passwordField.getPassword());
             latch.countDown();
         }
-        this.dispose();
+        dispose();
     }
 
     public String getUsername() {
@@ -51,14 +76,11 @@ public class LogInMenu extends JFrame implements ActionListener {
         CountDownLatch latch = new CountDownLatch(1);
         LogInMenu logInMenu = new LogInMenu(latch);
         try {
-           latch.await();
+            latch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println(logInMenu.getUsername());
         System.out.println(logInMenu.getPassword());
     }
-
-
-
 }
