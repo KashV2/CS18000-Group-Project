@@ -99,7 +99,7 @@ public class SearchUserMenu extends JFrame implements ActionListener {
 
     private void styleButton(JButton button, Color backgroundColor) {
         button.setBackground(backgroundColor);
-        button.setForeground(Color.WHITE);
+        button.setForeground(Color.BLACK);
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createCompoundBorder(

@@ -119,18 +119,22 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
                 } else if (menuResponse == 2) {
                     //Search & View User Profile
                     ArrayList<User> usersList = db.getUsers();
-                    String searchName = clientReader.readLine();
-                    boolean userFound = false;
-                    for (int i = 0; i < usersList.size(); i++) {
-                        if (searchName.equals(usersList.get(i).getLoginUsername())) {
-                            Profile searchedProfile = usersList.get(i).getProfile();
-                            clientWriter.printf("Name: %s\n", searchedProfile.getName());
-                            clientWriter.printf("Description: %s\n", searchedProfile.getDescription());
-                            clientWriter.printf("Friends: %s\n", searchedProfile.getFriends());
-                            userFound = true;
+                    boolean re_search = false;
+                    do {
+                        System.out.println("Re-searching on server");
+                        re_search = false;
+                        String searchName = clientReader.readLine();
+                        boolean userFound = false;
+                        for (int i = 0; i < usersList.size(); i++) {
+                            if (searchName.equals(usersList.get(i).getLoginUsername())) {
+                                Profile searchedProfile = usersList.get(i).getProfile();
+                                clientWriter.printf("Name: %s\n", searchedProfile.getName());
+                                clientWriter.printf("Description: %s\n", searchedProfile.getDescription());
+                                clientWriter.printf("Friends: %s\n", searchedProfile.getFriends());
+                                userFound = true;
 
-                            int menuResponse2 = Integer.parseInt(clientReader.readLine());
-                            switch (menuResponse2) {
+                                int menuResponse2 = Integer.parseInt(clientReader.readLine());
+                                switch (menuResponse2) {
                                 case 1:
                                     int menuResponse3 = Integer.parseInt(clientReader.readLine());
 
@@ -259,13 +263,17 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
                                     }
                                     break;
                                 default: //Back
+                                    String backResponse = clientReader.readLine();
+                                    if (backResponse.isEmpty()) break;
+                                    re_search = true;
+                                }
+                                break;
                             }
-                            break;
                         }
-                    }
-                    if (!userFound) {
-                        clientWriter.println("");
-                    }
+                        if (!userFound && !re_search) {
+                            clientWriter.println("");
+                        }
+                    } while (re_search);
                 } else if (menuResponse == 3) {
                     //Exit
                     if (client != null) client.close();
