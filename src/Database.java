@@ -91,7 +91,8 @@ public class Database implements DatabaseInterface {
             return "Second user blocked";
         } else {
             user1.getProfile().addFriend(username2);
-            user2.getProfile().addFriend(username1);
+            if (!user1.getLoginUsername().equals(user2.getLoginUsername()))
+                user2.getProfile().addFriend(username1);
             return "Friended Successfully!";
         }
     }
