@@ -243,6 +243,9 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
                                                     chat.removeMessage(index);
                                                     chatDb.saveChats();
                                                     //Tell client that we can remove message row
+                                                    //First send is to MessageOutputStream
+                                                    //Second send is to the actual client
+                                                    //Don't ask me why
                                                     clientWriter.println(sentMessage);
                                                     clientWriter.println(sentMessage);
                                                     continue;

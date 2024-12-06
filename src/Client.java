@@ -347,7 +347,7 @@ public class Client implements Runnable, ClientInterface {
                                     if (send.equals("/bye")) {
                                         chatMenu.dispose();
                                         break;
-                                    } else if (send.contains("/")) {
+                                    } else if (send.charAt(0) == '/') {
                                         //Send delete request
                                         //Receive success (number) or fail (empty)
                                         //If success actually delete that row

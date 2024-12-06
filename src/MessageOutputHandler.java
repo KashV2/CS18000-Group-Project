@@ -25,6 +25,7 @@ public class MessageOutputHandler implements Runnable, MessageOutputHandlerInter
             try {
                 String incomingMessage = reader.readLine();
                 if (incomingMessage.equals("/bye")) break;
+                //if (incomingMessage.equals("<~!||IGNORE||!~>")) break; //This works because you can only send empty through server
                 System.out.print(incomingMessage);
                 //Messaging will be a little funky when both are typing and sending at the same time
                 //Because if one sends it'll kind of be printed next to what the other is trying to type
