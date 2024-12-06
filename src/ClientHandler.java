@@ -222,6 +222,7 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
                                     //Message Loop
                                     inDM = true;
                                     while (true) {
+                                        boolean deleteMessage = false;
                                         String sentMessage = clientReader.readLine();
                                         if (sentMessage.charAt(0) == '/') {
                                             //Secret Exit Message
@@ -230,10 +231,10 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
                                                 clientWriter.println("/bye"); //Send this message to ourselves
                                                 break;
                                             }
+                                            deleteMessage = true;
                                             //Secret Deletion Code
-                                            sentMessage = sentMessage.substring(1);
                                             //Assume input is correct because this is just temporary
-                                            int index = Integer.parseInt(sentMessage);
+                                            int index = Integer.parseInt(sentMessage.substring(1));
                                             if (index < 0 || index >= messageHistory.size()) continue;
                                             int loginNameLength = user.getLoginUsername().length();
                                             if (messageHistory.get(index).length() >= loginNameLength) {
@@ -243,24 +244,26 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
                                                     chat.removeMessage(index);
                                                     chatDb.saveChats();
                                                     //Tell client that we can remove message row
-                                                    //First send is to MessageOutputStream
-                                                    //Second send is to the actual client
-                                                    //Don't ask me why
                                                     clientWriter.println(sentMessage);
-                                                    clientWriter.println(sentMessage);
+                                                } else {
+                                                    clientWriter.println("/");
                                                     continue;
                                                 }
+                                            } else {
+                                                clientWriter.println("/");
+                                                continue;
                                             }
-                                            clientWriter.println("");
-                                            clientWriter.println("");
-                                            continue;
                                         }
 
                                         //Process of saving message and sending to receiver
-                                        sentMessage = user.getLoginUsername() + ": " + sentMessage;
-                                        chat.addMessage(sentMessage);
-                                        chatDb.saveChats();
+                                        if (!deleteMessage) {
+                                            sentMessage = user.getLoginUsername() + ": " + sentMessage;
+                                            chat.addMessage(sentMessage);
+                                            chatDb.saveChats();
+                                        }
                                         //Send to Receiving Client if they are online (and in DM's too)
+                                        //Don't send again if receiver is yourself
+                                        if (user.getLoginUsername().equals(receivingUser.getLoginUsername())) continue;
                                         ArrayList<ClientHandler> clientHandlers = Server.getClientHandlers();
                                         for (ClientHandler onlineClient : clientHandlers) {
                                             if (!onlineClient.inDM) continue;

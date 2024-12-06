@@ -14,9 +14,11 @@ import java.io.*;
 
 public class MessageOutputHandler implements Runnable, MessageOutputHandlerInterface {
     private BufferedReader reader;
+    private ChatMenu chatMenu;
 
-    public MessageOutputHandler(BufferedReader reader) {
+    public MessageOutputHandler(BufferedReader reader, ChatMenu chatMenu) {
         this.reader = reader;
+        this.chatMenu = chatMenu;
     }
 
     @Override
@@ -25,8 +27,13 @@ public class MessageOutputHandler implements Runnable, MessageOutputHandlerInter
             try {
                 String incomingMessage = reader.readLine();
                 if (incomingMessage.equals("/bye")) break;
-                //if (incomingMessage.equals("<~!||IGNORE||!~>")) break; //This works because you can only send empty through server
+                if (incomingMessage.charAt(0) == '/') {
+                    if (incomingMessage.length() == 1) continue;
+                    chatMenu.removeRow(Integer.parseInt(incomingMessage.substring(1)));
+                    continue;
+                }
                 System.out.print(incomingMessage);
+                chatMenu.addMessage(incomingMessage, true);
                 //Messaging will be a little funky when both are typing and sending at the same time
                 //Because if one sends it'll kind of be printed next to what the other is trying to type
                 //But this will be cleared up in the GUI phase where we have our dedicated spaces to type

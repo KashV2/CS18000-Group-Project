@@ -339,7 +339,7 @@ public class Client implements Runnable, ClientInterface {
                                 }
 
                                 //Message Loop
-                                Thread messageHandler = new Thread(new MessageOutputHandler(serverReader[0]));
+                                Thread messageHandler = new Thread(new MessageOutputHandler(serverReader[0], chatMenu));
                                 messageHandler.start();
                                 while (true) {
                                     String send = messageQueue.take();
@@ -347,14 +347,6 @@ public class Client implements Runnable, ClientInterface {
                                     if (send.equals("/bye")) {
                                         chatMenu.dispose();
                                         break;
-                                    } else if (send.charAt(0) == '/') {
-                                        //Send delete request
-                                        //Receive success (number) or fail (empty)
-                                        //If success actually delete that row
-                                        String successIndicator = serverReader[0].readLine();
-                                        if (!successIndicator.isEmpty()) {
-                                            chatMenu.removeRow(Integer.parseInt(successIndicator));
-                                        }
                                     }
                                     try {
                                         Thread.sleep(100); // Add a small delay to avoid busy waiting
