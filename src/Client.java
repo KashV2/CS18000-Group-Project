@@ -238,7 +238,7 @@ public class Client implements Runnable, ClientInterface {
 
                             //Options to do on chosen User
                             menu5.userActionMenu(userDescription);
-                            try{
+                            try {
                                 barrier.await();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
@@ -268,7 +268,7 @@ public class Client implements Runnable, ClientInterface {
                                         String temp = serverReader[0].readLine();
 
                                         JOptionPane.showMessageDialog(null,temp,"Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
-                                        continueInSearch = true;
+                                        continueInSearch = false;
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -279,7 +279,7 @@ public class Client implements Runnable, ClientInterface {
                                         String temp = serverReader[0].readLine();
 
                                         JOptionPane.showMessageDialog(null,temp,"Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
-                                        continueInSearch = true;
+                                        continueInSearch = false;
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -300,7 +300,7 @@ public class Client implements Runnable, ClientInterface {
                                         String temp = serverReader[0].readLine();
 
                                         JOptionPane.showMessageDialog(null,temp,"Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
-                                        continueInSearch = true;
+                                        continueInSearch = false;
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -310,7 +310,7 @@ public class Client implements Runnable, ClientInterface {
                                         String temp = serverReader[0].readLine();
 
                                         JOptionPane.showMessageDialog(null,temp,"Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
-                                        continueInSearch = true;
+                                        continueInSearch = false;
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
