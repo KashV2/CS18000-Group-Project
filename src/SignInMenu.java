@@ -33,8 +33,10 @@ public class SignInMenu extends JFrame implements ActionListener, SignInMenuInte
         welcomeMessage.setForeground(new Color(50, 50, 50));
         add(welcomeMessage, BorderLayout.NORTH);
 
-        signInButton = createGradientButton("Sign In", new Color(135, 206, 250), new Color(70, 130, 180));
-        signUpButton = createGradientButton("Sign Up", new Color(255, 182, 193), new Color(255, 105, 180));
+        signInButton = createGradientButton("Sign In", new Color(135, 206, 250),
+            new Color(70, 130, 180));
+        signUpButton = createGradientButton("Sign Up", new Color(255, 182, 193),
+            new Color(255, 105, 180));
 
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 15, 15));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
