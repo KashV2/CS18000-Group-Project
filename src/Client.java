@@ -324,7 +324,7 @@ public class Client implements Runnable, ClientInterface {
                                 if (!canMessage) {
                                     JOptionPane.showMessageDialog(
                                         null,"Either you or your receiver is blocked","Messaging", JOptionPane.ERROR_MESSAGE);
-                                    continueInSearch = true;
+                                    continueInSearch = false;
                                     break;
                                 }
 
