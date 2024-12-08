@@ -7,7 +7,7 @@ import java.util.concurrent.CountDownLatch;
 /**
  * The AddRemoveBlockedMenu class. This is the menu that appears when we are trying to add or remove a user
  * from our blocked list.
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Rong Yang
@@ -19,8 +19,8 @@ public class AddRemoveBlockedMenu extends JFrame implements ActionListener, AddR
     private final JButton removeButton = new JButton("Remove Blocked");
     private final JButton addButton = new JButton("Add Blocked");
     private final JLabel instructionLabel = new JLabel("Would you like to add or remove a blocked user?");
-    private int menuResponse;
     private final CountDownLatch latch;
+    private int menuResponse;
 
     public AddRemoveBlockedMenu(CountDownLatch latch) {
         this.latch = latch;
@@ -53,14 +53,19 @@ public class AddRemoveBlockedMenu extends JFrame implements ActionListener, AddR
         setVisible(true);
     }
 
+    public static void main(String[] args) {
+        CountDownLatch latch = new CountDownLatch(1);
+        SwingUtilities.invokeLater(() -> new AddRemoveBlockedMenu(latch));
+    }
+
     public void styleButton(JButton button, Color backgroundColor) {
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
         button.setBackground(backgroundColor);
         button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+            BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
+            BorderFactory.createEmptyBorder(10, 20, 10, 20)
         ));
         button.addActionListener(this);
     }
@@ -78,10 +83,5 @@ public class AddRemoveBlockedMenu extends JFrame implements ActionListener, AddR
 
     public int getMenuResponse() {
         return menuResponse;
-    }
-
-    public static void main(String[] args) {
-        CountDownLatch latch = new CountDownLatch(1);
-        SwingUtilities.invokeLater(() -> new AddRemoveBlockedMenu(latch));
     }
 }

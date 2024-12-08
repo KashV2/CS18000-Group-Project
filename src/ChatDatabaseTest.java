@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The ChatDatabaseTest class. Testing the functionality of the ChatDatabase class
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Jason Chan
@@ -22,8 +22,8 @@ class ChatDatabaseTest {
     @Test
     void Databasetest1() {
         ChatDatabase dbtest = new ChatDatabase();
-        Chat chat1 = new Chat("user1","user2");
-        Chat chat2 = new Chat("user1","user2");
+        Chat chat1 = new Chat("user1", "user2");
+        Chat chat2 = new Chat("user1", "user2");
         chat1.addMessage("meow");
         chat2.addMessage("meow");
         chat1.addMessage("ahhhhh");

@@ -7,7 +7,7 @@ import java.util.concurrent.CountDownLatch;
 /**
  * The ChangeNameDescriptionMenu class. This is the menu that appears to give the user a choice
  * whether they want to change their name or their description
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Rong Yang
@@ -19,12 +19,12 @@ public class ChangeNameDescriptionMenu extends JFrame implements ActionListener,
     private final JButton nameButton = new JButton("Change Name");
     private final JButton descButton = new JButton("Change Description");
     private final JLabel instruction = new JLabel("Choose an option");
+    private final CountDownLatch latch;
     private JLabel profileNameLabel = new JLabel("Name: ");
     private JLabel profileDescriptionLabel = new JLabel("Description: ");
     private JLabel friendsLabel = new JLabel("Friends: ");
     private JLabel blockedLabel = new JLabel("Blocked: ");
     private int menuResponse;
-    private final CountDownLatch latch;
 
     public ChangeNameDescriptionMenu(CountDownLatch latch) {
         this.latch = latch;
@@ -73,6 +73,16 @@ public class ChangeNameDescriptionMenu extends JFrame implements ActionListener,
         setVisible(true);
     }
 
+    public static void main(String[] args) {
+        CountDownLatch latch = new CountDownLatch(1);
+        new ChangeNameDescriptionMenu(latch);
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == nameButton) {
@@ -86,16 +96,6 @@ public class ChangeNameDescriptionMenu extends JFrame implements ActionListener,
 
     public int getMenuResponse() {
         return menuResponse;
-    }
-
-    public static void main(String[] args) {
-        CountDownLatch latch = new CountDownLatch(1);
-        new ChangeNameDescriptionMenu(latch);
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public void initialize(String name, String description, String friends, String blocked) {

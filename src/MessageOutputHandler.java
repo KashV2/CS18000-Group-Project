@@ -5,7 +5,7 @@ import java.io.*;
 /**
  * The MessageOutputHandler program. A thread that listens to incoming messages from the other person during
  * direct messaging so that you can also send messages to them at the same time.
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Jason Chan

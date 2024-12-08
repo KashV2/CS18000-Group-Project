@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 /**
  * The ChatDatabase class. Responsible for storing Chat objects persistently.
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Jason Chan
@@ -17,7 +17,7 @@ public class ChatDatabase implements ChatDatabaseInterface {
         try (FileInputStream fileIn = new FileInputStream("chats.dat");
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
             while (true) {
-                Chat chat = (Chat)in.readObject();
+                Chat chat = (Chat) in.readObject();
                 chats.add(chat);
             }
         } catch (FileNotFoundException | EOFException | StreamCorruptedException e) {

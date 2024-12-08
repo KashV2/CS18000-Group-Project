@@ -6,7 +6,7 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * The SignInMenu class. This is the menu that appears when we are trying to sign in to our app.
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Rong Yang

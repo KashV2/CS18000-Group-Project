@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 
 /**
  * The AddRemoveBlockedMenu interface. Storing all the methods used in the AddRemoveBlockedMenu class.
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Rong Yang

@@ -6,7 +6,7 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * The AddRemoveFriendMenu class. This is the menu that appears when we are trying to add or remove a user as a friend.
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Rong Yang
@@ -18,8 +18,8 @@ public class AddRemoveFriendMenu extends JFrame implements ActionListener, AddRe
     private final JButton removeButton = new JButton("Remove Friend");
     private final JButton addButton = new JButton("Add Friend");
     private final JLabel instructionLabel = new JLabel("Would you like to add or remove a friend?");
-    private int menuResponse;
     private final CountDownLatch latch;
+    private int menuResponse;
 
     public AddRemoveFriendMenu(CountDownLatch latch) {
         this.latch = latch;
@@ -51,14 +51,19 @@ public class AddRemoveFriendMenu extends JFrame implements ActionListener, AddRe
         setVisible(true);
     }
 
+    public static void main(String[] args) {
+        CountDownLatch latch = new CountDownLatch(1);
+        SwingUtilities.invokeLater(() -> new AddRemoveFriendMenu(latch));
+    }
+
     public void styleButton(JButton button, Color backgroundColor) {
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
         button.setBackground(backgroundColor);
         button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+            BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
+            BorderFactory.createEmptyBorder(10, 20, 10, 20)
         ));
         button.addActionListener(this);
     }
@@ -76,10 +81,5 @@ public class AddRemoveFriendMenu extends JFrame implements ActionListener, AddRe
 
     public int getMenuResponse() {
         return menuResponse;
-    }
-
-    public static void main(String[] args) {
-        CountDownLatch latch = new CountDownLatch(1);
-        SwingUtilities.invokeLater(() -> new AddRemoveFriendMenu(latch));
     }
 }

@@ -10,7 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * The ChatMenu class. This is the menu that appears when we are conversing with another user.
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Rong Yang
@@ -19,14 +19,14 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 
 public class ChatMenu extends JFrame implements ActionListener, ChatMenuInterface {
-    private ArrayList<JPanel> messageRows = new ArrayList<>();
-    private String clientLoginUsername;
+    private final BlockingQueue<String> messageQueue;
     JButton sendButton = new JButton("Send");
     JButton backButton = new JButton("Back");
     JTextField textField = new JTextField();
     JPanel messagePanel = new JPanel(); // Panel for messages with delete buttons
     String message;
-    private final BlockingQueue<String> messageQueue;
+    private ArrayList<JPanel> messageRows = new ArrayList<>();
+    private String clientLoginUsername;
 
     public ChatMenu(BlockingQueue<String> messageQueue) {
         this.messageQueue = messageQueue;
@@ -69,6 +69,10 @@ public class ChatMenu extends JFrame implements ActionListener, ChatMenuInterfac
 
         // Display the frame
         setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new ChatMenu(new LinkedBlockingQueue<>());
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -140,9 +144,5 @@ public class ChatMenu extends JFrame implements ActionListener, ChatMenuInterfac
 
     public void setClientLoginUsername(String loginUsername) {
         clientLoginUsername = loginUsername;
-    }
-
-    public static void main(String[] args) {
-        new ChatMenu(new LinkedBlockingQueue<>());
     }
 }

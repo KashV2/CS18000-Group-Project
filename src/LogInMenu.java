@@ -6,7 +6,7 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * The LoginMenu class. This is the menu that appears when we are trying to log in.
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Rong Yang
@@ -17,11 +17,11 @@ import java.util.concurrent.CountDownLatch;
 public class LogInMenu extends JFrame implements ActionListener, LoginMenuInterface {
     private final JTextField usernameField = new JTextField();
     private final JPasswordField passwordField = new JPasswordField();
-    private String username;
-    private String password;
     private final JLabel instruction = new JLabel("Enter your username and password", JLabel.CENTER);
     private final JButton confirm = new JButton("Confirm");
     private final CountDownLatch latch;
+    private String username;
+    private String password;
 
     public LogInMenu(CountDownLatch latch) {
         this.latch = latch;
@@ -64,6 +64,18 @@ public class LogInMenu extends JFrame implements ActionListener, LoginMenuInterf
         setVisible(true);
     }
 
+    public static void main(String[] args) {
+        CountDownLatch latch = new CountDownLatch(1);
+        LogInMenu logInMenu = new LogInMenu(latch);
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(logInMenu.getUsername());
+        System.out.println(logInMenu.getPassword());
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == confirm) {
@@ -80,17 +92,5 @@ public class LogInMenu extends JFrame implements ActionListener, LoginMenuInterf
 
     public String getPassword() {
         return password;
-    }
-
-    public static void main(String[] args) {
-        CountDownLatch latch = new CountDownLatch(1);
-        LogInMenu logInMenu = new LogInMenu(latch);
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println(logInMenu.getUsername());
-        System.out.println(logInMenu.getPassword());
     }
 }

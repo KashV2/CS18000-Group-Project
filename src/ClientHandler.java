@@ -7,7 +7,7 @@ import java.util.Scanner;
 /**
  * The ClientHandler class. A thread created from Server for each Client to handle interaction between
  * the client, server, and databases.
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Jason Chan
@@ -45,46 +45,46 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
 
                 String errorMessage = null;
                 switch (signInResponse) {
-                    case 1:
-                        //Sign in request to database
-                        //Check correct username and password
-                        //On fail send information to the client of how we failed
-                        //If we could sign in, send information back to the client that we successfully signed in
-                        if (db.getUser(loginUsername) == null) {
-                            errorMessage = "Username does not exist";
+                case 1:
+                    //Sign in request to database
+                    //Check correct username and password
+                    //On fail send information to the client of how we failed
+                    //If we could sign in, send information back to the client that we successfully signed in
+                    if (db.getUser(loginUsername) == null) {
+                        errorMessage = "Username does not exist";
+                        signedIn = false;
+                    } else {
+                        user = db.getUser(loginUsername);
+                        if (!user.getPassword().equals(password)) {
+                            errorMessage = "Password is incorrect";
                             signedIn = false;
                         } else {
-                            user = db.getUser(loginUsername);
-                            if (!user.getPassword().equals(password)) {
-                                errorMessage = "Password is incorrect";
-                                signedIn = false;
-                            } else {
-                                //Signed in successfully
-                                profile = user.getProfile();
-                                signedIn = true;
-                            }
-                        }
-                        break;
-                    case 2:
-                        //Create new account request to database
-                        //Check if the username already exists but same password as another user is okay
-                        //On fail send information to the client of how we failed
-                        //If we could create an account, create it on the database, sign in on the client,
-                        //and send information back to the client on the successful creation
-                        if (db.nameAlreadyExists(loginUsername)) {
-                            errorMessage = "Username already exists";
-                            signedIn = false;
-                        } else {
-                            profile = new Profile(loginUsername, "",
-                                new ArrayList<>(), new ArrayList<>());
-                            user = new User(loginUsername, password, profile);
-                            db.addUser(user);
-                            //User added successfully
+                            //Signed in successfully
+                            profile = user.getProfile();
                             signedIn = true;
                         }
-                        break;
-                    default:
-                        //Just keep it I think kids would get mad if this doesn't exist
+                    }
+                    break;
+                case 2:
+                    //Create new account request to database
+                    //Check if the username already exists but same password as another user is okay
+                    //On fail send information to the client of how we failed
+                    //If we could create an account, create it on the database, sign in on the client,
+                    //and send information back to the client on the successful creation
+                    if (db.nameAlreadyExists(loginUsername)) {
+                        errorMessage = "Username already exists";
+                        signedIn = false;
+                    } else {
+                        profile = new Profile(loginUsername, "",
+                            new ArrayList<>(), new ArrayList<>());
+                        user = new User(loginUsername, password, profile);
+                        db.addUser(user);
+                        //User added successfully
+                        signedIn = true;
+                    }
+                    break;
+                default:
+                    //Just keep it I think kids would get mad if this doesn't exist
                 }
                 clientWriter.println(signedIn);
                 clientWriter.println(errorMessage);
@@ -102,18 +102,18 @@ public class ClientHandler implements Runnable, ClientHandlerInterface {
 
                     int menuResponse2 = Integer.parseInt(clientReader.readLine());
                     switch (menuResponse2) {
-                        case 1:
+                    case 1:
 
-                            String newName = clientReader.readLine();
-                            user.getProfile().setName(newName);
-                            clientWriter.println("Name Changed Successfully");
+                        String newName = clientReader.readLine();
+                        user.getProfile().setName(newName);
+                        clientWriter.println("Name Changed Successfully");
 
-                            break;
-                        case 2:
-                            String newDescription = clientReader.readLine();
-                            user.getProfile().setDescription(newDescription);
-                            clientWriter.println("Description Changed Successfully");
-                            break;
+                        break;
+                    case 2:
+                        String newDescription = clientReader.readLine();
+                        user.getProfile().setDescription(newDescription);
+                        clientWriter.println("Description Changed Successfully");
+                        break;
                     }
                     db.saveUsers();
                 } else if (menuResponse == 2) {

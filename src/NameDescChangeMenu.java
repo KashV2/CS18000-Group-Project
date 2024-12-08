@@ -6,7 +6,7 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * The NameDescChangeMenu class. This is the menu that appears when we are changing either our name or description
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Rong Yang
@@ -18,8 +18,8 @@ public class NameDescChangeMenu extends JFrame implements ActionListener, NameDe
     private final JButton sendButton = new JButton("Change");
     private final JLabel label = new JLabel();
     private final JTextField textField = new JTextField();
-    private String message;
     private final CountDownLatch latch;
+    private String message;
 
     public NameDescChangeMenu(CountDownLatch latch, String message) {
         this.latch = latch;
@@ -46,8 +46,8 @@ public class NameDescChangeMenu extends JFrame implements ActionListener, NameDe
         sendButton.setForeground(Color.BLACK);
         sendButton.setFocusPainted(false);
         sendButton.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(50, 50, 50), 2),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+            BorderFactory.createLineBorder(new Color(50, 50, 50), 2),
+            BorderFactory.createEmptyBorder(10, 20, 10, 20)
         ));
         sendButton.addActionListener(this);
 

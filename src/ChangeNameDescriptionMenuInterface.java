@@ -1,6 +1,6 @@
 /**
  * The ChangeNameDescriptionMenu interface. Storing all the methods used in the ChangeNameDescriptionMenu class.
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Rong Yang
@@ -10,6 +10,7 @@
 public interface ChangeNameDescriptionMenuInterface {
 
     int getMenuResponse();
+
     void initialize(String name, String description, String friends, String blocked);
 
 

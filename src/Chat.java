@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 /**
  * The Chat class. Representing the chat conversation between two people
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Jason Chan
@@ -28,7 +28,7 @@ public class Chat implements ChatInterface, Serializable {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Chat)) return false;
-        Chat chat = (Chat)obj;
+        Chat chat = (Chat) obj;
         return this.id.equals(chat.id);
     }
 

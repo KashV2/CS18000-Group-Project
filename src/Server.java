@@ -6,7 +6,7 @@ import java.lang.Thread;
 /**
  * The Server program. Run this on one computer once before starting up any client application.
  * This program allows clients to properly connect to the server in a thread-safe way.
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Jason Chan
@@ -14,16 +14,33 @@ import java.lang.Thread;
  */
 
 public class Server implements Runnable, ServerInterface {
-    private static ArrayList<Socket> clients = new ArrayList<>();
-    private static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private final static Database DB = new Database();
     private final static ChatDatabase CHAT_DB = new ChatDatabase();
+    private static ArrayList<Socket> clients = new ArrayList<>();
+    private static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private static ServerSocket serverSocket;
 
     public static void main(String[] args) {
         Thread serverThread = new Thread(new Server());
         //Only one server so call run
         serverThread.run();
+    }
+
+    public static void removeClient(ClientHandler sender, Socket client) {
+        clientHandlers.remove(sender);
+        clients.remove(client);
+    }
+
+    public static ArrayList<ClientHandler> getClientHandlers() {
+        return clientHandlers;
+    }
+
+    public static Database getDatabase() {
+        return DB;
+    }
+
+    public static ChatDatabase getChatDatabase() {
+        return CHAT_DB;
     }
 
     public void run() {
@@ -58,22 +75,5 @@ public class Server implements Runnable, ServerInterface {
             Thread clientHandlerThread = new Thread(clientHandler);
             clientHandlerThread.start();
         }
-    }
-
-    public static void removeClient(ClientHandler sender, Socket client) {
-        clientHandlers.remove(sender);
-        clients.remove(client);
-    }
-
-    public static ArrayList<ClientHandler> getClientHandlers() {
-        return clientHandlers;
-    }
-
-    public static Database getDatabase() {
-        return DB;
-    }
-
-    public static ChatDatabase getChatDatabase() {
-        return CHAT_DB;
     }
 }

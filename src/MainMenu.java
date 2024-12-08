@@ -9,7 +9,7 @@ import java.util.concurrent.CountDownLatch;
  * 1) Edit User Profile
  * 2) Search & View Users
  * 3) Exit
- *
+ * <p>
  * Purdue University -- CS18000 -- Fall 2024 -- Team Project
  *
  * @author Rong Yang
@@ -17,7 +17,7 @@ import java.util.concurrent.CountDownLatch;
  * @version December 7, 2024
  */
 
-public class MainMenu extends JFrame implements ActionListener, MainMenuInterface{
+public class MainMenu extends JFrame implements ActionListener, MainMenuInterface {
     private final JButton editButton = new JButton("Edit User Profile");
     private final JButton searchButton = new JButton("Search & View Users");
     private final JButton exitButton = new JButton("Exit");
@@ -48,14 +48,24 @@ public class MainMenu extends JFrame implements ActionListener, MainMenuInterfac
         setVisible(true);
     }
 
+    public static void main(String[] args) {
+        CountDownLatch latch = new CountDownLatch(1);
+        new MainMenu(latch);
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public JButton createStyledButton(JButton button) {
         button.setFont(new Font("SansSerif", Font.PLAIN, 16));
         button.setBackground(new Color(135, 206, 250));
         button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(50, 50, 50), 1),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+            BorderFactory.createLineBorder(new Color(50, 50, 50), 1),
+            BorderFactory.createEmptyBorder(10, 20, 10, 20)
         ));
         button.addActionListener(this);
         return button;
@@ -78,15 +88,5 @@ public class MainMenu extends JFrame implements ActionListener, MainMenuInterfac
 
     public int getMenuResponse() {
         return menuResponse;
-    }
-
-    public static void main(String[] args) {
-        CountDownLatch latch = new CountDownLatch(1);
-        new MainMenu(latch);
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
