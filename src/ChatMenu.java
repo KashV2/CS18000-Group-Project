@@ -3,18 +3,30 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class ChatMenu extends JFrame implements ActionListener {
-    private String clientLoginUsername;
+/**
+ * The ChatMenu class. This is the menu that appears when we are conversing with another user.
+ * <p>
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Rong Yang
+ * @author Bach Gia Le
+ * @version December 7, 2024
+ */
+
+public class ChatMenu extends JFrame implements ActionListener, ChatMenuInterface {
+    private final BlockingQueue<String> messageQueue;
     JButton sendButton = new JButton("Send");
     JButton backButton = new JButton("Back");
     JTextField textField = new JTextField();
     JPanel messagePanel = new JPanel(); // Panel for messages with delete buttons
     String message;
-    private final BlockingQueue<String> messageQueue;
+    private ArrayList<JPanel> messageRows = new ArrayList<>();
+    private String clientLoginUsername;
 
     public ChatMenu(BlockingQueue<String> messageQueue) {
         this.messageQueue = messageQueue;
@@ -59,6 +71,10 @@ public class ChatMenu extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    public static void main(String[] args) {
+        new ChatMenu(new LinkedBlockingQueue<>());
+    }
+
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == sendButton) {
             message = textField.getText();
@@ -94,14 +110,17 @@ public class ChatMenu extends JFrame implements ActionListener {
 
         // Action to delete the message row
         deleteButton.addActionListener(e -> {
-            messagePanel.remove(messageRow);
-            messagePanel.revalidate();
-            messagePanel.repaint();
+            try {
+                messageQueue.put("/" + messageRows.indexOf(messageRow));
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
         });
 
         messageRow.add(messageLabel, BorderLayout.CENTER);
         messageRow.add(deleteButton, BorderLayout.EAST);
         messagePanel.add(messageRow);
+        messageRows.add(messageRow);
         messagePanel.revalidate();
         messagePanel.repaint();
 
@@ -116,11 +135,14 @@ public class ChatMenu extends JFrame implements ActionListener {
         return currentMessage;
     }
 
-    public void setClientLoginUsername(String loginUsername) {
-        clientLoginUsername = loginUsername;
+    public void removeRow(int index) {
+        messagePanel.remove(messageRows.get(index));
+        messageRows.remove(index);
+        messagePanel.revalidate();
+        messagePanel.repaint();
     }
 
-    public static void main(String[] args) {
-        new ChatMenu(new LinkedBlockingQueue<>());
+    public void setClientLoginUsername(String loginUsername) {
+        clientLoginUsername = loginUsername;
     }
 }
