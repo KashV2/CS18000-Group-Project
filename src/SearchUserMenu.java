@@ -5,17 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-/**
- * The SearchUserMenu class. This is the menu that appears when we are trying to search for a user
- * <p>
- * Purdue University -- CS18000 -- Fall 2024 -- Team Project
- *
- * @author Rong Yang
- * @author Bach Gia Le
- * @version December 7, 2024
- */
-
-public class SearchUserMenu extends JFrame implements ActionListener, SearchUserMenuInterface {
+public class SearchUserMenu extends JFrame implements ActionListener {
     private final JButton searchButton = new JButton("Search");
     private final JTextField usernameField = new JTextField();
     private final JButton addOrRemoveButton = new JButton("Add/Remove Friend");
@@ -25,9 +15,9 @@ public class SearchUserMenu extends JFrame implements ActionListener, SearchUser
     private final JLabel userNotFoundLabel = new JLabel("User not found", JLabel.CENTER);
     private final JLabel userInfoLabel = new JLabel("");
     private final JPanel actionButtonPanel = new JPanel();
-    private final CyclicBarrier barrier;
     private int menuResponse;
     private String searchedUser;
+    private final CyclicBarrier barrier;
     private boolean backPressed = false;
 
     public SearchUserMenu(CyclicBarrier barrier) {
@@ -48,8 +38,8 @@ public class SearchUserMenu extends JFrame implements ActionListener, SearchUser
         usernameField.setPreferredSize(new Dimension(300, 30));
         usernameField.setFont(new Font("SansSerif", Font.PLAIN, 14));
         usernameField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(150, 150, 150), 1),
-            BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                BorderFactory.createLineBorder(new Color(150, 150, 150), 1),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
 
         searchButton.setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -107,19 +97,14 @@ public class SearchUserMenu extends JFrame implements ActionListener, SearchUser
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        CyclicBarrier barrier = new CyclicBarrier(1);
-        SwingUtilities.invokeLater(() -> new SearchUserMenu(barrier));
-    }
-
-    public void styleButton(JButton button, Color backgroundColor) {
+    private void styleButton(JButton button, Color backgroundColor) {
         button.setBackground(backgroundColor);
         button.setForeground(Color.BLACK);
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
-            BorderFactory.createEmptyBorder(10, 20, 10, 20)
+                BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
         ));
         button.addActionListener(this);
     }
@@ -133,7 +118,6 @@ public class SearchUserMenu extends JFrame implements ActionListener, SearchUser
             } else {
                 try {
                     barrier.await();
-                    this.searchButton.setVisible(false);
                 } catch (InterruptedException | BrokenBarrierException ex) {
                     ex.printStackTrace();
                 }
@@ -154,7 +138,7 @@ public class SearchUserMenu extends JFrame implements ActionListener, SearchUser
         }
     }
 
-    public void triggerBarrier() {
+    private void triggerBarrier() {
         try {
             barrier.await();
         } catch (InterruptedException | BrokenBarrierException ex) {
@@ -197,5 +181,10 @@ public class SearchUserMenu extends JFrame implements ActionListener, SearchUser
 
     public int getMenuResponse() {
         return menuResponse;
+    }
+
+    public static void main(String[] args) {
+        CyclicBarrier barrier = new CyclicBarrier(1);
+        SwingUtilities.invokeLater(() -> new SearchUserMenu(barrier));
     }
 }

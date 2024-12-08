@@ -42,7 +42,6 @@ public class NameDescChangeMenu extends JFrame implements ActionListener, NameDe
         add(inputPanel, BorderLayout.CENTER);
 
         sendButton.setFont(new Font("SansSerif", Font.BOLD, 16));
-        sendButton.setBackground(new Color(70, 130, 180));
         sendButton.setForeground(Color.BLACK);
         sendButton.setFocusPainted(false);
         sendButton.setBorder(BorderFactory.createCompoundBorder(
@@ -71,4 +70,6 @@ public class NameDescChangeMenu extends JFrame implements ActionListener, NameDe
     public String getMessage() {
         return message;
     }
+
+    
 }
