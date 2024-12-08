@@ -2,7 +2,7 @@
 
 
 # Instructions on how to compile and run project
-For Phase 1, we do not have a dedicated main method to show the interaction between the clients to the server to the databases. For Phase 2, we have a Server.java class that you can run once on your computer to start the server and interaction between clients. After running the Server class, you can run the Client.java class to run our fully functioning social media app in the console. If you want to simulate the social media app working on multiple devices, use IntelliJ’s Code with Me platform to share your workspace and allow every joined developer to run the Client in the terminal. For Phase 3, you can do the same as Phase 2 (just not the Code with Me part). You can simulate multiple clients by just running multiple Client.java scripts, such as one on IntelliJ and one executed in the terminal. 
+For Phase 1, we do not have a dedicated main method to show the interaction between the clients to the server to the databases. For Phase 2, we have a Server.java class that you can run once on your computer to start the server and interaction between clients. After running the Server class, you can run the Client.java class to run our fully functioning social media app in the console. If you want to simulate the social media app working on multiple devices, use IntelliJ’s Code with Me platform to share your workspace and allow every joined developer to run the Client in the terminal. For Phase 3, you can do the same as Phase 2 (just not the Code with Me part). You can simulate multiple clients by just running multiple Client.java scripts, such as one on IntelliJ and one executed in the terminal. Find all of our scripts in the src folder.
 
 
 Here is some context to help you navigate the application:
