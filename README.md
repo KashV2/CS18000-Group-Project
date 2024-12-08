@@ -25,7 +25,8 @@ There are no test cases written for our new classes that were created to build t
 
 # Brightspace and Vocareum Submission
 Jason Chan submitted Phase 1 workspace to Vocareum<br>
-Jason Chan submitted Phase 2 workspace to Vocareum
+Jason Chan submitted Phase 2 workspace to Vocareum<br>
+Jason Chan submitted Phase 3 workspace to Vocareum
 
 
 # Class Descriptions
