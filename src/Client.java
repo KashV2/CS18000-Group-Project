@@ -93,7 +93,8 @@ public class Client implements Runnable, ClientInterface {
 
                 if (!signedIn) {
                     if (errorMessage != null) {
-                        JOptionPane.showMessageDialog(null, errorMessage, "Input Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, errorMessage,
+                            "Input Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             } catch (IOException e) {
@@ -165,7 +166,8 @@ public class Client implements Runnable, ClientInterface {
                 switch (ans) {
                     case 1:
                         CountDownLatch latch2 = new CountDownLatch(1);
-                        NameDescChangeMenu menu9 = new NameDescChangeMenu(latch2, "Please enter your new name");
+                        NameDescChangeMenu menu9 = new NameDescChangeMenu(latch2,
+                            "Please enter your new name");
                         try {
                             latch2.await();
                         } catch (InterruptedException e) {
@@ -179,11 +181,13 @@ public class Client implements Runnable, ClientInterface {
                             throw new RuntimeException(e);
                         }
                         JOptionPane.showMessageDialog(
-                            null, "Succesfully Changed Name!", "Changing Profile", JOptionPane.INFORMATION_MESSAGE);
+                            null, "Succesfully Changed Name!",
+                            "Changing Profile", JOptionPane.INFORMATION_MESSAGE);
                         break;
                     case 2:
                         CountDownLatch latch3 = new CountDownLatch(1);
-                        NameDescChangeMenu menu10 = new NameDescChangeMenu(latch3, "Please enter your new description");
+                        NameDescChangeMenu menu10 = new NameDescChangeMenu(latch3,
+                            "Please enter your new description");
                         try {
                             latch3.await();
                         } catch (InterruptedException e) {
@@ -197,7 +201,8 @@ public class Client implements Runnable, ClientInterface {
                             throw new RuntimeException(e);
                         }
                         JOptionPane.showMessageDialog(
-                            null, "Succesfully Changed Description!", "Changing Profile", JOptionPane.INFORMATION_MESSAGE);
+                            null, "Succesfully Changed Description!",
+                            "Changing Profile", JOptionPane.INFORMATION_MESSAGE);
                         break;
                 }
             } else if (menuResponse == 2) {
@@ -223,7 +228,8 @@ public class Client implements Runnable, ClientInterface {
                         String message = serverReader[0].readLine();
                         if (message.isEmpty() && !menu5.isBackPressed()) {
                             JOptionPane.showMessageDialog(
-                                null, "Username does not exist", "Input Error", JOptionPane.ERROR_MESSAGE);
+                                null, "Username does not exist",
+                                "Input Error", JOptionPane.ERROR_MESSAGE);
                             menu5.displayUserNotFound();
                             continueInSearch = true;
                             openSearch = false;
@@ -268,7 +274,8 @@ public class Client implements Runnable, ClientInterface {
                                         try {
                                             String temp = serverReader[0].readLine();
 
-                                            JOptionPane.showMessageDialog(null, temp, "Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
+                                            JOptionPane.showMessageDialog(null, temp,
+                                                "Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
                                             continueInSearch = false;
                                         } catch (IOException e) {
                                             throw new RuntimeException(e);
@@ -279,7 +286,8 @@ public class Client implements Runnable, ClientInterface {
 
                                             String temp = serverReader[0].readLine();
 
-                                            JOptionPane.showMessageDialog(null, temp, "Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
+                                            JOptionPane.showMessageDialog(null, temp,
+                                                "Changing Friend Status", JOptionPane.INFORMATION_MESSAGE);
                                             continueInSearch = false;
                                         } catch (IOException e) {
                                             throw new RuntimeException(e);
@@ -300,7 +308,8 @@ public class Client implements Runnable, ClientInterface {
                                         try {
                                             String temp = serverReader[0].readLine();
 
-                                            JOptionPane.showMessageDialog(null, temp, "Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
+                                            JOptionPane.showMessageDialog(null, temp,
+                                                "Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
                                             continueInSearch = false;
                                         } catch (IOException e) {
                                             throw new RuntimeException(e);
@@ -310,7 +319,8 @@ public class Client implements Runnable, ClientInterface {
                                         try {
                                             String temp = serverReader[0].readLine();
 
-                                            JOptionPane.showMessageDialog(null, temp, "Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
+                                            JOptionPane.showMessageDialog(null, temp,
+                                                "Changing Block Status", JOptionPane.INFORMATION_MESSAGE);
                                             continueInSearch = false;
                                         } catch (IOException e) {
                                             throw new RuntimeException(e);
@@ -323,7 +333,8 @@ public class Client implements Runnable, ClientInterface {
                                     //Checking blocked
                                     if (!canMessage) {
                                         JOptionPane.showMessageDialog(
-                                            null, "Either you or your receiver is blocked", "Messaging", JOptionPane.ERROR_MESSAGE);
+                                            null, "Either you or your receiver is blocked",
+                                            "Messaging", JOptionPane.ERROR_MESSAGE);
                                         continueInSearch = false;
                                         break;
                                     }
@@ -335,12 +346,13 @@ public class Client implements Runnable, ClientInterface {
                                     //Loading Messages
                                     String currentHistoryMessage = serverReader[0].readLine();
                                     while (!currentHistoryMessage.equals("<~!||NULL||!~>")) {
-                                        chatMenu.addMessage(currentHistoryMessage, true); // false if no timestamp
+                                        chatMenu.addMessage(currentHistoryMessage, true);
                                         currentHistoryMessage = serverReader[0].readLine();
                                     }
 
                                     //Message Loop
-                                    Thread messageHandler = new Thread(new MessageOutputHandler(serverReader[0], chatMenu));
+                                    Thread messageHandler = new Thread(
+                                        new MessageOutputHandler(serverReader[0], chatMenu));
                                     messageHandler.start();
                                     while (true) {
                                         String send = messageQueue.take();
