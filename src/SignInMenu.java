@@ -4,7 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
 
-public class SignInMenu extends JFrame implements ActionListener {
+/**
+ * The SignInMenu class. This is the menu that appears when we are trying to sign in to our app.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Rong Yang
+ * @author Bach Gia Le
+ * @version December 7, 2024
+ */
+
+public class SignInMenu extends JFrame implements ActionListener, SignInMenuInterface {
     private final JButton signInButton;
     private final JButton signUpButton;
     private final CountDownLatch latch;
@@ -41,7 +51,7 @@ public class SignInMenu extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private JButton createGradientButton(String text, Color startColor, Color endColor) {
+    public JButton createGradientButton(String text, Color startColor, Color endColor) {
         JButton button = new JButton(text) {
             @Override
             protected void paintComponent(Graphics g) {

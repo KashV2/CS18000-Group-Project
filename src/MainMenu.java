@@ -4,7 +4,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
 
-public class MainMenu extends JFrame implements ActionListener {
+/**
+ * The MainMenu class. This is the menu that appears that gives us a choice between
+ * 1) Edit User Profile
+ * 2) Search & View Users
+ * 3) Exit
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Rong Yang
+ * @author Bach Gia Le
+ * @version December 7, 2024
+ */
+
+public class MainMenu extends JFrame implements ActionListener, MainMenuInterface{
     private final JButton editButton = new JButton("Edit User Profile");
     private final JButton searchButton = new JButton("Search & View Users");
     private final JButton exitButton = new JButton("Exit");
@@ -35,7 +48,7 @@ public class MainMenu extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private JButton createStyledButton(JButton button) {
+    public JButton createStyledButton(JButton button) {
         button.setFont(new Font("SansSerif", Font.PLAIN, 16));
         button.setBackground(new Color(135, 206, 250));
         button.setForeground(Color.BLACK);

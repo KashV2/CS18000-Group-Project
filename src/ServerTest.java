@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import static org.junit.jupiter.api.Assertions.*;
-class ServerTest {
+class     ServerTest {
     private Method createServerSocketMethod;
     private Method createClientMethod;
     private Method closeServerSocketMethod;

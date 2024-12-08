@@ -4,7 +4,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
 
-public class AddRemoveBlockedMenu extends JFrame implements ActionListener {
+/**
+ * The AddRemoveBlockedMenu class. This is the menu that appears when we are trying to add or remove a user
+ * from our blocked list.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Rong Yang
+ * @author Bach Gia Le
+ * @version December 7, 2024
+ */
+
+public class AddRemoveBlockedMenu extends JFrame implements ActionListener, AddRemoveBlockedMenuInterface {
     private final JButton removeButton = new JButton("Remove Blocked");
     private final JButton addButton = new JButton("Add Blocked");
     private final JLabel instructionLabel = new JLabel("Would you like to add or remove a blocked user?");
@@ -42,7 +53,7 @@ public class AddRemoveBlockedMenu extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private void styleButton(JButton button, Color backgroundColor) {
+    public void styleButton(JButton button, Color backgroundColor) {
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
         button.setBackground(backgroundColor);
         button.setForeground(Color.BLACK);

@@ -7,6 +7,16 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The ChatDatabaseTest class. Testing the functionality of the ChatDatabase class
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Jason Chan
+ * @author Rong Yang
+ * @version November 3, 2024
+ */
+
 class ChatDatabaseTest {
 
     @Test

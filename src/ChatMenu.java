@@ -8,7 +8,17 @@ import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class ChatMenu extends JFrame implements ActionListener {
+/**
+ * The ChatMenu class. This is the menu that appears when we are conversing with another user.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Rong Yang
+ * @author Bach Gia Le
+ * @version December 7, 2024
+ */
+
+public class ChatMenu extends JFrame implements ActionListener, ChatMenuInterface {
     private ArrayList<JPanel> messageRows = new ArrayList<>();
     private String clientLoginUsername;
     JButton sendButton = new JButton("Send");

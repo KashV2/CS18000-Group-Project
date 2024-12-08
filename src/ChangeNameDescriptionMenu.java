@@ -4,7 +4,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
 
-public class ChangeNameDescriptionMenu extends JFrame implements ActionListener {
+/**
+ * The ChangeNameDescriptionMenu class. This is the menu that appears to give the user a choice
+ * whether they want to change their name or their description
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Rong Yang
+ * @author Bach Gia Le
+ * @version December 7, 2024
+ */
+
+public class ChangeNameDescriptionMenu extends JFrame implements ActionListener, ChangeNameDescriptionMenuInterface {
     private final JButton nameButton = new JButton("Change Name");
     private final JButton descButton = new JButton("Change Description");
     private final JLabel instruction = new JLabel("Choose an option");

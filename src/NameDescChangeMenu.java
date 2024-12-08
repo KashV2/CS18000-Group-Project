@@ -4,7 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
 
-public class NameDescChangeMenu extends JFrame implements ActionListener {
+/**
+ * The NameDescChangeMenu class. This is the menu that appears when we are changing either our name or description
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Rong Yang
+ * @author Bach Gia Le
+ * @version December 7, 2024
+ */
+
+public class NameDescChangeMenu extends JFrame implements ActionListener, NameDescChangeMenuInterface {
     private final JButton sendButton = new JButton("Change");
     private final JLabel label = new JLabel();
     private final JTextField textField = new JTextField();

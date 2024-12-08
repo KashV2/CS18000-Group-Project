@@ -5,7 +5,17 @@ import java.awt.event.ActionListener;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-public class SearchUserMenu extends JFrame implements ActionListener {
+/**
+ * The SearchUserMenu class. This is the menu that appears when we are trying to search for a user
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Rong Yang
+ * @author Bach Gia Le
+ * @version December 7, 2024
+ */
+
+public class SearchUserMenu extends JFrame implements ActionListener, SearchUserMenuInterface {
     private final JButton searchButton = new JButton("Search");
     private final JTextField usernameField = new JTextField();
     private final JButton addOrRemoveButton = new JButton("Add/Remove Friend");
@@ -97,7 +107,7 @@ public class SearchUserMenu extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private void styleButton(JButton button, Color backgroundColor) {
+    public void styleButton(JButton button, Color backgroundColor) {
         button.setBackground(backgroundColor);
         button.setForeground(Color.BLACK);
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -139,7 +149,7 @@ public class SearchUserMenu extends JFrame implements ActionListener {
         }
     }
 
-    private void triggerBarrier() {
+    public void triggerBarrier() {
         try {
             barrier.await();
         } catch (InterruptedException | BrokenBarrierException ex) {

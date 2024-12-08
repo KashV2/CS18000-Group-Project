@@ -4,7 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
 
-public class LogInMenu extends JFrame implements ActionListener {
+/**
+ * The LoginMenu class. This is the menu that appears when we are trying to log in.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Rong Yang
+ * @author Bach Gia Le
+ * @version December 7, 2024
+ */
+
+public class LogInMenu extends JFrame implements ActionListener, LoginMenuInterface {
     private final JTextField usernameField = new JTextField();
     private final JPasswordField passwordField = new JPasswordField();
     private String username;

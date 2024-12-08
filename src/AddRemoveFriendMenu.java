@@ -4,7 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
 
-public class AddRemoveFriendMenu extends JFrame implements ActionListener {
+/**
+ * The AddRemoveFriendMenu class. This is the menu that appears when we are trying to add or remove a user as a friend.
+ *
+ * Purdue University -- CS18000 -- Fall 2024 -- Team Project
+ *
+ * @author Rong Yang
+ * @author Bach Gia Le
+ * @version December 7, 2024
+ */
+
+public class AddRemoveFriendMenu extends JFrame implements ActionListener, AddRemoveFriendMenuInterface {
     private final JButton removeButton = new JButton("Remove Friend");
     private final JButton addButton = new JButton("Add Friend");
     private final JLabel instructionLabel = new JLabel("Would you like to add or remove a friend?");
@@ -41,7 +51,7 @@ public class AddRemoveFriendMenu extends JFrame implements ActionListener {
         setVisible(true);
     }
 
-    private void styleButton(JButton button, Color backgroundColor) {
+    public void styleButton(JButton button, Color backgroundColor) {
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
         button.setBackground(backgroundColor);
         button.setForeground(Color.BLACK);
